@@ -1,0 +1,6 @@
+{
+  "name": "openai-embeddings-native-mjs",
+  "test_type": "native_stdlib",
+  "mjs": "node:https",
+  "app_yaml_section": ["providers", "openai_embeddings"]
+}

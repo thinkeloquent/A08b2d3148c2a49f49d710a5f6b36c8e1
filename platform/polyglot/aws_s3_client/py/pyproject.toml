@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aws-s3-client"
+version = "1.0.0"
+description = "AWS S3-backed JSON storage with TTL support and polyglot parity"
+license = {text = "MIT"}
+requires-python = ">=3.11,<3.12"
+authors = [
+    {name = "AI Architect", email = "ai@example.com"}
+]
+keywords = ["aws", "s3", "storage", "json", "cache", "ttl"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+dependencies = [
+    "aiobotocore[boto3]==3.1.1",
+]
+
+[project.optional-dependencies]
+fastapi = [
+    "fastapi==0.128.0",
+    "uvicorn[standard]==0.40.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "moto[s3]>=4.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "httpx[http2]>=0.28.1",
+    "fastapi==0.128.0",
+    "uvicorn[standard]==0.40.0",
+]
+
+[project.scripts]
+aws-s3-client = "aws_s3_client.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/example/aws-s3-client"
+Documentation = "https://github.com/example/aws-s3-client#readme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aws_s3_client"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["aws_s3_client/tests", "tests"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]

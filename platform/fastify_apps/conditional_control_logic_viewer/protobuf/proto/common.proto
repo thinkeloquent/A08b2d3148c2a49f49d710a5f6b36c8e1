@@ -1,0 +1,42 @@
+syntax = "proto3";
+package conditional_control_logic_viewer;
+
+// Status enum
+enum FilterTreeStatus {
+  FILTER_TREE_STATUS_UNSPECIFIED = 0;
+  FILTER_TREE_STATUS_ACTIVE = 1;
+  FILTER_TREE_STATUS_ARCHIVED = 2;
+}
+
+// Logical operator enum
+enum LogicalOperator {
+  LOGICAL_OPERATOR_UNSPECIFIED = 0;
+  LOGICAL_OPERATOR_AND = 1;
+  LOGICAL_OPERATOR_OR = 2;
+}
+
+// Node type enum
+enum FilterNodeType {
+  FILTER_NODE_TYPE_UNSPECIFIED = 0;
+  FILTER_NODE_TYPE_FILTER = 1;
+  FILTER_NODE_TYPE_GROUP = 2;
+}
+
+// Pagination
+message PaginationRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message PaginationResponse {
+  int32 total = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 total_pages = 4;
+}
+
+// Timestamps
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}

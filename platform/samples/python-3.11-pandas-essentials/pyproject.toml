@@ -1,0 +1,13 @@
+[project]
+name = "python-3.11-pandas-essentials"
+version = "1.0.0"
+description = "Pandas essentials — data manipulation, cleaning, and analysis"
+requires-python = ">=3.11,<3.12"
+
+dependencies = [
+    "pandas>=2.2,<3",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends._legacy:_Backend"

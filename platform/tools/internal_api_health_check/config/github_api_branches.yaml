@@ -1,0 +1,25 @@
+name: github_api_branches
+description: Branch listing, details, protection, and comparison endpoints
+
+tests:
+  - id: list-branches
+    description: List repository branches
+    path: /repos/:owner/:repo/branches
+    expected_status: 200
+
+  - id: get-branch
+    description: Get branch details
+    path: /repos/:owner/:repo/branches/:branch
+    expected_status: 200
+
+  - id: get-branch-protection
+    description: Get branch protection rules
+    path: /repos/:owner/:repo/branches/:branch/protection
+    expected_status: [200, 403, 404]
+
+  - id: compare-refs
+    description: Compare two refs
+    path: /repos/:owner/:repo/compare/:basehead
+    variables:
+      basehead: "main...stage"
+    expected_status: 200

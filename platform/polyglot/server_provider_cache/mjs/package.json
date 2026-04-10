@@ -1,0 +1,17 @@
+{
+  "name": "server-provider-cache",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": "./index.mjs",
+  "types": "./types.d.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome lint src/"
+  },
+  "devDependencies": {
+    "vitest": "^1.2.0",
+    "@vitest/coverage-v8": "^1.2.0"
+  }
+}

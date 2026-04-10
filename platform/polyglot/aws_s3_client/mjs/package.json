@@ -1,0 +1,73 @@
+{
+  "name": "aws-s3-client",
+  "version": "1.0.0",
+  "description": "AWS S3-backed JSON storage with TTL support and polyglot parity",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "aws-s3-client": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./adapters/fastify": {
+      "types": "./dist/adapters/fastify.d.ts",
+      "import": "./dist/adapters/fastify.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx watch examples/fastify-app.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run src/",
+    "test:parity": "vitest run --grep parity",
+    "lint": "biome lint src/",
+    "lint:fix": "biome lint --write src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "aws",
+    "s3",
+    "storage",
+    "json",
+    "cache",
+    "ttl",
+    "fastify"
+  ],
+  "author": "AI Architect",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@internal/env-resolver": "workspace:*"
+  },
+  "peerDependencies": {
+    "fastify": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "fastify": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "aws-sdk-client-mock": "^3.0.0",
+    "fastify": "^4.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "commander": "^12.0.0"
+  }
+}

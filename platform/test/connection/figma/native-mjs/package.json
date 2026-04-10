@@ -1,0 +1,10 @@
+{
+  "name": "@connection-test/figma--native-mjs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Connection test for Figma API via undici directly — no local packages",
+  "dependencies": {
+    "undici": "^7.19.0"
+  }
+}

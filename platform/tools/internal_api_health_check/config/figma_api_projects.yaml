@@ -1,0 +1,13 @@
+name: figma_api_projects
+description: Team project and project file listing endpoints
+
+tests:
+  - id: list-team-projects
+    description: List projects for a team
+    path: /v1/teams/:team_id/projects
+    expected_status: [200, 403, 404, 429]
+
+  - id: list-project-files
+    description: List files in a project
+    path: /v1/projects/:project_id/files
+    expected_status: [200, 403, 404, 429]

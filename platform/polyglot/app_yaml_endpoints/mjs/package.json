@@ -1,0 +1,33 @@
+{
+  "name": "app-yaml-endpoints",
+  "version": "1.1.0",
+  "description": "Configuration-driven endpoint routing SDK",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./logger": "./src/logger.mjs",
+    "./config": "./src/config.mjs",
+    "./sdk": "./src/sdk.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node --test __tests__/*.test.mjs",
+    "test:integration": "node --test __tests__/*.integration.test.mjs",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "fetch",
+    "router",
+    "config",
+    "endpoint",
+    "sdk"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {}
+}

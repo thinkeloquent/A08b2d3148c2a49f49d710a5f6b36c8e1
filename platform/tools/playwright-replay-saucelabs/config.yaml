@@ -1,0 +1,4 @@
+# Errors on these step commands will be logged as warnings
+# instead of failing the replay.
+ignoreErrors:
+  - waitForElement

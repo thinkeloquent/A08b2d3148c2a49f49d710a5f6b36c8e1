@@ -1,0 +1,26 @@
+{
+  "name": "@integration-test/chromadb-embeddings",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Integration test for chromadb-embeddings connection",
+  "dependencies": {
+    "@biomejs/biome": "2.3.6",
+    "@internal/app-yaml-load": "file:../../../polyglot/app_yaml_load/mjs",
+    "@internal/app-yaml-static-config": "file:../../../polyglot/app_yaml_static_config/mjs",
+    "@internal/common-exceptions": "file:../../../polyglot/raise_exceptions/mjs",
+    "@internal/auth-config": "file:../../../packages_mjs/auth_config",
+    "@internal/auth-encoding": "file:../../../packages_mjs/auth_encoding",
+    "@internal/proxy-url-builder": "file:../../../polyglot/proxy_url_builder/mjs",
+    "@internal/rag-embedding-client": "file:../../../polyglot/rag_embedding_client/mjs",
+    "@internal/rag-embedding-config": "file:../../../polyglot/rag_embedding_config/mjs",
+    "@internal/vault-file": "file:../../../polyglot/vault_file/mjs",
+    "@thinkeloquent/computed-url-builder": "file:../../../polyglot/computed_url_builder/mjs",
+    "app-yaml-endpoints": "file:../../../polyglot/app_yaml_endpoints/mjs",
+    "app_yaml_overwrites": "file:../../../polyglot/app_yaml_overwrites/mjs",
+    "dotenv": "16.6.1",
+    "healthz-diagnostics": "file:../../../polyglot/healthz_diagnostics/mjs",
+    "runtime-template-resolver": "file:../../../polyglot/overwrite_from_context/mjs",
+    "server-provider-cache": "file:../../../polyglot/server_provider_cache/mjs"
+  }
+}

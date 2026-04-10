@@ -1,0 +1,37 @@
+SHELL := /bin/bash
+.DEFAULT_GOAL := help
+
+PLATFORM_ROOT := $(shell cd ../ && pwd)
+VENV_DIR := .venv
+PYTHON := $(VENV_DIR)/bin/python
+PIP := $(VENV_DIR)/bin/pip
+DEPS_STAMP := $(VENV_DIR)/.deps-ready
+
+PIP_INSTALL_TARGET ?= -e ".[dev]"
+
+.PHONY: help setup ensure-setup test lint clean
+
+help: ## Show this help
+	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
+
+setup: ## Create venv and install package with dev dependencies
+	python3 -m venv $(VENV_DIR)
+	$(PIP) install --upgrade pip
+	$(PIP) install $(PIP_INSTALL_TARGET)
+	@touch $(DEPS_STAMP)
+
+ensure-setup:
+	@if [ ! -x "$(PYTHON)" ] || [ ! -f "$(DEPS_STAMP)" ] || [ pyproject.toml -nt "$(DEPS_STAMP)" ]; then \
+		echo "[setup] Python environment missing or stale; running setup..."; \
+		$(MAKE) setup; \
+	fi
+
+test: ensure-setup ## Run tests
+	$(PYTHON) -m pytest -v
+
+lint: ensure-setup ## Run linters
+	$(PYTHON) -m ruff check .
+
+clean: ## Remove build artifacts and venv
+	rm -rf $(VENV_DIR) build dist *.egg-info .pytest_cache .mypy_cache .ruff_cache htmlcov .coverage
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true

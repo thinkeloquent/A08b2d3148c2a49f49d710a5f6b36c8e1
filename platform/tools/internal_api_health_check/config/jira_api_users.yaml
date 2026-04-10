@@ -1,0 +1,13 @@
+name: jira_api_users
+description: User search and retrieval endpoints
+
+tests:
+  - id: search-users
+    description: Search for users by query string
+    path: /v3/users/search?query=:query
+    expected_status: [200, 401, 403, 429]
+
+  - id: get-user
+    description: Get user by account ID or email
+    path: /v3/users/:identifier
+    expected_status: [200, 401, 403, 404, 429]

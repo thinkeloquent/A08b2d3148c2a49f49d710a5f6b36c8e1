@@ -1,0 +1,13 @@
+name: confluence_api_search_923
+description: CQL search endpoint (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: search-pages
+    description: Search for content using CQL
+    path: /v9/search?cql=:cql&limit=5
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: search-with-expand
+    description: Search with expanded fields
+    path: /v9/search?cql=:cql&expand=content.version&limit=5
+    expected_status: [200, 401, 403, 404, 429]

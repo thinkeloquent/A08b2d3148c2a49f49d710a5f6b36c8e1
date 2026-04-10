@@ -1,0 +1,12 @@
+"""
+Logger factory for {{APP_NAME_SNAKE}}.
+"""
+
+import logging
+
+__all__ = ["get_logger"]
+
+
+def get_logger(name: str) -> logging.Logger:
+    """Create a scoped logger."""
+    return logging.getLogger(f"{{APP_NAME_SNAKE}}.{name}")

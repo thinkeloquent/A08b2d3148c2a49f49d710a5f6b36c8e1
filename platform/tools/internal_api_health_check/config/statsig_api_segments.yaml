@@ -1,0 +1,8 @@
+name: statsig_api_segments
+description: Segments endpoints
+
+tests:
+  - id: list-segments
+    description: List all segments
+    path: /v1/segments
+    expected_status: [200, 401, 403, 429]

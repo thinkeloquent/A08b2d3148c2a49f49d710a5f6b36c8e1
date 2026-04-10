@@ -1,0 +1,6 @@
+{
+  "name": "openai-embeddings-native-py",
+  "test_type": "native_stdlib",
+  "python": "urllib.request",
+  "app_yaml_section": ["providers", "openai_embeddings"]
+}

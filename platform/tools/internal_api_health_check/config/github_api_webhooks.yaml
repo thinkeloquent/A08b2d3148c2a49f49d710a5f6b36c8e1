@@ -1,0 +1,13 @@
+name: github_api_webhooks
+description: Webhook listing endpoints
+
+tests:
+  - id: list-hooks
+    description: List repository webhooks
+    path: /repos/:owner/:repo/hooks
+    expected_status: [200, 403, 404]
+
+  - id: get-hook
+    description: Get a specific webhook
+    path: /repos/:owner/:repo/hooks/:hook_id
+    expected_status: [200, 403, 404]

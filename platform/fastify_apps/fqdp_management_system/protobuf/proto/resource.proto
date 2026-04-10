@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package fqdp;
+
+import "common.proto";
+
+message Resource {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  EntityStatus status = 5;
+  string metadata_json = 6;
+  string resource_name = 7;
+  ResourceType resource_type = 8;
+  string resource_url = 9;
+  int32 resource_size = 10;
+  string fqdp_id = 11;
+  string external_links_json = 12;
+  string project_id = 13;
+  string project_name = 14;
+  string application_id = 15;
+  string application_name = 16;
+  string team_id = 17;
+  string team_name = 18;
+  string workspace_id = 19;
+  string workspace_name = 20;
+  string organization_id = 21;
+  string organization_name = 22;
+  string created_by = 23;
+  string updated_by = 24;
+  string created_at = 25;
+  string updated_at = 26;
+}
+
+message ResourceList {
+  repeated Resource data = 1;
+  PaginationMeta meta = 2;
+}
+
+message CreateResourceRequest {
+  string name = 1;
+  reserved 2;
+  string description = 3;
+  string resource_name = 4;
+  ResourceType resource_type = 5;
+  string resource_url = 6;
+  int32 resource_size = 7;
+  string project_id = 8;
+  string external_links_json = 9;
+  string metadata_json = 10;
+}
+
+message UpdateResourceRequest {
+  string name = 1;
+  reserved 2;
+  string description = 3;
+  EntityStatus status = 4;
+  string resource_name = 5;
+  ResourceType resource_type = 6;
+  string resource_url = 7;
+  int32 resource_size = 8;
+  string external_links_json = 9;
+  string metadata_json = 10;
+}

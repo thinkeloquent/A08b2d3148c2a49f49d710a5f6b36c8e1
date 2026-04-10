@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package form_builder.form_definition;
+
+import "common.proto";
+import "tag.proto";
+import "version.proto";
+
+// Full form definition entity
+message FormDefinition {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  form_builder.common.FormStatus status = 5;
+  bytes schema_data = 6;       // JSON-encoded ExportableFormSchema
+  bytes metadata_data = 7;     // JSON-encoded ExportableFormMetadata
+  string created_by = 8;
+  repeated form_builder.tag.Tag tags = 9;
+  form_builder.common.Timestamp created_at = 10;
+  form_builder.common.Timestamp updated_at = 11;
+}
+
+// Summary without full schema/metadata
+message FormDefinitionSummary {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  form_builder.common.FormStatus status = 5;
+  string created_by = 6;
+  repeated form_builder.tag.Tag tags = 7;
+  int32 page_count = 8;
+  int32 element_count = 9;
+  form_builder.common.Timestamp created_at = 10;
+  form_builder.common.Timestamp updated_at = 11;
+}
+
+// List form definitions request
+message ListFormDefinitionsRequest {
+  form_builder.common.PaginationRequest pagination = 1;
+  form_builder.common.FormStatus status = 2;
+  string search = 3;
+  repeated string tags = 4;
+}
+
+// List form definitions response
+message ListFormDefinitionsResponse {
+  repeated FormDefinitionSummary form_definitions = 1;
+  form_builder.common.PaginationResponse pagination = 2;
+}
+
+// Get form definition request
+message GetFormDefinitionRequest {
+  string id = 1;
+}
+
+// Get form definition response
+message GetFormDefinitionResponse {
+  FormDefinition form_definition = 1;
+}
+
+// Create form definition request
+message CreateFormDefinitionRequest {
+  string name = 1;
+  string description = 2;
+  string version = 3;
+  form_builder.common.FormStatus status = 4;
+  bytes schema_data = 5;
+  bytes metadata_data = 6;
+  string created_by = 7;
+  repeated string tag_names = 8;
+}
+
+// Create form definition response
+message CreateFormDefinitionResponse {
+  FormDefinition form_definition = 1;
+}
+
+// Update form definition request
+message UpdateFormDefinitionRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  form_builder.common.FormStatus status = 5;
+  bytes schema_data = 6;
+  bytes metadata_data = 7;
+  repeated string tag_names = 8;
+}
+
+// Update form definition response
+message UpdateFormDefinitionResponse {
+  FormDefinition form_definition = 1;
+}
+
+// Delete form definition request
+message DeleteFormDefinitionRequest {
+  string id = 1;
+}
+
+// Delete form definition response
+message DeleteFormDefinitionResponse {
+  bool success = 1;
+}

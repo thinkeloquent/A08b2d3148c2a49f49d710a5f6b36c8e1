@@ -1,0 +1,6 @@
+{
+  "name": "openai-embeddings-oss-undici",
+  "test_type": "direct_package_import",
+  "mjs": "undici:request",
+  "app_yaml_section": ["providers", "openai_embeddings"]
+}

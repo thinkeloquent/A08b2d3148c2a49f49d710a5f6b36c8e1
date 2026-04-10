@@ -1,0 +1,91 @@
+syntax = "proto3";
+package conditional_control_logic_viewer;
+
+import "common.proto";
+
+// Filter condition (leaf node data)
+message FilterCondition {
+  string field = 1;
+  string operator = 2;
+  string value = 3;
+}
+
+// Tree node (recursive)
+message FilterNode {
+  string id = 1;
+  FilterNodeType type = 2;
+  FilterCondition condition = 3;       // For filter nodes
+  LogicalOperator operator = 4;        // For group nodes
+  repeated FilterNode children = 5;    // For group nodes
+  string text = 6;                     // Legacy text-based filter
+}
+
+// Filter tree entity
+message FilterTree {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  FilterTreeStatus status = 4;
+  FilterNode tree_data = 5;
+  int32 version = 6;
+  string created_by = 7;
+  string updated_by = 8;
+  Timestamp created_at = 9;
+  Timestamp updated_at = 10;
+}
+
+// CRUD Messages
+message CreateFilterTreeRequest {
+  string name = 1;
+  string description = 2;
+  FilterNode tree_data = 3;
+}
+
+message CreateFilterTreeResponse {
+  FilterTree filter_tree = 1;
+}
+
+message ListFilterTreesRequest {
+  PaginationRequest pagination = 1;
+  string search = 2;
+  FilterTreeStatus status = 3;
+}
+
+message ListFilterTreesResponse {
+  repeated FilterTree filter_trees = 1;
+  PaginationResponse pagination = 2;
+}
+
+message GetFilterTreeRequest {
+  string id = 1;
+}
+
+message GetFilterTreeResponse {
+  FilterTree filter_tree = 1;
+}
+
+message UpdateFilterTreeRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  FilterNode tree_data = 4;
+  FilterTreeStatus status = 5;
+}
+
+message UpdateFilterTreeResponse {
+  FilterTree filter_tree = 1;
+}
+
+message DeleteFilterTreeRequest {
+  string id = 1;
+  bool permanent = 2;
+}
+
+message CloneFilterTreeRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message CloneFilterTreeResponse {
+  FilterTree filter_tree = 1;
+}

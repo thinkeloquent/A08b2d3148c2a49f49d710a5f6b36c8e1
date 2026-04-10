@@ -1,0 +1,18 @@
+name: github_api_collaborators
+description: Collaborators and invitation endpoints
+
+tests:
+  - id: list-collaborators
+    description: List repository collaborators
+    path: /repos/:owner/:repo/collaborators
+    expected_status: [200, 403]
+
+  - id: check-permission
+    description: Check user permission level
+    path: /repos/:owner/:repo/collaborators/:username/permission
+    expected_status: [200, 403]
+
+  - id: list-invitations
+    description: List pending invitations
+    path: /repos/:owner/:repo/invitations
+    expected_status: [200, 403]

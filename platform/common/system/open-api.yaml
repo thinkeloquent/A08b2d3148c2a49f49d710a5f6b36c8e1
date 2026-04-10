@@ -1,0 +1,1967 @@
+# OpenAPI LLM-Friendly Endpoint Registry
+#
+# Controls which endpoints are surfaced at /openapi/llm
+# Both Fastify and FastAPI servers read this file to render
+# a simplified, LLM-consumable endpoint table.
+#
+# Base URL is derived at runtime from the request object (supports cloud/microservice deployments).
+# Endpoints section: each entry has path, method, name, server, and optional description.
+
+endpoints:
+  # ── Runtime App Config ──────────────────────────────────────────────
+  - path: /api/runtime-app-config/endpoints
+    method: GET
+    name: get_all_endpoints
+    server: both
+  - path: /api/runtime-app-config/endpoints/refresh
+    method: POST
+    name: refresh_endpoint_config
+    server: both
+  - path: /api/runtime-app-config/endpoints/by-name/{name}
+    method: GET
+    name: get_endpoint_by_friendly_name
+    server: both
+  - path: /api/runtime-app-config/endpoints/by-tag/{tag}
+    method: GET
+    name: get_endpoints_by_tag
+    server: both
+  - path: /api/runtime-app-config/endpoints/{name}
+    method: GET
+    name: get_endpoint_by_name
+    server: both
+  - path: /api/runtime-app-config/intent-mapping
+    method: GET
+    name: get_intent_mapping
+    server: both
+  - path: /api/runtime-app-config/resolve-intent/{intent}
+    method: GET
+    name: resolve_intent
+    server: both
+  - path: /api/runtime-app-config/origins
+    method: GET
+    name: get_origins
+    server: both
+
+  # ── Async Example ───────────────────────────────────────────────────
+  - path: /async-example
+    method: GET
+    name: async_example
+    server: fastapi
+
+  # ── CSP Report ──────────────────────────────────────────────────────
+  - path: /api/csp-report
+    method: POST
+    name: csp_report
+    server: both
+
+  # ── LLM Gemini OpenAI v1 ───────────────────────────────────────────
+  - path: /api/llm/gemini-openai-v1/health
+    method: GET
+    name: llm_health
+    server: both
+    description: SDK health check — returns connectivity and model availability status
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/chat
+    method: POST
+    name: llm_chat
+    server: both
+    description: Chat completion using Gemini via OpenAI-compatible API
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/stream
+    method: POST
+    name: llm_stream
+    server: both
+    description: SSE streaming chat completion — returns Server-Sent Events
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/structure
+    method: POST
+    name: llm_structure
+    server: both
+    description: Structured JSON output — extracts data matching a provided JSON schema
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/tool-call
+    method: POST
+    name: llm_tool_call
+    server: both
+    description: Function calling — invokes tools based on prompt analysis
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/json
+    method: POST
+    name: llm_json_mode
+    server: both
+    description: JSON mode — returns LLM response as valid JSON
+    tag: llm
+  - path: /api/llm/gemini-openai-v1/conversation
+    method: POST
+    name: llm_conversation
+    server: both
+    description: Multi-turn conversation with message history
+    tag: llm
+
+  # ── LLM Gemini OpenAI v1 Router ────────────────────────────────────
+  - path: /api/llm/gemini-openai-v1-router/health
+    method: GET
+    name: llm_router_health
+    server: both
+    description: SDK health check (routed) — returns connectivity and model availability status
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/chat
+    method: POST
+    name: llm_router_chat
+    server: both
+    description: Chat completion (routed) using Gemini via OpenAI-compatible API
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/stream
+    method: POST
+    name: llm_router_stream
+    server: both
+    description: SSE streaming chat completion (routed) — returns Server-Sent Events
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/structure
+    method: POST
+    name: llm_router_structure
+    server: both
+    description: Structured JSON output (routed) — extracts data matching a provided JSON schema
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/tool-call
+    method: POST
+    name: llm_router_tool_call
+    server: both
+    description: Function calling (routed) — invokes tools based on prompt analysis
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/json
+    method: POST
+    name: llm_router_json_mode
+    server: both
+    description: JSON mode (routed) — returns LLM response as valid JSON
+    tag: llm
+  - path: /api/llm/gemini-openai-v1-router/conversation
+    method: POST
+    name: llm_router_conversation
+    server: both
+    description: Multi-turn conversation (routed) with message history
+    tag: llm
+
+  # ── Health ──────────────────────────────────────────────────────────
+  - path: /health
+    method: GET
+    name: health
+    server: both
+  - path: /health/greet
+    method: GET
+    name: health_greet
+    server: both
+
+  # ── Healthz Admin ───────────────────────────────────────────────────
+  - path: /healthz/admin
+    method: GET
+    name: healthz_admin
+    server: both
+  - path: /healthz/admin/app-yaml-static-config/status
+    method: GET
+    name: app_yaml_config_status
+    server: both
+  - path: /healthz/admin/app-yaml-static-config/json
+    method: GET
+    name: app_yaml_config_json
+    server: both
+  - path: /healthz/admin/app-yaml-static-config/keys
+    method: GET
+    name: app_yaml_config_keys
+    server: both
+  - path: /healthz/admin/compute-functions/list
+    method: GET
+    name: compute_functions_list
+    server: both
+  - path: /healthz/admin/compute-functions/details
+    method: GET
+    name: compute_functions_details
+    server: both
+
+  # ── Healthz Elasticsearch ───────────────────────────────────────────
+  - path: /healthz/elasticsearch
+    method: GET
+    name: healthz_elasticsearch
+    server: both
+  - path: /healthz/elasticsearch/indices
+    method: GET
+    name: elasticsearch_indices
+    server: both
+  - path: /healthz/elasticsearch/indices/{index_name}/mappings
+    method: GET
+    name: elasticsearch_index_mappings
+    server: both
+  - path: /healthz/elasticsearch/indices/{index_name}/documents
+    method: GET
+    name: elasticsearch_index_documents
+    server: both
+
+  # ── Healthz Gemini OpenAI ───────────────────────────────────────────
+  - path: /healthz/gemini-openai
+    method: GET
+    name: healthz_gemini_openai
+    server: both
+  - path: /healthz/gemini-openai/chat
+    method: GET
+    name: healthz_chat
+    server: both
+  - path: /healthz/gemini-openai/chat
+    method: POST
+    name: healthz_chat_post
+    server: both
+  - path: /healthz/gemini-openai/structure
+    method: GET
+    name: healthz_structure
+    server: both
+  - path: /healthz/gemini-openai/streaming
+    method: GET
+    name: healthz_streaming
+    server: both
+  - path: /healthz/gemini-openai/sse
+    method: GET
+    name: healthz_sse
+    server: both
+  - path: /healthz/gemini-openai/tool-calls
+    method: GET
+    name: healthz_tool_calls
+    server: both
+  - path: /healthz/gemini-openai/schema-mapping
+    method: GET
+    name: healthz_schema_mapping
+    server: both
+  - path: /healthz/gemini-openai/pool
+    method: GET
+    name: healthz_pool
+    server: both
+  - path: /healthz/gemini-openai/proxy-pool
+    method: GET
+    name: healthz_proxy_pool
+    server: both
+  - path: /healthz/gemini-openai/stream-format
+    method: GET
+    name: healthz_stream_format
+    server: both
+  - path: /healthz/gemini-openai/conversation
+    method: POST
+    name: healthz_conversation
+    server: both
+  - path: /healthz/gemini-openai/json-mode
+    method: GET
+    name: healthz_json_mode
+    server: both
+  - path: /healthz/gemini-openai/models
+    method: GET
+    name: healthz_models
+    server: both
+
+  # ── Healthz Integration ─────────────────────────────────────────────
+  - path: /healthz/admin/integration/anthropic
+    method: GET
+    name: healthz_integration_anthropic
+    server: both
+  - path: /healthz/admin/integration/anthropic
+    method: POST
+    name: healthz_integration_anthropic_post
+    server: both
+  - path: /healthz/admin/integration/anthropic/config
+    method: GET
+    name: healthz_integration_anthropic_config
+    server: both
+  - path: /healthz/admin/integration/openai
+    method: GET
+    name: healthz_integration_openai
+    server: both
+  - path: /healthz/admin/integration/openai
+    method: POST
+    name: healthz_integration_openai_post
+    server: both
+  - path: /healthz/admin/integration/openai/config
+    method: GET
+    name: healthz_integration_openai_config
+    server: both
+  - path: /healthz/admin/integration/openai-embeddings
+    method: GET
+    name: healthz_integration_openai_embeddings
+    server: both
+  - path: /healthz/admin/integration/openai-embeddings
+    method: POST
+    name: healthz_integration_openai_embeddings_post
+    server: both
+  - path: /healthz/admin/integration/openai-embeddings/config
+    method: GET
+    name: healthz_integration_openai_embeddings_config
+    server: both
+  - path: /healthz/admin/integration/github
+    method: GET
+    name: healthz_integration_github
+    server: both
+  - path: /healthz/admin/integration/github
+    method: POST
+    name: healthz_integration_github_post
+    server: both
+  - path: /healthz/admin/integration/github/config
+    method: GET
+    name: healthz_integration_github_config
+    server: both
+  - path: /healthz/admin/integration/figma
+    method: GET
+    name: healthz_integration_figma
+    server: both
+  - path: /healthz/admin/integration/figma
+    method: POST
+    name: healthz_integration_figma_post
+    server: both
+  - path: /healthz/admin/integration/figma/config
+    method: GET
+    name: healthz_integration_figma_config
+    server: both
+  - path: /healthz/admin/integration/rally
+    method: GET
+    name: healthz_integration_rally
+    server: both
+  - path: /healthz/admin/integration/rally
+    method: POST
+    name: healthz_integration_rally_post
+    server: both
+  - path: /healthz/admin/integration/rally/config
+    method: GET
+    name: healthz_integration_rally_config
+    server: both
+  - path: /healthz/admin/integration/statsig
+    method: GET
+    name: healthz_integration_statsig
+    server: both
+  - path: /healthz/admin/integration/statsig
+    method: POST
+    name: healthz_integration_statsig_post
+    server: both
+  - path: /healthz/admin/integration/statsig/config
+    method: GET
+    name: healthz_integration_statsig_config
+    server: both
+  - path: /healthz/admin/integration/sonar
+    method: GET
+    name: healthz_integration_sonar
+    server: both
+  - path: /healthz/admin/integration/sonar
+    method: POST
+    name: healthz_integration_sonar_post
+    server: both
+  - path: /healthz/admin/integration/sonar/config
+    method: GET
+    name: healthz_integration_sonar_config
+    server: both
+  - path: /healthz/admin/integration/jira
+    method: GET
+    name: healthz_integration_jira
+    server: both
+  - path: /healthz/admin/integration/jira
+    method: POST
+    name: healthz_integration_jira_post
+    server: both
+  - path: /healthz/admin/integration/jira/config
+    method: GET
+    name: healthz_integration_jira_config
+    server: both
+  - path: /healthz/admin/integration/confluence
+    method: GET
+    name: healthz_integration_confluence
+    server: both
+  - path: /healthz/admin/integration/confluence
+    method: POST
+    name: healthz_integration_confluence_post
+    server: both
+  - path: /healthz/admin/integration/confluence/config
+    method: GET
+    name: healthz_integration_confluence_config
+    server: both
+  - path: /healthz/admin/integration/saucelabs
+    method: GET
+    name: healthz_integration_saucelabs
+    server: both
+  - path: /healthz/admin/integration/saucelabs
+    method: POST
+    name: healthz_integration_saucelabs_post
+    server: both
+  - path: /healthz/admin/integration/saucelabs/config
+    method: GET
+    name: healthz_integration_saucelabs_config
+    server: both
+  - path: /healthz/admin/integration/servicenow
+    method: GET
+    name: healthz_integration_servicenow
+    server: both
+  - path: /healthz/admin/integration/servicenow
+    method: POST
+    name: healthz_integration_servicenow_post
+    server: both
+  - path: /healthz/admin/integration/servicenow/config
+    method: GET
+    name: healthz_integration_servicenow_config
+    server: both
+  - path: /healthz/admin/integration/gemini-openai
+    method: GET
+    name: healthz_integration_gemini_openai
+    server: both
+  - path: /healthz/admin/integration/gemini-openai
+    method: POST
+    name: healthz_integration_gemini_openai_post
+    server: both
+  - path: /healthz/admin/integration/gemini-openai/config
+    method: GET
+    name: healthz_integration_gemini_openai_config
+    server: both
+
+  # ── Healthz Integration Gemini OpenAI Proxy ─────────────────────────
+  - path: /healthz/admin/integration/gemini-openai-proxy/fetch-client
+    method: GET
+    name: test_fetch_client
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/fetch-client-proxy
+    method: GET
+    name: test_fetch_client_proxy
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/proxy-aware-client
+    method: GET
+    name: test_proxy_aware_client
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/proxy-aware-client-proxy
+    method: GET
+    name: test_proxy_aware_client_proxy
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/proxy-dispatcher
+    method: GET
+    name: test_proxy_dispatcher
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/proxy-dispatcher-proxy
+    method: GET
+    name: test_proxy_dispatcher_proxy
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/httpx
+    method: GET
+    name: test_httpx
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/httpx-proxy
+    method: GET
+    name: test_httpx_proxy
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/all
+    method: GET
+    name: test_all
+    server: both
+  - path: /healthz/admin/integration/gemini-openai-proxy/config
+    method: GET
+    name: test_proxy_config
+    server: both
+
+  # ── Healthz Overwrite From Context ──────────────────────────────────
+  - path: /healthz/admin/overwrite-from-context/status
+    method: GET
+    name: overwrite_from_context_status
+    server: both
+  - path: /healthz/admin/overwrite-from-context/json
+    method: GET
+    name: overwrite_from_context_json
+    server: both
+  - path: /healthz/admin/overwrite-from-context/keys
+    method: GET
+    name: overwrite_from_context_keys
+    server: both
+  - path: /healthz/admin/overwrite-from-context/overwrite
+    method: GET
+    name: overwrite_from_context_overwrite
+    server: both
+
+  # ── Healthz Postgres ────────────────────────────────────────────────
+  - path: /healthz/postgres
+    method: GET
+    name: healthz_postgres
+    server: both
+  - path: /healthz/postgres/schemas
+    method: GET
+    name: postgres_schemas
+    server: both
+  - path: /healthz/postgres/schemas/{schema}/tables
+    method: GET
+    name: postgres_tables
+    server: both
+  - path: /healthz/postgres/schemas/{schema}/tables/{table}/columns
+    method: GET
+    name: postgres_columns
+    server: both
+  - path: /healthz/postgres/schemas/{schema}/tables/{table}/rows
+    method: GET
+    name: postgres_rows
+    server: both
+
+  # ── Healthz Redis ───────────────────────────────────────────────────
+  - path: /healthz/redis
+    method: GET
+    name: healthz_redis
+    server: both
+  - path: /healthz/redis/keys
+    method: GET
+    name: redis_keys
+    server: both
+  - path: /healthz/redis/key
+    method: GET
+    name: redis_key_detail
+    server: both
+  - path: /healthz/redis/namespaces
+    method: GET
+    name: redis_namespaces
+    server: both
+
+  # ── Healthz S3 ──────────────────────────────────────────────────────
+  - path: /healthz/s3
+    method: GET
+    name: healthz_s3
+    server: both
+  - path: /healthz/s3/buckets
+    method: GET
+    name: s3_buckets
+    server: both
+  - path: /healthz/s3/buckets/{bucket}/objects
+    method: GET
+    name: s3_bucket_objects
+    server: both
+  - path: /healthz/s3/buckets/{bucket}/objects/metadata
+    method: GET
+    name: s3_object_metadata
+    server: both
+
+  # ── Healthz Vault File ──────────────────────────────────────────────
+  - path: /healthz/admin/vault-file/status
+    method: GET
+    name: vault_file_status
+    server: both
+  - path: /healthz/admin/vault-file/json
+    method: GET
+    name: vault_file_json
+    server: both
+  - path: /healthz/admin/vault-file/keys
+    method: GET
+    name: vault_file_keys
+    server: both
+
+  # ── Home ────────────────────────────────────────────────────────────
+  - path: /
+    method: GET
+    name: home
+    server: both
+
+  # ── Fastify-only: Figma Component Inspector ─────────────────────────
+  - path: /~/api/figma_component_inspector
+    method: GET
+    name: figma_inspector_index
+    server: both
+  - path: /~/api/figma_component_inspector/comments
+    method: GET
+    name: figma_inspector_comments_list
+    server: both
+  - path: /~/api/figma_component_inspector/comments
+    method: POST
+    name: figma_inspector_comments_create
+    server: both
+  - path: /~/api/figma_component_inspector/comments/{commentId}
+    method: PATCH
+    name: figma_inspector_comment_update
+    server: both
+  - path: /~/api/figma_component_inspector/comments/{commentId}
+    method: DELETE
+    name: figma_inspector_comment_delete
+    server: both
+  - path: /~/api/figma_component_inspector/comments/{commentId}/replies
+    method: POST
+    name: figma_inspector_comment_reply
+    server: both
+  - path: /~/api/figma_component_inspector/figma/components/{fileId}
+    method: GET
+    name: figma_inspector_components
+    server: both
+  - path: /~/api/figma_component_inspector/figma/files/{fileId}
+    method: GET
+    name: figma_inspector_file
+    server: both
+  - path: /~/api/figma_component_inspector/figma/files/{fileId}/comments
+    method: GET
+    name: figma_inspector_file_comments
+    server: both
+  - path: /~/api/figma_component_inspector/figma/images/{fileId}
+    method: GET
+    name: figma_inspector_images
+    server: both
+  - path: /~/api/figma_component_inspector/figma/node/{fileId}/{nodeId}
+    method: GET
+    name: figma_inspector_node
+    server: both
+  - path: /~/api/figma_component_inspector/figma/variables/{fileId}
+    method: GET
+    name: figma_inspector_variables
+    server: both
+  - path: /~/api/figma_component_inspector/health
+    method: GET
+    name: figma_inspector_health
+    server: both
+
+  # ── Fastify-only: FQDP Management System ───────────────────────────
+  - path: /~/api/fqdp_management_system
+    method: GET
+    name: fqdp_index
+    server: both
+  - path: /~/api/fqdp_management_system/applications
+    method: GET
+    name: fqdp_applications_list
+    server: both
+  - path: /~/api/fqdp_management_system/applications
+    method: POST
+    name: fqdp_applications_create
+    server: both
+  - path: /~/api/fqdp_management_system/applications/{id}
+    method: GET
+    name: fqdp_application_get
+    server: both
+  - path: /~/api/fqdp_management_system/applications/{id}
+    method: PUT
+    name: fqdp_application_update
+    server: both
+  - path: /~/api/fqdp_management_system/applications/{id}
+    method: DELETE
+    name: fqdp_application_delete
+    server: both
+  - path: /~/api/fqdp_management_system/organizations
+    method: GET
+    name: fqdp_organizations_list
+    server: both
+  - path: /~/api/fqdp_management_system/organizations
+    method: POST
+    name: fqdp_organizations_create
+    server: both
+  - path: /~/api/fqdp_management_system/organizations/{id}
+    method: GET
+    name: fqdp_organization_get
+    server: both
+  - path: /~/api/fqdp_management_system/organizations/{id}
+    method: PUT
+    name: fqdp_organization_update
+    server: both
+  - path: /~/api/fqdp_management_system/organizations/{id}
+    method: DELETE
+    name: fqdp_organization_delete
+    server: both
+  - path: /~/api/fqdp_management_system/projects
+    method: GET
+    name: fqdp_projects_list
+    server: both
+  - path: /~/api/fqdp_management_system/projects
+    method: POST
+    name: fqdp_projects_create
+    server: both
+  - path: /~/api/fqdp_management_system/projects/{id}
+    method: GET
+    name: fqdp_project_get
+    server: both
+  - path: /~/api/fqdp_management_system/projects/{id}
+    method: PUT
+    name: fqdp_project_update
+    server: both
+  - path: /~/api/fqdp_management_system/projects/{id}
+    method: DELETE
+    name: fqdp_project_delete
+    server: both
+  - path: /~/api/fqdp_management_system/references
+    method: GET
+    name: fqdp_references_list
+    server: both
+  - path: /~/api/fqdp_management_system/references
+    method: POST
+    name: fqdp_references_create
+    server: both
+  - path: /~/api/fqdp_management_system/references/{id}
+    method: GET
+    name: fqdp_reference_get
+    server: both
+  - path: /~/api/fqdp_management_system/references/{id}
+    method: PUT
+    name: fqdp_reference_update
+    server: both
+  - path: /~/api/fqdp_management_system/references/{id}
+    method: DELETE
+    name: fqdp_reference_delete
+    server: both
+  - path: /~/api/fqdp_management_system/resources
+    method: GET
+    name: fqdp_resources_list
+    server: both
+  - path: /~/api/fqdp_management_system/resources
+    method: POST
+    name: fqdp_resources_create
+    server: both
+  - path: /~/api/fqdp_management_system/resources/{id}
+    method: GET
+    name: fqdp_resource_get
+    server: both
+  - path: /~/api/fqdp_management_system/resources/{id}
+    method: PUT
+    name: fqdp_resource_update
+    server: both
+  - path: /~/api/fqdp_management_system/resources/{id}
+    method: DELETE
+    name: fqdp_resource_delete
+    server: both
+  - path: /~/api/fqdp_management_system/teams
+    method: GET
+    name: fqdp_teams_list
+    server: both
+  - path: /~/api/fqdp_management_system/teams
+    method: POST
+    name: fqdp_teams_create
+    server: both
+  - path: /~/api/fqdp_management_system/teams/{id}
+    method: GET
+    name: fqdp_team_get
+    server: both
+  - path: /~/api/fqdp_management_system/teams/{id}
+    method: PUT
+    name: fqdp_team_update
+    server: both
+  - path: /~/api/fqdp_management_system/teams/{id}
+    method: DELETE
+    name: fqdp_team_delete
+    server: both
+  - path: /~/api/fqdp_management_system/workspaces
+    method: GET
+    name: fqdp_workspaces_list
+    server: both
+  - path: /~/api/fqdp_management_system/workspaces
+    method: POST
+    name: fqdp_workspaces_create
+    server: both
+  - path: /~/api/fqdp_management_system/workspaces/{id}
+    method: GET
+    name: fqdp_workspace_get
+    server: both
+  - path: /~/api/fqdp_management_system/workspaces/{id}
+    method: PUT
+    name: fqdp_workspace_update
+    server: both
+  - path: /~/api/fqdp_management_system/workspaces/{id}
+    method: DELETE
+    name: fqdp_workspace_delete
+    server: both
+
+  # ── Fastify-only: GitHub Workflow Action UI ─────────────────────────
+  - path: /~/api/github_workflow_action_ui
+    method: GET
+    name: github_workflow_ui_index
+    server: both
+  - path: /~/api/github_workflow_action_ui/config
+    method: GET
+    name: github_workflow_ui_config
+    server: both
+  - path: /~/api/github_workflow_action_ui/health
+    method: GET
+    name: github_workflow_ui_health
+    server: both
+
+  # ── Fastify-only: Persona Editor ────────────────────────────────────
+  - path: /~/api/persona_editor
+    method: GET
+    name: persona_editor_index
+    server: both
+  - path: /~/api/persona_editor/audit-logs
+    method: GET
+    name: persona_editor_audit_logs
+    server: both
+  - path: /~/api/persona_editor/health
+    method: GET
+    name: persona_editor_health
+    server: both
+  - path: /~/api/persona_editor/health/detailed
+    method: GET
+    name: persona_editor_health_detailed
+    server: both
+  - path: /~/api/persona_editor/llm-defaults
+    method: GET
+    name: persona_editor_llm_defaults_list
+    server: both
+  - path: /~/api/persona_editor/llm-defaults
+    method: POST
+    name: persona_editor_llm_defaults_create
+    server: both
+  - path: /~/api/persona_editor/llm-defaults/{id}
+    method: GET
+    name: persona_editor_llm_defaults_get
+    server: both
+  - path: /~/api/persona_editor/llm-defaults/{id}
+    method: PUT
+    name: persona_editor_llm_defaults_update
+    server: both
+  - path: /~/api/persona_editor/llm-defaults/{id}
+    method: DELETE
+    name: persona_editor_llm_defaults_delete
+    server: both
+  - path: /~/api/persona_editor/llm-defaults/category/{category}
+    method: GET
+    name: persona_editor_llm_defaults_by_category
+    server: both
+  - path: /~/api/persona_editor/personas
+    method: GET
+    name: persona_editor_personas_list
+    server: both
+  - path: /~/api/persona_editor/personas
+    method: POST
+    name: persona_editor_personas_create
+    server: both
+  - path: /~/api/persona_editor/personas/{id}
+    method: GET
+    name: persona_editor_persona_get
+    server: both
+  - path: /~/api/persona_editor/personas/{id}
+    method: PUT
+    name: persona_editor_persona_update
+    server: both
+  - path: /~/api/persona_editor/personas/{id}
+    method: DELETE
+    name: persona_editor_persona_delete
+    server: both
+  - path: /~/api/persona_editor/personas/{id}/audit-logs
+    method: GET
+    name: persona_editor_persona_audit_logs
+    server: both
+  - path: /~/api/persona_editor/personas/{id}/prompt/data
+    method: GET
+    name: persona_editor_prompt_data
+    server: both
+  - path: /~/api/persona_editor/personas/{id}/prompt/generated
+    method: GET
+    name: persona_editor_prompt_generated
+    server: both
+  - path: /~/api/persona_editor/personas/{id}/prompt/template
+    method: GET
+    name: persona_editor_prompt_template
+    server: both
+  - path: /~/api/persona_editor/presets/{category}
+    method: GET
+    name: persona_editor_presets
+    server: both
+  - path: /~/api/persona_editor/render-template
+    method: POST
+    name: persona_editor_render_template
+    server: both
+  - path: /~/api/persona_editor/suggest
+    method: POST
+    name: persona_editor_suggest
+    server: both
+
+  # ── Fastify-only: Process Checklist ─────────────────────────────────
+  - path: /~/api/process_checklist
+    method: GET
+    name: process_checklist_index
+    server: both
+  - path: /~/api/process_checklist/checklists
+    method: GET
+    name: process_checklist_list
+    server: both
+  - path: /~/api/process_checklist/checklists
+    method: POST
+    name: process_checklist_create
+    server: both
+  - path: /~/api/process_checklist/checklists/{id}
+    method: GET
+    name: process_checklist_get
+    server: both
+  - path: /~/api/process_checklist/templates
+    method: GET
+    name: process_checklist_templates_list
+    server: both
+  - path: /~/api/process_checklist/templates
+    method: POST
+    name: process_checklist_templates_create
+    server: both
+  - path: /~/api/process_checklist/templates/{id}
+    method: GET
+    name: process_checklist_template_get
+    server: both
+  - path: /~/api/process_checklist/templates/{id}
+    method: PUT
+    name: process_checklist_template_update
+    server: both
+  - path: /~/api/process_checklist/templates/{id}
+    method: DELETE
+    name: process_checklist_template_delete
+    server: both
+
+  # ── Fastify-only: Rule Tree Table ───────────────────────────────────
+  - path: /~/api/rule_tree_table
+    method: GET
+    name: rule_tree_table_index
+    server: both
+  - path: /~/api/rule_tree_table/rules
+    method: GET
+    name: rule_tree_rules_list
+    server: both
+  - path: /~/api/rule_tree_table/rules
+    method: POST
+    name: rule_tree_rules_create
+    server: both
+  - path: /~/api/rule_tree_table/rules/validate
+    method: POST
+    name: rule_tree_rules_validate
+    server: both
+  - path: /~/api/rule_tree_table/trees
+    method: GET
+    name: rule_tree_trees_list
+    server: both
+  - path: /~/api/rule_tree_table/trees
+    method: POST
+    name: rule_tree_trees_create
+    server: both
+  - path: /~/api/rule_tree_table/trees/{id}
+    method: GET
+    name: rule_tree_tree_get
+    server: both
+  - path: /~/api/rule_tree_table/trees/{id}
+    method: PUT
+    name: rule_tree_tree_update
+    server: both
+  - path: /~/api/rule_tree_table/trees/{id}
+    method: DELETE
+    name: rule_tree_tree_delete
+    server: both
+
+  # ── Fastify-only: Task Graph ────────────────────────────────────────
+  - path: /~/api/task-graph
+    method: GET
+    name: task_graph_index
+    server: both
+  - path: /~/api/task-graph/health
+    method: GET
+    name: task_graph_health
+    server: both
+  - path: /~/api/task-graph/health/live
+    method: GET
+    name: task_graph_health_live
+    server: both
+  - path: /~/api/task-graph/health/ready
+    method: GET
+    name: task_graph_health_ready
+    server: both
+  - path: /~/api/task-graph/tasks
+    method: GET
+    name: task_graph_tasks_list
+    server: both
+  - path: /~/api/task-graph/tasks
+    method: POST
+    name: task_graph_tasks_create
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}
+    method: GET
+    name: task_graph_task_get
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}
+    method: PATCH
+    name: task_graph_task_update
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}
+    method: DELETE
+    name: task_graph_task_delete
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/start
+    method: POST
+    name: task_graph_task_start
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/complete
+    method: POST
+    name: task_graph_task_complete
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/fail
+    method: POST
+    name: task_graph_task_fail
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/skip
+    method: POST
+    name: task_graph_task_skip
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/retry
+    method: POST
+    name: task_graph_task_retry
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/status
+    method: PATCH
+    name: task_graph_task_status_update
+    server: both
+  - path: /~/api/task-graph/tasks/{taskId}/execution-status
+    method: GET
+    name: task_graph_task_execution_status
+    server: both
+  - path: /~/api/task-graph/tasks/idempotency/{key}
+    method: GET
+    name: task_graph_task_by_idempotency
+    server: both
+  - path: /~/api/task-graph/steps
+    method: POST
+    name: task_graph_step_create
+    server: both
+  - path: /~/api/task-graph/steps/batch
+    method: POST
+    name: task_graph_steps_batch
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}
+    method: GET
+    name: task_graph_step_get
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}
+    method: PATCH
+    name: task_graph_step_update
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}
+    method: DELETE
+    name: task_graph_step_delete
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}/start
+    method: POST
+    name: task_graph_step_start
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}/complete
+    method: POST
+    name: task_graph_step_complete
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}/skip
+    method: POST
+    name: task_graph_step_skip
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}/block
+    method: POST
+    name: task_graph_step_block
+    server: both
+  - path: /~/api/task-graph/steps/{stepId}/unblock
+    method: POST
+    name: task_graph_step_unblock
+    server: both
+  - path: /~/api/task-graph/steps/task/{taskId}
+    method: GET
+    name: task_graph_steps_by_task
+    server: both
+  - path: /~/api/task-graph/steps/task/{taskId}/progress
+    method: GET
+    name: task_graph_steps_progress
+    server: both
+  - path: /~/api/task-graph/dependencies
+    method: POST
+    name: task_graph_dependency_create
+    server: both
+  - path: /~/api/task-graph/dependencies/{prerequisiteId}/{dependentId}
+    method: DELETE
+    name: task_graph_dependency_delete
+    server: both
+  - path: /~/api/task-graph/dependencies/{taskId}/graph
+    method: GET
+    name: task_graph_dependency_graph
+    server: both
+  - path: /~/api/task-graph/dependencies/{taskId}/execution-readiness
+    method: GET
+    name: task_graph_execution_readiness
+    server: both
+  - path: /~/api/task-graph/notes
+    method: POST
+    name: task_graph_note_create
+    server: both
+  - path: /~/api/task-graph/notes/{noteId}
+    method: PATCH
+    name: task_graph_note_update
+    server: both
+  - path: /~/api/task-graph/notes/{noteId}
+    method: DELETE
+    name: task_graph_note_delete
+    server: both
+  - path: /~/api/task-graph/notes/task/{taskId}
+    method: GET
+    name: task_graph_notes_by_task
+    server: both
+  - path: /~/api/task-graph/files
+    method: POST
+    name: task_graph_file_create
+    server: both
+  - path: /~/api/task-graph/files/{fileId}
+    method: PATCH
+    name: task_graph_file_update
+    server: both
+  - path: /~/api/task-graph/files/{fileId}
+    method: DELETE
+    name: task_graph_file_delete
+    server: both
+  - path: /~/api/task-graph/files/step/{stepId}
+    method: GET
+    name: task_graph_files_by_step
+    server: both
+  - path: /~/api/task-graph/files/task/{taskId}
+    method: GET
+    name: task_graph_files_by_task
+    server: both
+  - path: /~/api/task-graph/failed-jobs
+    method: GET
+    name: task_graph_failed_jobs_list
+    server: both
+  - path: /~/api/task-graph/failed-jobs/{id}
+    method: GET
+    name: task_graph_failed_job_get
+    server: both
+  - path: /~/api/task-graph/failed-jobs/{id}
+    method: DELETE
+    name: task_graph_failed_job_delete
+    server: both
+  - path: /~/api/task-graph/failed-jobs/{id}/retry
+    method: POST
+    name: task_graph_failed_job_retry
+    server: both
+  - path: /~/api/task-graph/executions/logs
+    method: GET
+    name: task_graph_execution_logs
+    server: both
+  - path: /~/api/task-graph/executions/timeline/{taskId}
+    method: GET
+    name: task_graph_execution_timeline
+    server: both
+
+  # ── Fastify-only: AI Ask v1 ─────────────────────────────────────────
+  - path: /api/ai-ask-v1
+    method: GET
+    name: ai_ask_v1_index
+    server: both
+  - path: /api/ai-ask-v1/personas
+    method: GET
+    name: ai_ask_v1_personas_list
+    server: both
+  - path: /api/ai-ask-v1/personas
+    method: POST
+    name: ai_ask_v1_personas_create
+    server: both
+  - path: /api/ai-ask-v1/personas/{id}
+    method: GET
+    name: ai_ask_v1_persona_get
+    server: both
+  - path: /api/ai-ask-v1/personas/{id}
+    method: PUT
+    name: ai_ask_v1_persona_update
+    server: both
+  - path: /api/ai-ask-v1/personas/{id}
+    method: DELETE
+    name: ai_ask_v1_persona_delete
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults
+    method: GET
+    name: ai_ask_v1_llm_defaults_list
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults
+    method: POST
+    name: ai_ask_v1_llm_defaults_create
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults/{id}
+    method: GET
+    name: ai_ask_v1_llm_defaults_get
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults/{id}
+    method: PUT
+    name: ai_ask_v1_llm_defaults_update
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults/{id}
+    method: DELETE
+    name: ai_ask_v1_llm_defaults_delete
+    server: both
+  - path: /api/ai-ask-v1/llm-defaults/category/{category}
+    method: GET
+    name: ai_ask_v1_llm_defaults_by_category
+    server: both
+
+  # ── Fastify-only: AI Ask v2 ─────────────────────────────────────────
+  - path: /api/ai-ask-v2
+    method: GET
+    name: ai_ask_v2_index
+    server: both
+  - path: /api/ai-ask-v2/personas
+    method: GET
+    name: ai_ask_v2_personas_list
+    server: both
+  - path: /api/ai-ask-v2/personas
+    method: POST
+    name: ai_ask_v2_personas_create
+    server: both
+  - path: /api/ai-ask-v2/personas/{id}
+    method: GET
+    name: ai_ask_v2_persona_get
+    server: both
+  - path: /api/ai-ask-v2/personas/{id}
+    method: PUT
+    name: ai_ask_v2_persona_update
+    server: both
+  - path: /api/ai-ask-v2/personas/{id}
+    method: DELETE
+    name: ai_ask_v2_persona_delete
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults
+    method: GET
+    name: ai_ask_v2_llm_defaults_list
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults
+    method: POST
+    name: ai_ask_v2_llm_defaults_create
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults/{id}
+    method: GET
+    name: ai_ask_v2_llm_defaults_get
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults/{id}
+    method: PUT
+    name: ai_ask_v2_llm_defaults_update
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults/{id}
+    method: DELETE
+    name: ai_ask_v2_llm_defaults_delete
+    server: both
+  - path: /api/ai-ask-v2/llm-defaults/category/{category}
+    method: GET
+    name: ai_ask_v2_llm_defaults_by_category
+    server: both
+
+  # ── Fastify-only: Code Repositories ─────────────────────────────────
+  - path: /api/code-repositories
+    method: GET
+    name: code_repos_index
+    server: both
+  - path: /api/code-repositories/repos
+    method: GET
+    name: code_repos_list
+    server: both
+  - path: /api/code-repositories/repos
+    method: POST
+    name: code_repos_create
+    server: both
+  - path: /api/code-repositories/repos/{id}
+    method: GET
+    name: code_repo_get
+    server: both
+  - path: /api/code-repositories/repos/{id}
+    method: PUT
+    name: code_repo_update
+    server: both
+  - path: /api/code-repositories/repos/{id}
+    method: DELETE
+    name: code_repo_delete
+    server: both
+  - path: /api/code-repositories/repos/{repoId}/metadata
+    method: GET
+    name: code_repo_metadata_list
+    server: both
+  - path: /api/code-repositories/repos/{repoId}/metadata
+    method: POST
+    name: code_repo_metadata_create
+    server: both
+  - path: /api/code-repositories/metadata/{id}
+    method: GET
+    name: code_repo_metadata_get
+    server: both
+  - path: /api/code-repositories/metadata/{id}
+    method: PUT
+    name: code_repo_metadata_update
+    server: both
+  - path: /api/code-repositories/metadata/{id}
+    method: DELETE
+    name: code_repo_metadata_delete
+    server: both
+  - path: /api/code-repositories/tags
+    method: GET
+    name: code_repos_tags_list
+    server: both
+  - path: /api/code-repositories/tags
+    method: POST
+    name: code_repos_tags_create
+    server: both
+  - path: /api/code-repositories/tags/{id}
+    method: GET
+    name: code_repos_tag_get
+    server: both
+  - path: /api/code-repositories/tags/{id}
+    method: PUT
+    name: code_repos_tag_update
+    server: both
+  - path: /api/code-repositories/tags/{id}
+    method: DELETE
+    name: code_repos_tag_delete
+    server: both
+
+  # ── Fastify-only: Component Registry ────────────────────────────────
+  - path: /api/component-registry
+    method: GET
+    name: component_registry_index
+    server: both
+  - path: /api/component-registry/components
+    method: GET
+    name: component_registry_list
+    server: both
+  - path: /api/component-registry/components
+    method: POST
+    name: component_registry_create
+    server: both
+  - path: /api/component-registry/components/{id}
+    method: GET
+    name: component_registry_get
+    server: both
+  - path: /api/component-registry/components/{id}
+    method: PUT
+    name: component_registry_update
+    server: both
+  - path: /api/component-registry/components/{id}
+    method: DELETE
+    name: component_registry_delete
+    server: both
+  - path: /api/component-registry/components/authors
+    method: GET
+    name: component_registry_authors
+    server: both
+  - path: /api/component-registry/components/stats
+    method: GET
+    name: component_registry_stats
+    server: both
+  - path: /api/component-registry/tags
+    method: GET
+    name: component_registry_tags_list
+    server: both
+  - path: /api/component-registry/tags
+    method: POST
+    name: component_registry_tags_create
+    server: both
+  - path: /api/component-registry/tags/{id}
+    method: PUT
+    name: component_registry_tag_update
+    server: both
+  - path: /api/component-registry/tags/{id}
+    method: DELETE
+    name: component_registry_tag_delete
+    server: both
+  - path: /api/component-registry/tags/search
+    method: GET
+    name: component_registry_tags_search
+    server: both
+
+  # ── Fastify-only: Conditional Control Logic Viewer ──────────────────
+  - path: /api/conditional-control-logic-viewer
+    method: GET
+    name: cclv_index
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees
+    method: GET
+    name: cclv_filter_trees_list
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees
+    method: POST
+    name: cclv_filter_trees_create
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees/{id}
+    method: GET
+    name: cclv_filter_tree_get
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees/{id}
+    method: PUT
+    name: cclv_filter_tree_update
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees/{id}
+    method: DELETE
+    name: cclv_filter_tree_delete
+    server: both
+  - path: /api/conditional-control-logic-viewer/filter-trees/{id}/clone
+    method: POST
+    name: cclv_filter_tree_clone
+    server: both
+  - path: /api/conditional-control-logic-viewer/dropdown-options
+    method: GET
+    name: cclv_dropdown_options_list
+    server: both
+  - path: /api/conditional-control-logic-viewer/dropdown-options
+    method: POST
+    name: cclv_dropdown_options_create
+    server: both
+  - path: /api/conditional-control-logic-viewer/dropdown-options/{id}
+    method: GET
+    name: cclv_dropdown_option_get
+    server: both
+  - path: /api/conditional-control-logic-viewer/dropdown-options/{id}
+    method: PUT
+    name: cclv_dropdown_option_update
+    server: both
+  - path: /api/conditional-control-logic-viewer/dropdown-options/{id}
+    method: DELETE
+    name: cclv_dropdown_option_delete
+    server: both
+
+  # ── Fastify-only: Form Builder ──────────────────────────────────────
+  - path: /api/form-builder
+    method: GET
+    name: form_builder_index
+    server: both
+  - path: /api/form-builder/forms
+    method: GET
+    name: form_builder_forms_list
+    server: both
+  - path: /api/form-builder/forms
+    method: POST
+    name: form_builder_forms_create
+    server: both
+  - path: /api/form-builder/forms/{id}
+    method: GET
+    name: form_builder_form_get
+    server: both
+  - path: /api/form-builder/forms/{id}
+    method: PUT
+    name: form_builder_form_update
+    server: both
+  - path: /api/form-builder/forms/{id}
+    method: DELETE
+    name: form_builder_form_delete
+    server: both
+  - path: /api/form-builder/forms/{id}/export
+    method: GET
+    name: form_builder_form_export
+    server: both
+  - path: /api/form-builder/forms/import
+    method: POST
+    name: form_builder_form_import
+    server: both
+  - path: /api/form-builder/forms/{id}/versions
+    method: GET
+    name: form_builder_versions_list
+    server: both
+  - path: /api/form-builder/forms/{id}/versions
+    method: POST
+    name: form_builder_version_create
+    server: both
+  - path: /api/form-builder/forms/{id}/versions/{vid}
+    method: GET
+    name: form_builder_version_get
+    server: both
+  - path: /api/form-builder/forms/{id}/versions/{vid}/restore
+    method: POST
+    name: form_builder_version_restore
+    server: both
+  - path: /api/form-builder/tags
+    method: GET
+    name: form_builder_tags_list
+    server: both
+  - path: /api/form-builder/tags
+    method: POST
+    name: form_builder_tags_create
+    server: both
+  - path: /api/form-builder/tags/{id}
+    method: GET
+    name: form_builder_tag_get
+    server: both
+  - path: /api/form-builder/tags/{id}
+    method: PUT
+    name: form_builder_tag_update
+    server: both
+  - path: /api/form-builder/tags/{id}
+    method: DELETE
+    name: form_builder_tag_delete
+    server: both
+
+  # ── Fastify-only: Group Role Management ─────────────────────────────
+  - path: /api/group-role-management
+    method: GET
+    name: grm_index
+    server: both
+  - path: /api/group-role-management/groups
+    method: GET
+    name: grm_groups_list
+    server: both
+  - path: /api/group-role-management/groups
+    method: POST
+    name: grm_groups_create
+    server: both
+  - path: /api/group-role-management/groups/{id}
+    method: GET
+    name: grm_group_get
+    server: both
+  - path: /api/group-role-management/groups/{id}
+    method: PUT
+    name: grm_group_update
+    server: both
+  - path: /api/group-role-management/groups/{id}
+    method: DELETE
+    name: grm_group_delete
+    server: both
+  - path: /api/group-role-management/groups/search
+    method: GET
+    name: grm_groups_search
+    server: both
+  - path: /api/group-role-management/roles
+    method: GET
+    name: grm_roles_list
+    server: both
+  - path: /api/group-role-management/roles
+    method: POST
+    name: grm_roles_create
+    server: both
+  - path: /api/group-role-management/roles/{id}
+    method: GET
+    name: grm_role_get
+    server: both
+  - path: /api/group-role-management/roles/{id}
+    method: PUT
+    name: grm_role_update
+    server: both
+  - path: /api/group-role-management/roles/{id}
+    method: DELETE
+    name: grm_role_delete
+    server: both
+  - path: /api/group-role-management/roles/{id}/clone
+    method: POST
+    name: grm_role_clone
+    server: both
+  - path: /api/group-role-management/actions
+    method: GET
+    name: grm_actions_list
+    server: both
+  - path: /api/group-role-management/actions
+    method: POST
+    name: grm_actions_create
+    server: both
+  - path: /api/group-role-management/actions/{id}
+    method: PUT
+    name: grm_action_update
+    server: both
+  - path: /api/group-role-management/actions/{id}
+    method: DELETE
+    name: grm_action_delete
+    server: both
+  - path: /api/group-role-management/actions/search
+    method: GET
+    name: grm_actions_search
+    server: both
+  - path: /api/group-role-management/restrictions
+    method: GET
+    name: grm_restrictions_list
+    server: both
+  - path: /api/group-role-management/restrictions
+    method: POST
+    name: grm_restrictions_create
+    server: both
+  - path: /api/group-role-management/restrictions/{id}
+    method: PUT
+    name: grm_restriction_update
+    server: both
+  - path: /api/group-role-management/restrictions/{id}
+    method: DELETE
+    name: grm_restriction_delete
+    server: both
+  - path: /api/group-role-management/restrictions/search
+    method: GET
+    name: grm_restrictions_search
+    server: both
+  - path: /api/group-role-management/labels
+    method: GET
+    name: grm_labels_list
+    server: both
+  - path: /api/group-role-management/labels
+    method: POST
+    name: grm_labels_create
+    server: both
+  - path: /api/group-role-management/labels/{name}
+    method: PUT
+    name: grm_label_update
+    server: both
+  - path: /api/group-role-management/labels/{name}
+    method: DELETE
+    name: grm_label_delete
+    server: both
+
+  # ── Fastify-only: Onboarding Screen ─────────────────────────────────
+  - path: /api/onboarding-screen
+    method: GET
+    name: onboarding_index
+    server: both
+  - path: /api/onboarding-screen/screens
+    method: GET
+    name: onboarding_screens_list
+    server: both
+  - path: /api/onboarding-screen/screens
+    method: POST
+    name: onboarding_screens_create
+    server: both
+  - path: /api/onboarding-screen/screens/{id}
+    method: GET
+    name: onboarding_screen_get
+    server: both
+  - path: /api/onboarding-screen/screens/{id}
+    method: PUT
+    name: onboarding_screen_update
+    server: both
+  - path: /api/onboarding-screen/screens/{id}
+    method: DELETE
+    name: onboarding_screen_delete
+    server: both
+  - path: /api/onboarding-screen/flows
+    method: GET
+    name: onboarding_flows_list
+    server: both
+  - path: /api/onboarding-screen/flows
+    method: POST
+    name: onboarding_flows_create
+    server: both
+  - path: /api/onboarding-screen/flows/{id}
+    method: GET
+    name: onboarding_flow_get
+    server: both
+  - path: /api/onboarding-screen/flows/{id}
+    method: PUT
+    name: onboarding_flow_update
+    server: both
+  - path: /api/onboarding-screen/flows/{id}
+    method: DELETE
+    name: onboarding_flow_delete
+    server: both
+
+  # ── Fastify-only: Prompt Management System ──────────────────────────
+  - path: /api/prompt-management-system
+    method: GET
+    name: pms_index
+    server: both
+  - path: /api/prompt-management-system/projects
+    method: GET
+    name: pms_projects_list
+    server: both
+  - path: /api/prompt-management-system/projects
+    method: POST
+    name: pms_projects_create
+    server: both
+  - path: /api/prompt-management-system/projects/{id}
+    method: GET
+    name: pms_project_get
+    server: both
+  - path: /api/prompt-management-system/projects/{id}
+    method: PUT
+    name: pms_project_update
+    server: both
+  - path: /api/prompt-management-system/projects/{id}
+    method: DELETE
+    name: pms_project_delete
+    server: both
+  - path: /api/prompt-management-system/prompts
+    method: GET
+    name: pms_prompts_list
+    server: both
+  - path: /api/prompt-management-system/prompts
+    method: POST
+    name: pms_prompts_create
+    server: both
+  - path: /api/prompt-management-system/prompts/{id}
+    method: GET
+    name: pms_prompt_get
+    server: both
+  - path: /api/prompt-management-system/prompts/{id}
+    method: PUT
+    name: pms_prompt_update
+    server: both
+  - path: /api/prompt-management-system/prompts/{id}
+    method: DELETE
+    name: pms_prompt_delete
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/versions
+    method: GET
+    name: pms_prompt_versions_list
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/versions
+    method: POST
+    name: pms_prompt_version_create
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/versions/{id}
+    method: GET
+    name: pms_prompt_version_get
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/versions/{id}/status
+    method: PATCH
+    name: pms_prompt_version_status
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/deployments
+    method: GET
+    name: pms_prompt_deployments
+    server: both
+  - path: /api/prompt-management-system/prompts/{promptId}/deploy
+    method: POST
+    name: pms_prompt_deploy
+    server: both
+  - path: /api/prompt-management-system/prompts/{slug}/{environment}
+    method: GET
+    name: pms_prompt_by_slug_env
+    server: both
+  - path: /api/prompt-management-system/prompts/{slug}/render
+    method: POST
+    name: pms_prompt_render
+    server: both
+
+  # ── Fastify-only: Provider APIs ─────────────────────────────────────
+  # Confluence
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/health
+    method: GET
+    name: confluence_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/content
+    method: GET
+    name: confluence_content_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/content
+    method: POST
+    name: confluence_content_create
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/content/{contentId}
+    method: GET
+    name: confluence_content_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/content/{contentId}
+    method: PUT
+    name: confluence_content_update
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/content/{contentId}
+    method: DELETE
+    name: confluence_content_delete
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/search
+    method: GET
+    name: confluence_search
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/space
+    method: GET
+    name: confluence_space_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/space
+    method: POST
+    name: confluence_space_create
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/space/{spaceKey}
+    method: GET
+    name: confluence_space_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/user
+    method: GET
+    name: confluence_user
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/user/current
+    method: GET
+    name: confluence_user_current
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/group
+    method: GET
+    name: confluence_group_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/confluence_api/v9/group/{groupName}/member
+    method: GET
+    name: confluence_group_members
+    server: both
+
+  # Figma
+  - path: /~/api/rest/02-01-2026/providers/figma_api/health
+    method: GET
+    name: figma_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}
+    method: GET
+    name: figma_file_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/nodes
+    method: GET
+    name: figma_file_nodes
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/components
+    method: GET
+    name: figma_file_components
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/images
+    method: GET
+    name: figma_file_images
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/comments
+    method: GET
+    name: figma_file_comments
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/versions
+    method: GET
+    name: figma_file_versions
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/variables/local
+    method: GET
+    name: figma_variables_local
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/files/{fileKey}/variables/published
+    method: GET
+    name: figma_variables_published
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/teams/{teamId}/projects
+    method: GET
+    name: figma_team_projects
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/teams/{teamId}/components
+    method: GET
+    name: figma_team_components
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/teams/{teamId}/styles
+    method: GET
+    name: figma_team_styles
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/components/{key}
+    method: GET
+    name: figma_component_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/figma_api/v1/styles/{key}
+    method: GET
+    name: figma_style_get
+    server: both
+
+  # GitHub (wildcard — expanded from server route table at load time)
+  - path: /~/api/rest/02-01-2026/providers/github_api/**
+    name: github_api
+    server: both
+
+  # GitHub SDK Component Usage Audit
+  - path: /~/api/rest/02-01-2026/providers/github_sdk_api_component_usage_audit/v1/audit
+    method: POST
+    name: github_component_usage_audit
+    server: both
+
+  # Jira
+  - path: /~/api/rest/02-01-2026/providers/jira_api/health
+    method: GET
+    name: jira_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/issues
+    method: POST
+    name: jira_issue_create
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/issues/{issueKey}
+    method: GET
+    name: jira_issue_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/issues/{issueKey}
+    method: PATCH
+    name: jira_issue_update
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/issues/{issueKey}/transitions
+    method: GET
+    name: jira_transitions_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/issues/{issueKey}/transitions
+    method: POST
+    name: jira_transition
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/projects/{projectKey}
+    method: GET
+    name: jira_project_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/jira_api/v3/users/search
+    method: GET
+    name: jira_users_search
+    server: both
+
+  # SauceLabs
+  - path: /~/api/rest/02-01-2026/providers/saucelabs_api/health
+    method: GET
+    name: saucelabs_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/saucelabs_api/v1/jobs
+    method: GET
+    name: saucelabs_jobs_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/saucelabs_api/v1/jobs/{jobId}
+    method: GET
+    name: saucelabs_job_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/saucelabs_api/v1/platform/status
+    method: GET
+    name: saucelabs_platform_status
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/saucelabs_api/v1/users/{username}
+    method: GET
+    name: saucelabs_user_get
+    server: both
+
+  # Statsig
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/health
+    method: GET
+    name: statsig_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/experiments
+    method: GET
+    name: statsig_experiments_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/experiments/{id}
+    method: GET
+    name: statsig_experiment_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/gates
+    method: GET
+    name: statsig_gates_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/gates/{id}
+    method: GET
+    name: statsig_gate_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/layers
+    method: GET
+    name: statsig_layers_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/segments
+    method: GET
+    name: statsig_segments_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/metrics/list
+    method: GET
+    name: statsig_metrics_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/events
+    method: GET
+    name: statsig_events_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/statsig_api/v1/tags
+    method: GET
+    name: statsig_tags_list
+    server: both
+
+  # AWS S3
+  - path: /~/api/rest/02-01-2026/providers/s3_api/health
+    method: GET
+    name: s3_api_health
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets
+    method: GET
+    name: s3_buckets_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}
+    method: POST
+    name: s3_bucket_create
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}
+    method: HEAD
+    name: s3_bucket_exists
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects
+    method: GET
+    name: s3_objects_list
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects
+    method: POST
+    name: s3_object_put
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects/by-key
+    method: GET
+    name: s3_object_get
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects/by-key
+    method: PUT
+    name: s3_object_update
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects/by-key
+    method: DELETE
+    name: s3_object_delete
+    server: both
+  - path: /~/api/rest/02-01-2026/providers/s3_api/v1/buckets/{bucket}/objects/metadata
+    method: GET
+    name: s3_object_metadata
+    server: both

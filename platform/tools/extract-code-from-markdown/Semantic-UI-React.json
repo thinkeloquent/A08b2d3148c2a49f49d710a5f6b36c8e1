@@ -1,0 +1,526 @@
+{
+  "scanned_files": 18,
+  "code_blocks_found": 65,
+  "blocks": [
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuide.mdx",
+      "start_line": 35,
+      "end_line": 47,
+      "code": "import { Button } from 'semantic-ui-react'\n\nconst App = () => {\n  const buttonRef = React.useRef()\n\n  React.useEffect(() => {\n    console.log(buttonRef.current)\n  }, [])\n\n  return <Button ref={buttonRef} />\n}",
+      "language": "jsx",
+      "context": "For example, you can use `ref` to get a reference to the underlying DOM element of `Button` component:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuide.mdx",
+      "start_line": 67,
+      "end_line": 76,
+      "code": "function App() {\n-  return (\n-    <Ref innerRef={buttonRef}>\n-      <Button />\n-    </Ref>\n-  )\n+  return <Button ref={buttonRef} />\n}",
+      "language": "diff",
+      "context": "Because of the native ref support, `Ref` component is no longer needed and was removed as it used deprecated APIs."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuide.mdx",
+      "start_line": 80,
+      "end_line": 83,
+      "code": "-import { Ref } from \"semantic-ui-react\";\n+import Ref from \"@semantic-ui-react/component-ref\";",
+      "language": "diff",
+      "context": "As we exported `Ref` component and recommended its usage everywhere we moved out `Ref` component to a separate package (`@semantic-ui-react/component-ref`). This means that you can use it already with both v2 & v3 to make the upgrade smoother."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuide.mdx",
+      "start_line": 107,
+      "end_line": 110,
+      "code": "-import { Visibility } from \"semantic-ui-react\";\n+import Visibility from \"@semantic-ui-react/component-visibility\";",
+      "language": "diff",
+      "context": "As it's not a straightforward replacement that may cause issues with adoption we moved out `Visibility` component to a separate package (`@semantic-ui-react/component-visibility`). This means that you can use it already with v2 or upcoming v3:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuide.mdx",
+      "start_line": 132,
+      "end_line": 139,
+      "code": "-  static INITIAL = TRANSITION_STATUS_INITIAL\n-  static ENTERED = TRANSITION_STATUS_ENTERED\n-  static ENTERING = TRANSITION_STATUS_ENTERING\n-  static EXITED = TRANSITION_STATUS_EXITED\n-  static EXITING = TRANSITION_STATUS_EXITING\n-  static UNMOUNTED = TRANSITION_STATUS_UNMOUNTED",
+      "language": "diff",
+      "context": "Some static properties on `Transition` component were removed:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuideV2.mdx",
+      "start_line": 16,
+      "end_line": 24,
+      "code": " <>\n-  <Popup offset=\"50px\" />\n+  <Popup offset={[50, 0]} />\n   <br />\n-  <Popup offset=\"-100%p\" />\n+  <Popup offset={({ popper }) => [-popper.width, 0]} />\n </>",
+      "language": "diff",
+      "context": "Previously it was possible to pass different units to the offset prop as units. This behavior was changed and `offset` accepts a tuple or a function. Examples in our docs were also updated."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuideV2.mdx",
+      "start_line": 30,
+      "end_line": 33,
+      "code": "-<Popup popperModifiers={{ preventOverflow: { padding: 0 } }} />\n+<Popup popperModifiers={[{ name: 'preventOverflow', options: { padding: 0 } }]} />",
+      "language": "diff",
+      "context": "The `popperModifiers` prop should be defined as an array with changed format (see [Popper docs](https://popper.js.org/docs/v2/migration-guide/#10-update-modifiers))."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/MigrationGuideV2.mdx",
+      "start_line": 47,
+      "end_line": 80,
+      "code": "+import { createMedia } from \"@artsy/fresnel\";\nimport React from \"react\";\n-import { Responsive, Segment } from \"semantic-ui-react\";\n+import { Segment } from \"semantic-ui-react\";\n\n+const AppMedia = createMedia({\n+  breakpoints: {\n+    mobile: 320,\n+    tablet: 768,\n+    computer: 992,\n+    largeScreen: 1200,\n+    widescreen: 1920\n+  }\n+});\n+const mediaStyles = AppMedia.createMediaStyle();\n+const { Media, MediaContextProvider } = AppMedia;\n\n-const App = () => (\n-  <Responsive as={Segment} {...Responsive.onlyMobile}>\n-    Mobile\n-  </Responsive>\n-)\n+const App = () => (\n+  <>\n+    <style>{mediaStyles}</style>\n+    <MediaContextProvider>\n+      <Segment as={Media} at=\"mobile\">\n+        Mobile\n+      </Segment>\n+    </MediaContextProvider>\n+  </>\n+);",
+      "language": "diff",
+      "context": "[@artsy/fresnel](https://github.com/artsy/fresnel) was proposed as a replacement as it properly handles SSR scenarios."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "<Button icon='like' />",
+      "language": "jsx",
+      "context": "Semantic UI React components can have \"shorthands\". For example, `Button` component has an `icon` shorthand which value defines the icon that will be rendered."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 21,
+      "end_line": 35,
+      "code": "<>\n  {/* \ud83d\udca1 'color' and 'name' will be used as <Icon /> element's props */}\n  <Button content='Like' icon={{ color: 'red', name: 'like' }} />\n  {/* \ud83d\udca1 you can also add handlers and any DOM props to shorthands */}\n  <Input\n    action={{\n      icon: 'search',\n      onClick: () => console.log('An action was clicked!'),\n    }}\n    actionPosition='left'\n    placeholder='Search...'\n  />\n</>",
+      "language": "jsx",
+      "context": "Each component's shorthand has an associated default element type. For example, by default, there is `<Icon />` element rendered for `Button`'s icon shorthand. It is possible to customize props of this default element by providing props object as shorthand value:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 41,
+      "end_line": 47,
+      "code": "<>\n  <Button content='Like' icon='like' />\n  {/* \ud83d\udca1 has identical effect to the previous one */}\n  <Button content='Like' icon={{ name: 'like' }} />\n</>",
+      "language": "jsx",
+      "context": "There is even shorter way to define default element's props - by using a primitive value. In that case provided shorthand value will be taken as a value for \"default prop\" of this element."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 51,
+      "end_line": 59,
+      "code": "<>\n  <Modal trigger={<Button>Show</Button>} content='Content' />\n  {/* \ud83d\udca1 has identical effect to the previous one */}\n  <Modal trigger={<Button>Show</Button>} content={{ content: 'Content' }} />\n  {/* \u26d4 example below has broken styling, see section about React Element */}\n  <Modal trigger={<Button>Show</Button>} content={<div>Content</div>} />\n</>",
+      "language": "jsx",
+      "context": "This works because `name` is the default prop of shorthand's `<Icon />` element."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 65,
+      "end_line": 71,
+      "code": "<>\n  {/* \ud83d\udca1 hides a toogle icon in `Dropdown` */}\n  <Dropdown icon={null} />\n  <Dropdown icon={false} />\n</>",
+      "language": "jsx",
+      "context": "It is also possible to pass falsy values (`false`, `null` or `undefined`) - in that case there will be nothing rendered for the component's shorthand."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 77,
+      "end_line": 79,
+      "code": "<Button icon={<i className='my-icon' />} />",
+      "language": "jsx",
+      "context": "There are cases where it might be necessary to customize the element tree that will be rendered as a shorthand's value. Returning to `Button` example, we might want to render `<i />` instead of default `<Icon />` element. In that case, the necessary element might be directly provided as shorthand value:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 94,
+      "end_line": 96,
+      "code": "<Button icon={{ as: 'i', className: 'my-icon' }} />",
+      "language": "jsx",
+      "context": "Due to this limitation, you should strive to use other options for shorthand values whenever is possible - for instance, this is how the previous example can be rewritten:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 104,
+      "end_line": 112,
+      "code": "<Button\n  content='Like'\n  icon={{\n    children: (Component, componentProps) => <Component {...componentProps} color='red' />,\n    name: 'question',\n  }}\n/>",
+      "language": "jsx",
+      "context": "Providing function as a shorthand value is the most involving but, at the same time, the most powerful option for customizing component's shorthand. It should return React Element as a result or `null`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 118,
+      "end_line": 123,
+      "code": "<Button\n  content='Like'\n  icon={{ children: (Component, componentProps) => <Label basic>+1</Label> }}\n/>",
+      "language": "jsx",
+      "context": "There is another use case when render function is very useful for - this is the case where custom element's tree should be rendered for the shorthand. As you might recall, there is a problem that might happen when React Element is provided directly as shorthand value - in that case, props are not propagated to rendered. In order to avoid that the following strategy should be considered:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/ShorthandProps.mdx",
+      "start_line": 138,
+      "end_line": 143,
+      "code": "<Button\n  content='Like'\n  icon={(Component, componentProps) => <Component {...componentProps} color='red' name='like' />}\n/>",
+      "language": "jsx",
+      "context": "Thus, in its simplest form, it could be used the following way:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Usage.mdx",
+      "start_line": 21,
+      "end_line": 25,
+      "code": "yarn add semantic-ui-react semantic-ui-css\n## Or NPM\nnpm install semantic-ui-react semantic-ui-css",
+      "language": "bash",
+      "context": "React components can be installed via <code>yarn</code> or <code>npm</code>:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Usage.mdx",
+      "start_line": 29,
+      "end_line": 31,
+      "code": "import 'semantic-ui-css/semantic.min.css'",
+      "language": "js",
+      "context": "After install, **import the minified CSS file in your app's entry file:**"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Usage.mdx",
+      "start_line": 53,
+      "end_line": 68,
+      "code": "<body>\n  <!-- ... other HTML ... -->\n  <!-- ... Load React ... -->\n\n  <link\n    async\n    rel=\"stylesheet\"\n    href=\"https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css\"\n  />\n  <script src=\"https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js\"></script>\n\n  <!-- Load our React component. -->\n  <script src=\"like_button.js\"></script>\n</body>",
+      "language": "html",
+      "context": "And then just add this link and script tag to the `<body>` after initializing React in your `index.html` file."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Usage.mdx",
+      "start_line": 70,
+      "end_line": 81,
+      "code": "const e = React.createElement\nconst { Button } = semanticUIReact\n\n// ... Other JS code ...\n\nconst domContainer = document.querySelector('#like_button_container')\n\n// \ud83d\udca1 This example is simplied to use React without JSX\n//    https://reactjs.org/docs/react-without-jsx.html\nReactDOM.render(e(Button, { primary: true }, 'Hello world!'), domContainer)",
+      "language": "js",
+      "context": "</body>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Augmentation.mdx",
+      "start_line": 13,
+      "end_line": 21,
+      "code": "<>\n  {/* \ud83d\udd28  Each Semantic UI React component has a default value for `as` prop */}\n  {/* Will output: <button class='ui button' /> */}\n  <Button />\n  {/* Uses another tag: <a class='ui button' /> */}\n  <Button as='a' />\n</>",
+      "language": "jsx",
+      "context": "Semantic UI React provides a way to compose React components through the `as` prop. It allows composing component features and props without adding extra nested components."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Augmentation.mdx",
+      "start_line": 27,
+      "end_line": 31,
+      "code": "// `type` is an unhandled prop on `Button` and will be passed through \u2b07\ufe0f\n// Will output: <button class=\"ui button\" type=\"submit\" />\n<Button type='submit' />",
+      "language": "jsx",
+      "context": "Our components handle only props that are defined in their `propTypes`, all unhandled props are passed to the component you are rendering `as`. It means that all HTML props are supported on all components."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Augmentation.mdx",
+      "start_line": 35,
+      "end_line": 43,
+      "code": "import { Link } from 'react-router-dom'\nimport { Button } from 'semantic-ui-react'\n\n// \ud83d\udca1 `to` prop is not handled in `Button` and will be passed to `Link` component\n;<Button as={Link} to='/home'>\n  To homepage\n</Button>",
+      "language": "jsx",
+      "context": "This is also essential for composing with third party libraries like `react-router`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 73,
+      "end_line": 75,
+      "code": "npm uninstall semantic-ui semantic-ui-css",
+      "language": "bash",
+      "context": "First of all, please remove existing references for `semantic-ui` & `semantic-ui-css` package or styles included from CDN to avoid styles duplication."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 77,
+      "end_line": 79,
+      "code": "yarn remove semantic-ui semantic-ui-css",
+      "language": "bash",
+      "context": "npm uninstall semantic-ui semantic-ui-css"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 85,
+      "end_line": 88,
+      "code": "npm install @craco/craco @semantic-ui-react/craco-less --save-dev\nnpm install semantic-ui-less --save",
+      "language": "bash",
+      "context": "Create React App does not support LESS out of the box; we propose to use [`@craco/craco`](https://www.npmjs.com/package/@craco/craco) to add its support and avoid `eject`. You have to install required packages:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 90,
+      "end_line": 93,
+      "code": "yarn add @craco/craco @semantic-ui-react/craco-less --dev\nyarn add semantic-ui-less",
+      "language": "bash",
+      "context": "npm install semantic-ui-less --save"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 97,
+      "end_line": 106,
+      "code": "{\n  \"scripts\": {\n    \"start\": \"craco start\",\n    \"build\": \"craco build\",\n    \"test\": \"craco test\",\n    \"eject\": \"craco eject\"\n  }\n}",
+      "language": "json",
+      "context": "And then update your `package.json` and create `craco.config.js`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 108,
+      "end_line": 112,
+      "code": "module.exports = {\n  plugins: [{ plugin: require('@semantic-ui-react/craco-less') }],\n}",
+      "language": "jsx",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 118,
+      "end_line": 120,
+      "code": "npx @semantic-ui-react/bootstrap",
+      "language": "bash",
+      "context": "We made a special CLI tool that will copy necessary files with the skeleton of your customization."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 150,
+      "end_line": 164,
+      "code": "/*******************************\n            Folders\n*******************************/\n\n@themesFolder : 'themes';\n@siteFolder  : '../../src/semantic-ui/site';\n\n/*******************************\n         Import Theme\n*******************************/\n\n@import (multiple) '~semantic-ui-less/theme.less';\n@fontPath : '../../../themes/@{theme}/assets/fonts';",
+      "language": "json",
+      "context": "This file is mostly prepared, but you have to change some details in the bottom of it:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 170,
+      "end_line": 172,
+      "code": "import 'semantic-ui-less/semantic.less'",
+      "language": "jsx",
+      "context": "You have to import `semantic.less` file in your entry file."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 176,
+      "end_line": 178,
+      "code": "yarn start",
+      "language": "bash",
+      "context": "### It is working now!"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/docs/src/pages/Theming.mdx",
+      "start_line": 182,
+      "end_line": 185,
+      "code": "@primaryColor: #002f4e;\n@pageBackground: #eff0f1;",
+      "language": "json",
+      "context": "You can now go e.g. to `src/semantic-ui/site/globals/site.variables` and add:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 48,
+      "end_line": 52,
+      "code": "node -v\n\nv6.2.1",
+      "language": "sh",
+      "context": "Make sure you have at least [Node.js v6][11]:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 58,
+      "end_line": 62,
+      "code": "git clone git@github.com:<your-user>/Semantic-UI-React.git\ncd Semantic-UI-React\nyarn",
+      "language": "sh",
+      "context": "Start by [forking Semantic UI React][12] to your GitHub account.  Then clone your fork and install dependencies:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 68,
+      "end_line": 70,
+      "code": "git remote add upstream git@github.com:Semantic-Org/Semantic-UI-React.git",
+      "language": null,
+      "context": "Add our repo as a git remote so you can pull/rebase your fork with our latest updates:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 80,
+      "end_line": 98,
+      "code": "yarn start                 // run doc site\n\nyarn ci                    // run all checks CI runs\n\nyarn test                  // test once\nyarn test:watch            // test on file change\n\nyarn build                 // build everything\nyarn build:dist            // build dist\nyarn build:docs            // build docs\nyarn build:docs-toc        // build toc for markdown files\n\nyarn deploy:docs           // deploy gh-pages doc site\n\nyarn lint                  // lint once\nyarn lint:fix              // lint and attempt to fix\nyarn lint:watch            // lint on file change",
+      "language": "sh",
+      "context": ">This list is not updated, you should run `yarn run` to see all scripts."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 113,
+      "end_line": 117,
+      "code": "function Button(props) {\n  // ...\n}",
+      "language": "js",
+      "context": "Stateless components should be written as a `function`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 121,
+      "end_line": 127,
+      "code": "import { AutoControlledComponent as Component } from '../../lib'\n\nclass Dropdown extends Component {\n  // ...\n}",
+      "language": "js",
+      "context": "Stateful components should be classes:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 135,
+      "end_line": 146,
+      "code": " import React, { PropTypes } from 'react'\n \n function MyComponent(props) {\n   return <div className={props.position}>{props.children}</div>\n }\n \n MyComponent.propTypes = {\n   children: PropTypes.node,\n   position: PropTypes.oneOf(['left', 'right']),\n }",
+      "language": "js",
+      "context": "Every component must have fully described `propTypes`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 186,
+      "end_line": 192,
+      "code": "<Segment basic />                     // standalone\n<Segment floated='left' />            // pairs\n<Segment padded />                    // mixed\n<Segment padded='very' />\n<Segment size='small' color='red' />  // groups",
+      "language": "js",
+      "context": "#### API Patterns"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 194,
+      "end_line": 200,
+      "code": "<div class=\"ui basic segment\"></div>\n<div class=\"ui left floated segment\"></div>\n<div class=\"ui padded segment\"></div>\n<div class=\"ui very padded segment\"></div>\n<div class=\"ui small red segment\"></div>",
+      "language": "html",
+      "context": "<Segment size='small' color='red' />  // groups"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 206,
+      "end_line": 223,
+      "code": "import cx from 'clsx'\nimport { useKeyOnly, useValueAndKey, useKeyOrValueAndKey } from '../../lib'\n\nfunction Segment({ size, color, basic, floated, padded }) {\n  const classes = cx(\n    'ui',\n    size,\n    color,\n    useKeyOnly(basic, 'basic'),\n    useValueAndKey(floated, 'floated'),\n    useKeyOrValueAndKey(padded, 'padded'),\n    'segment'\n  )\n\n  return <div className={classes} />\n}",
+      "language": "js",
+      "context": "Use [`classNameBuilders`][4] to extract the prop values and build up the `className`.  Grouped classes like `color` and `size` simply use the prop value as the `className`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 229,
+      "end_line": 240,
+      "code": "import * as common from 'test/specs/commonTests'\nimport Segment from 'src/elements/Segment/Segment'\n\ndescribe('Segment', () => {\n  common.propValueOnlyToClassName(Segment, 'size')\n  common.propValueOnlyToClassName(Segment, 'color')\n  common.propKeyOnlyToClassName(Segment, 'basic')\n  common.propKeyAndValueToClassName(Segment, 'floated')\n  common.propKeyOrValueAndKeyToClassName(Segment, 'padded')\n})",
+      "language": "js",
+      "context": "Use [`commonTests`](#common-tests) to test the `className` build up for each prop.  These tests will run your component through all the possible usage permutations:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 258,
+      "end_line": 260,
+      "code": "<div class=\"ui small header\">...</div>",
+      "language": "html",
+      "context": "**Header Component**"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 264,
+      "end_line": 268,
+      "code": "<div class=\"ui small modal\">\n  <div class=\"header\">...</div>\n</div>",
+      "language": "html",
+      "context": "**Modal Component (with header *component part*)**"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 278,
+      "end_line": 284,
+      "code": "<List>\n  <List.Item>Apples</List.Item>\n  <List.Item>Oranges</List.Item>\n  <List.Item>Pears</List.Item>\n</List>",
+      "language": "js",
+      "context": "Use sub components to design *component part* markup."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 288,
+      "end_line": 292,
+      "code": "function  ListItem() {\n  // ...\n}",
+      "language": "js",
+      "context": "Create the sub component as a separate component in the parent component's directory:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 296,
+      "end_line": 304,
+      "code": "import ListItem from './ListItem'\n\nfunction List() {\n  // ...\n}\n\nList.Item = ListItem",
+      "language": "js",
+      "context": "Attach it to the parent via static properties:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 306,
+      "end_line": 312,
+      "code": "import ListItem from './ListItem'\n\nclass List {\n  static Item = ListItem\n}",
+      "language": "js",
+      "context": "List.Item = ListItem"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 318,
+      "end_line": 324,
+      "code": "<a class=\"ui image label\">\n  <img src=\"veronika.jpg\">\n  Veronika\n  <div class=\"detail\">Friend</div>\n</a>",
+      "language": "html",
+      "context": "Sometimes it is convenient to use props to generate markup.  Example, the [Label][10] markup is minimal.  One configuration includes an image and detail:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 328,
+      "end_line": 334,
+      "code": "<Label\n  image='veronika.jpg'\n  detail='Friend'\n  text='Veronica'\n/>",
+      "language": "jsx",
+      "context": "We allow props to define these minimal *component parts*:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 356,
+      "end_line": 373,
+      "code": "common.isConformant()\ncommon.hasUIClassName()\ncommon.hasSubcomponents()\ncommon.isTabbable()\ncommon.rendersChildren()\n\ncommon.implementsIconProp()\ncommon.implementsImageProp()\ncommon.implementsTextAlignProp()\ncommon.implementsVerticalAlignProp()\ncommon.implementsWidthProp()\n\ncommon.propKeyOnlyToClassName()\ncommon.propValueOnlyToClassName()\ncommon.propKeyAndValueToClassName()\ncommon.propKeyOrValueAndKeyToClassName()",
+      "language": "js",
+      "context": ">This list is not updated, check the [source][1] for current tests and inline documentation."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 379,
+      "end_line": 391,
+      "code": "import React from 'react'\nimport * as common from 'test/specs/commonTests'\nimport Menu from 'src/collections/Menu/Menu'\nimport MenuItem from 'src/collections/Menu/MenuItem'\n\ndescribe('Menu', () => {\n  common.isConformant(Menu)\n  common.hasUIClassName(Menu)\n  common.rendersChildren(Menu)\n  common.hasSubcomponents(Menu, [MenuItem]) // some take additional arguments\n})",
+      "language": "js",
+      "context": "Every common test receives your component as its first argument."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 395,
+      "end_line": 406,
+      "code": "import * as common from 'test/specs/commonTests'\nimport Select from 'src/addons/Select/Select'\n\ndescribe('Select', () => {\n  common.isConformant(Select, {\n    requiredProps: {\n      options: [],\n    },\n  })\n})",
+      "language": "js",
+      "context": "The last argument to a common test is always `options`.  You can configure the test here. For example, if your component requires certain props to render, you can pass in `requiredProps`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 434,
+      "end_line": 438,
+      "code": "function MyComponent(props) {\n  return <div {...props} />\n}",
+      "language": "js",
+      "context": "Strive to use stateless functional components when possible:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 442,
+      "end_line": 452,
+      "code": "class MyComponent extends Component {\n  handleClick = (e) => {\n    console.log('Clicked my component!')\n  }\n\n  render() {\n    return <div onClick={this.handleClick} />\n  }\n}",
+      "language": "js",
+      "context": "If your component requires event handlers, it is a stateful class component. Want to know [why][15]?"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 473,
+      "end_line": 475,
+      "code": "yarn start",
+      "language": "sh",
+      "context": "Developing against the doc site is a good way to try your component as you build it. Run the doc site with:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 481,
+      "end_line": 489,
+      "code": "/**\n * A <Select /> is sugar for <Dropdown selection />.\n * @see Dropdown\n */\nfunction Select(props) {\n  return <Dropdown {...props} selection />\n}",
+      "language": "js",
+      "context": "A docblock should appear above a component class or function to describe it:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 497,
+      "end_line": 526,
+      "code": "Label.propTypes = {\n  /** An element type to render as (string or function). */\n  as: PropTypes.elementType,\n\n  /** A label can reduce its complexity. */\n  basic: PropTypes.bool,\n\n  /** Primary content. */\n  children: PropTypes.node,\n\n  /** Additional classes. */\n  className: PropTypes.string,\n\n  /** Color of the label. */\n  color: PropTypes.oneOf(Label._meta.props.color),\n\n  /** Place the label in one of the upper corners . */\n  corner: PropTypes.oneOfType([\n    PropTypes.bool,\n    PropTypes.oneOf(['left', 'right']),\n  ]),\n\n  /** Add an icon by icon className or pass an <Icon /> */\n  icon: PropTypes.oneOfType([\n    PropTypes.string,\n    PropTypes.element,\n  ]),\n}",
+      "language": "js",
+      "context": ">Limited props shown for brevity."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/.github/CONTRIBUTING.md",
+      "start_line": 540,
+      "end_line": 542,
+      "code": "npm run release:<major|minor|patch>",
+      "language": "sh",
+      "context": "On the latest clean `master`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/Semantic-UI-React/src/modules/Dropdown/TODO.md",
+      "start_line": 8,
+      "end_line": 62,
+      "code": "state = {\n  dropdownAnimationClasses: '',\n  menuAnimationClasses: 'hidden',\n}\n\nopen = () => {\n  if (this.state.isOpen) return\n  // animation prep\n  this.setState({\n    isOpen: true,\n    menuStyle: {\n      animationDuration: '200ms',\n      display: 'block !important',\n    },\n  })\n  // animation start\n  setTimeout(() => this.setState({\n    dropdownAnimationClasses: 'active',\n    menuAnimationClasses: 'visible animating slide down in',\n  }), 0)\n  // animation end\n  setTimeout(() => this.setState({\n    dropdownAnimationClasses: 'active visible',\n    menuAnimationClasses: 'visible',\n    menuStyle: {\n      animationDuration: null,\n    },\n  }), 200)\n}\n\nclose = () => {\n  if (!this.state.isOpen) return\n  // animation prep\n  this.setState({\n    isOpen: false,\n    menuStyle: {\n      animationDuration: '200ms',\n    },\n  })\n  // animation start\n  setTimeout(() => this.setState({\n    dropdownAnimationClasses: 'visible',\n    menuAnimationClasses: 'visible animating slide down out',\n  }), 0)\n  // animation end\n  setTimeout(() => this.setState({\n    dropdownAnimationClasses: '',\n    menuAnimationClasses: 'hidden',\n    menuStyle: {\n      display: null,\n      animationDuration: null,\n    },\n  }), 200)",
+      "language": "jsx",
+      "context": "This state based implementation should be generalized using ReactTransitionGroup hooks (or similar) and used for all components."
+    }
+  ]
+}

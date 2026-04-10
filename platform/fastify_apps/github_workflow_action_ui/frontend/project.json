@@ -1,0 +1,37 @@
+{
+  "name": "@internal/app-github-workflow-action-ui-frontend",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "fastify_apps/github_workflow_action_ui/frontend/src",
+  "projectType": "application",
+  "tags": [
+    "type:frontend",
+    "scope:fastify"
+  ],
+  "targets": {
+    "lint": {},
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "options": {
+        "command": "npm run build",
+        "cwd": "fastify_apps/github_workflow_action_ui/frontend"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev",
+        "cwd": "fastify_apps/github_workflow_action_ui/frontend"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run preview",
+        "cwd": "fastify_apps/github_workflow_action_ui/frontend"
+      }
+    }
+  }
+}

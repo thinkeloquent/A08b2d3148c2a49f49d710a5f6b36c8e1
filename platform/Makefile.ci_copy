@@ -1,0 +1,204 @@
+# CI Copy Makefile for mta-v800
+# Usage: make -f Makefile.ci_copy [target] SRC=<source_dir> DEST=<dest_dir>
+# Default: help
+
+# # Full sync A -> B
+# make -f Makefile.ci_copy sync SRC=./dirA DEST=./dirB
+
+# # Sync only changed files A -> B
+# make -f Makefile.ci_copy sync-update SRC=./dirA DEST=./dirB
+
+# # With custom excludes
+# make -f Makefile.ci_copy sync SRC=./dirA DEST=./dirB
+# EXCLUDE_PATTERNS="*.tmp secrets/"
+# make -f Makefile.ci_copy sync SRC=./dirA DEST=./dirB
+# EXCLUDE_FILE=.ci_exclude
+
+# # Preview before running
+# make -f Makefile.ci_copy preview SRC=./dirA DEST=./dirB VERBOSE=1
+
+# === Get Makefile Directory (Project Root) ===
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# === Configuration Variables ===
+SRC  ?=
+DEST ?=
+
+# rsync filter: respect .gitignore files found in source tree
+GITIGNORE_FILTER := --filter=':- .gitignore'
+
+# Custom exclude file (one pattern per line, same syntax as .gitignore)
+EXCLUDE_FILE ?=
+
+# Additional exclude patterns passed inline (space-separated)
+# Example: EXCLUDE_PATTERNS="*.tmp secrets/"
+EXCLUDE_PATTERNS ?=
+
+# Override-include patterns: force-include paths even if ignored by .gitignore
+# These rsync --include rules are placed BEFORE the gitignore filter so they win.
+# Example: OVERWRITE_INCLUDE="lib **/lib"
+OVERWRITE_INCLUDE ?= lib **/lib
+
+# Dry-run mode: set DRY_RUN=1 to preview without copying
+DRY_RUN ?= 0
+
+# Verbose mode: set VERBOSE=1 for detailed output
+VERBOSE ?= 0
+
+# === Internal ===
+# Exclude .git directory from source (dot files are included by default with -a)
+_RSYNC_EXCLUDES := --exclude='.git'
+
+# Append custom exclude file if provided
+_RSYNC_EXCLUDE_FILE := $(if $(EXCLUDE_FILE),--exclude-from='$(EXCLUDE_FILE)',)
+
+# Build inline exclude flags from EXCLUDE_PATTERNS
+_RSYNC_INLINE_EXCLUDES := $(foreach pat,$(EXCLUDE_PATTERNS),--exclude='$(pat)')
+
+# Build inline include flags from OVERWRITE_INCLUDE (placed before gitignore filter)
+_RSYNC_OVERWRITE_INCLUDES := $(foreach pat,$(OVERWRITE_INCLUDE),--include='$(pat)')
+
+# Dry-run flag
+_RSYNC_DRY_RUN := $(if $(filter 1,$(DRY_RUN)),--dry-run,)
+
+# Always show file names; VERBOSE adds itemized change details
+_RSYNC_VERBOSE := -v $(if $(filter 1,$(VERBOSE)),--itemize-changes,)
+
+# Shared rsync options (without --delete so macOS rsync compat)
+_RSYNC_OPTS = $(_RSYNC_OVERWRITE_INCLUDES) \
+	$(GITIGNORE_FILTER) \
+	$(_RSYNC_EXCLUDES) \
+	$(_RSYNC_EXCLUDE_FILE) \
+	$(_RSYNC_INLINE_EXCLUDES) \
+	$(_RSYNC_DRY_RUN) \
+	$(_RSYNC_VERBOSE)
+
+# Full sync: mirror SRC to DEST (pre-clean DEST, then rsync without --delete)
+_RSYNC_SYNC = rsync -a $(_RSYNC_OPTS)
+
+# Incremental sync: copy changed/new only (--update skips newer in DEST, no --delete)
+_RSYNC_UPDATE = rsync -a --update $(_RSYNC_OPTS)
+
+# Colors for output
+RED    := \033[0;31m
+GREEN  := \033[0;32m
+YELLOW := \033[1;33m
+CYAN   := \033[0;36m
+WHITE  := \033[1;37m
+NC     := \033[0m
+
+# === Default Target ===
+.DEFAULT_GOAL := help
+
+# === Validation ===
+.PHONY: _validate
+_validate:
+	@if [ -z "$(SRC)" ]; then \
+		echo "$(RED)Error: SRC is required. Usage: make -f Makefile.ci_copy sync SRC=<dir> DEST=<dir>$(NC)"; \
+		exit 1; \
+	fi
+	@if [ -z "$(DEST)" ]; then \
+		echo "$(RED)Error: DEST is required. Usage: make -f Makefile.ci_copy sync SRC=<dir> DEST=<dir>$(NC)"; \
+		exit 1; \
+	fi
+	@if [ ! -d "$(SRC)" ]; then \
+		echo "$(RED)Error: SRC directory does not exist: $(SRC)$(NC)"; \
+		exit 1; \
+	fi
+
+# === Targets ===
+.PHONY: help
+help: ## Show this help message
+	@echo "$(CYAN)════════════════════════════════════════════════════════════════════$(NC)"
+	@echo "$(WHITE)               CI Copy Makefile for mta-v800                       $(NC)"
+	@echo "$(CYAN)════════════════════════════════════════════════════════════════════$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Usage:$(NC) make -f Makefile.ci_copy $(GREEN)[target]$(NC) SRC=<source> DEST=<dest>"
+	@echo ""
+	@echo "$(YELLOW)Sync Commands:$(NC)"
+	@echo "  $(GREEN)sync$(NC)               Full sync: copy all files from SRC to DEST"
+	@echo "                       - Overwrites existing files"
+	@echo "                       - Creates DEST directories as needed"
+	@echo "                       - Removes files in DEST not present in SRC"
+	@echo "  $(GREEN)sync-update$(NC)        Incremental sync: copy only changed/new files"
+	@echo "                       - Skips files in DEST that are newer than SRC"
+	@echo "                       - Does NOT delete files missing from SRC"
+	@echo ""
+	@echo "$(YELLOW)Utility Commands:$(NC)"
+	@echo "  $(GREEN)preview$(NC)            Dry-run of full sync (no files copied)"
+	@echo "  $(GREEN)preview-update$(NC)     Dry-run of incremental sync (no files copied)"
+	@echo "  $(GREEN)diff$(NC)               Show files that differ between SRC and DEST"
+	@echo ""
+	@echo "$(YELLOW)Required Variables:$(NC)"
+	@echo "  $(GREEN)SRC$(NC)                Source directory path"
+	@echo "  $(GREEN)DEST$(NC)               Destination directory path"
+	@echo ""
+	@echo "$(YELLOW)Optional Variables:$(NC)"
+	@echo "  $(GREEN)EXCLUDE_FILE$(NC)       Path to file with exclude patterns (one per line)"
+	@echo "  $(GREEN)EXCLUDE_PATTERNS$(NC)   Space-separated inline exclude patterns"
+	@echo "  $(GREEN)OVERWRITE_INCLUDE$(NC)  Force-include patterns even if in .gitignore (default: lib **/lib)"
+	@echo "  $(GREEN)DRY_RUN$(NC)            Set to 1 to preview without copying"
+	@echo "  $(GREEN)VERBOSE$(NC)            Set to 1 for detailed output"
+	@echo ""
+	@echo "$(YELLOW)Behavior:$(NC)"
+	@echo "  - Respects .gitignore files found in the source tree"
+	@echo "  - Always excludes .git/ directories"
+	@echo "  - Copies dot files (e.g. .env.example, .eslintrc)"
+	@echo "  - Overwrites existing files, preserves directory structure"
+	@echo ""
+	@echo "$(YELLOW)Examples:$(NC)"
+	@echo "  make -f Makefile.ci_copy sync SRC=./app DEST=/deploy/app"
+	@echo "  make -f Makefile.ci_copy sync-update SRC=./app DEST=/deploy/app"
+	@echo "  make -f Makefile.ci_copy sync SRC=./app DEST=/deploy/app EXCLUDE_PATTERNS=\"*.tmp .DS_Store\""
+	@echo "  make -f Makefile.ci_copy sync SRC=./app DEST=/deploy/app EXCLUDE_FILE=.ci_exclude"
+	@echo "  make -f Makefile.ci_copy preview SRC=./app DEST=/deploy/app VERBOSE=1"
+	@echo "$(CYAN)════════════════════════════════════════════════════════════════════$(NC)"
+
+.PHONY: sync
+sync: _validate ## Full sync: copy all files from SRC to DEST (mirror)
+	@echo "$(YELLOW)Syncing: $(SRC) -> $(DEST)$(NC)"
+	@if [ "$(DRY_RUN)" = "1" ]; then echo "$(CYAN)  [DRY RUN] No files will be modified$(NC)"; fi
+	@if [ "$(DRY_RUN)" != "1" ]; then python3 "$(MAKEFILE_DIR).bin/ci-clean-dest.py" "$(DEST)"; fi
+	@mkdir -p "$(DEST)"
+	@$(_RSYNC_SYNC) "$(SRC)/" "$(DEST)/"
+	@if [ "$(DRY_RUN)" != "1" ]; then \
+		echo "$(GREEN)Sync complete: $(SRC) -> $(DEST)$(NC)"; \
+	else \
+		echo "$(CYAN)Dry run complete. Re-run without DRY_RUN=1 to apply.$(NC)"; \
+	fi
+
+.PHONY: sync-update
+sync-update: _validate ## Incremental sync: copy only changed/new files from SRC to DEST
+	@echo "$(YELLOW)Sync (changed only): $(SRC) -> $(DEST)$(NC)"
+	@if [ "$(DRY_RUN)" = "1" ]; then echo "$(CYAN)  [DRY RUN] No files will be modified$(NC)"; fi
+	@mkdir -p "$(DEST)"
+	@$(_RSYNC_UPDATE) "$(SRC)/" "$(DEST)/"
+	@if [ "$(DRY_RUN)" != "1" ]; then \
+		echo "$(GREEN)Incremental sync complete: $(SRC) -> $(DEST)$(NC)"; \
+	else \
+		echo "$(CYAN)Dry run complete. Re-run without DRY_RUN=1 to apply.$(NC)"; \
+	fi
+
+.PHONY: preview
+preview: _validate ## Dry-run of full sync
+	@echo "$(CYAN)Preview (full sync): $(SRC) -> $(DEST)$(NC)"
+	@mkdir -p "$(DEST)"
+	@$(_RSYNC_SYNC) --dry-run -v --itemize-changes "$(SRC)/" "$(DEST)/"
+	@echo "$(CYAN)Preview complete. No files were modified.$(NC)"
+
+.PHONY: preview-update
+preview-update: _validate ## Dry-run of incremental sync
+	@echo "$(CYAN)Preview (changed only): $(SRC) -> $(DEST)$(NC)"
+	@mkdir -p "$(DEST)"
+	@$(_RSYNC_UPDATE) --dry-run -v --itemize-changes "$(SRC)/" "$(DEST)/"
+	@echo "$(CYAN)Preview complete. No files were modified.$(NC)"
+
+.PHONY: diff
+diff: _validate ## Show files that differ between SRC and DEST
+	@echo "$(CYAN)Diff: $(SRC) vs $(DEST)$(NC)"
+	@if [ ! -d "$(DEST)" ]; then \
+		echo "$(YELLOW)DEST does not exist yet. All files would be new.$(NC)"; \
+		exit 0; \
+	fi
+	@$(_RSYNC_SYNC) --dry-run --itemize-changes "$(SRC)/" "$(DEST)/" | \
+		grep -E '^[<>ch.*]' || echo "$(GREEN)No differences found.$(NC)"

@@ -1,0 +1,75 @@
+name: healthz_gemini_openai
+description: Gemini OpenAI health check endpoints
+
+tests:
+  - id: gemini-openai
+    description: Gemini OpenAI health overview
+    path: /healthz/gemini-openai
+    expected_status: 200
+
+  - id: chat
+    description: Chat health check
+    path: /healthz/gemini-openai/chat
+    expected_status: 200
+
+  - id: conversation
+    description: Conversation health check
+    path: /healthz/gemini-openai/conversation
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      messages:
+        - role: "user"
+          content: "hello"
+    expected_status: [200, 400]
+
+  - id: json-mode
+    description: JSON mode health check
+    path: /healthz/gemini-openai/json-mode
+    expected_status: 200
+
+  - id: models
+    description: Models health check
+    path: /healthz/gemini-openai/models
+    expected_status: 200
+
+  - id: pool
+    description: Connection pool health check
+    path: /healthz/gemini-openai/pool
+    expected_status: 200
+
+  - id: proxy-pool
+    description: Proxy pool health check
+    path: /healthz/gemini-openai/proxy-pool
+    expected_status: 200
+
+  - id: schema-mapping
+    description: Schema mapping health check
+    path: /healthz/gemini-openai/schema-mapping
+    expected_status: 200
+
+  - id: sse
+    description: SSE health check
+    path: /healthz/gemini-openai/sse
+    expected_status: 200
+
+  - id: stream-format
+    description: Stream format health check
+    path: /healthz/gemini-openai/stream-format
+    expected_status: 200
+
+  - id: streaming
+    description: Streaming health check
+    path: /healthz/gemini-openai/streaming
+    expected_status: 200
+
+  - id: structure
+    description: Structured output health check
+    path: /healthz/gemini-openai/structure
+    expected_status: 200
+
+  - id: tool-calls
+    description: Tool calls health check
+    path: /healthz/gemini-openai/tool-calls
+    expected_status: 200

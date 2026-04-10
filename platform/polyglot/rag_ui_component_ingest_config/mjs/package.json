@@ -1,0 +1,21 @@
+{
+  "name": "@internal/rag-ui-component-ingest-config",
+  "version": "1.0.0",
+  "description": "RAG UI Component Ingest Config — Polyglot Common Interface (Node.js)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@internal/app",
+  "version": "1.0.0",
+  "description": "Alias for @internal/fastify-server",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./*": "./src/*.mjs"
+  },
+  "dependencies": {
+    "@internal/fastify-server": "workspace:*"
+  }
+}

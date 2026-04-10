@@ -1,0 +1,18 @@
+name: confluence_api_groups_923
+description: Group retrieval endpoints (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: list-groups
+    description: List groups with default pagination
+    path: /v9/group
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: list-groups-paginated
+    description: List groups with pagination parameters
+    path: /v9/group?start=0&limit=5
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-group-members
+    description: Get members of a group
+    path: /v9/group/:group_name/member
+    expected_status: [200, 401, 403, 404, 429]

@@ -1,0 +1,222 @@
+{
+  "scanned_files": 57,
+  "code_blocks_found": 27,
+  "blocks": [
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/MAINTAINING.md",
+      "start_line": 69,
+      "end_line": 76,
+      "code": "$ npm run release patch // without \"--run\" it will run in \"dry run\" mode\n$ npm run release patch -- --run\n$ npm run release minor -- --run\n$ npm run release major -- --run\n$ npm run release minor -- --preid beta --run  Use both bump and preid for first prerelease\n$ npm run release -- --preid beta --run        For follow on prereleases of the next version just use this",
+      "language": "bash",
+      "context": "Example usages of the `release-script`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/MAINTAINING.md",
+      "start_line": 82,
+      "end_line": 84,
+      "code": "export PATH=\"./node_modules/.bin:$PATH\"",
+      "language": "sh",
+      "context": "Or if you have this line"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/MAINTAINING.md",
+      "start_line": 88,
+      "end_line": 93,
+      "code": "$ release patch // without \"--run\" it will run in \"dry run\" mode\n$ release patch --run\n$ release minor --preid beta --run\n$ release --preid beta --run",
+      "language": "bash",
+      "context": "in your shell config, then you can run it just as:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/MAINTAINING.md",
+      "start_line": 133,
+      "end_line": 137,
+      "code": "$ npm run release -- --only-docs --run\n// or\n$ release --only-docs --run",
+      "language": "bash",
+      "context": "2. Use the"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/MAINTAINING.md",
+      "start_line": 155,
+      "end_line": 163,
+      "code": "$ npm run release -- --only-docs\n$ npm run release major\n$ npm run release minor -- --preid beta\n// or\n$ release --only-docs\n$ release major\n$ release minor --preid beta",
+      "language": "bash",
+      "context": "- to ensure there are no side issues before you release anything."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/CONTRIBUTING.md",
+      "start_line": 57,
+      "end_line": 71,
+      "code": "const propTypes = {\n  /**\n   * Sets the visibility of the Component\n   */\n  show: PropTypes.bool,\n\n  /**\n   * A callback fired when the visibility changes\n   * @type {func}\n   * @required\n   */\n  onHide: myCustomPropType,\n};",
+      "language": "js",
+      "context": "Here's an example of well-documented `propTypes`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/README.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "$ yarn",
+      "language": null,
+      "context": "### Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/README.md",
+      "start_line": 13,
+      "end_line": 15,
+      "code": "$ yarn start",
+      "language": null,
+      "context": "### Local Development"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/README.md",
+      "start_line": 21,
+      "end_line": 23,
+      "code": "$ yarn build",
+      "language": null,
+      "context": "### Build"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/components/accordion.mdx",
+      "start_line": 97,
+      "end_line": 101,
+      "code": "import useAccordionButton from 'react-bootstrap/useAccordionButton';\n\nconst decoratedOnClick = useAccordionButton(eventKey, onClick);",
+      "language": "jsx",
+      "context": "### useAccordionButton"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/components/navbar.mdx",
+      "start_line": 113,
+      "end_line": 115,
+      "code": "<Navbar fixed=\"top\" />",
+      "language": "jsx",
+      "context": "### Fixed top"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/components/navbar.mdx",
+      "start_line": 119,
+      "end_line": 121,
+      "code": "<Navbar fixed=\"bottom\" />",
+      "language": "jsx",
+      "context": "### Fixed bottom"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/components/navbar.mdx",
+      "start_line": 125,
+      "end_line": 127,
+      "code": "<Navbar sticky=\"top\" />",
+      "language": "jsx",
+      "context": "### Sticky top"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/components/navbar.mdx",
+      "start_line": 131,
+      "end_line": 133,
+      "code": "<Navbar sticky=\"bottom\" />",
+      "language": "jsx",
+      "context": "### Sticky bottom"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/why-react-bootstrap.mdx",
+      "start_line": 31,
+      "end_line": 50,
+      "code": "import * as React from 'react';\n\nfunction Example() {\n  return (\n    <div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n      <strong>Oh snap! You got an error!</strong>\n      <p>Change this and that and try again.</p>\n      <button\n        type=\"button\"\n        class=\"close\"\n        data-dismiss=\"alert\"\n        aria-label=\"Close\"\n      >\n        <span aria-hidden=\"true\">&times;</span>\n      </button>\n    </div>\n  );\n}",
+      "language": "jsx",
+      "context": "### Bootstrap"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/why-react-bootstrap.mdx",
+      "start_line": 54,
+      "end_line": 66,
+      "code": "import * as React from 'react';\nimport Alert from 'react-bootstrap/Alert';\n\nfunction Example() {\n  return (\n    <Alert dismissible variant=\"danger\">\n      <Alert.Heading>Oh snap! You got an error!</Alert.Heading>\n      <p>Change this and that and try again.</p>\n    </Alert>\n  );\n}",
+      "language": "jsx",
+      "context": "### React-Bootstrap"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/why-react-bootstrap.mdx",
+      "start_line": 85,
+      "end_line": 101,
+      "code": "<div class=\"alert alert-success alert-dismissible fade show firstCollapsible\" role=\"alert\">\n  <strong>How's it going?!</strong>\n  <p>\n    Duis mollis, est non commodo luctus, nisi erat porttitor ligula,\n    eget lacinia odio sem nec elit. Cras mattis consectetur purus sit\n    amet fermentum.\n  </p>\n  <hr/>\n  <div class=\"d-flex justify-content-end\">\n\t<button type=\"button\" class=\"btn btn-outline-success\">Close me ya'll!</button>\n  </div>\n</div>\n<div class=\"d-flex justify-content-start alert fade show\">\n\t<button type=\"button\" class=\"btn btn-primary d-none secondCollapsible\">Show Alert</button>\n</div>",
+      "language": "html",
+      "context": "### Bootstrap"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/why-react-bootstrap.mdx",
+      "start_line": 103,
+      "end_line": 113,
+      "code": "$('.btn-outline-success').on('click', function(e) {\n    $('.firstCollapsible').addClass('d-none');\n    $('.secondCollapsible').removeClass('d-none');\n})\n\n$('.btn-primary').on('click', function(e) {\n    $('.firstCollapsible').removeClass('d-none');\n    $('.secondCollapsible').addClass('d-none');\n})",
+      "language": "js",
+      "context": "</div>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 19,
+      "end_line": 21,
+      "code": "npm install react-bootstrap bootstrap",
+      "language": "bash",
+      "context": "install <DocLink path=\"/getting-started/download/#npm\">vanilla Bootstrap</DocLink> as well."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 31,
+      "end_line": 36,
+      "code": "import Button from 'react-bootstrap/Button';\n\n// or less ideally\nimport { Button } from 'react-bootstrap';",
+      "language": "jsx",
+      "context": "the client."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 46,
+      "end_line": 58,
+      "code": "<script src=\"https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js\" crossorigin></script>\n\n<script\n  src=\"https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js\"\n  crossorigin></script>\n\n<script\n  src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js\"\n  crossorigin></script>\n\n<script>var Alert = ReactBootstrap.Alert;</script>",
+      "language": "js",
+      "context": "well as in the npm package."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 74,
+      "end_line": 79,
+      "code": "{\n  /* The following line can be included in your src/index.js or App.js file */\n}\nimport 'bootstrap/dist/css/bootstrap.min.css';",
+      "language": "jsx",
+      "context": "### CSS"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 95,
+      "end_line": 98,
+      "code": "/* The following line can be included in a src/App.scss */\n@import '~bootstrap/scss/bootstrap';",
+      "language": "css",
+      "context": "the bundler of your choice to compile Sass/SCSS stylesheets to CSS."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 100,
+      "end_line": 103,
+      "code": "/* The following line can be included in your src/index.js or App.js file */\nimport './App.scss';",
+      "language": "jsx",
+      "context": "@import '~bootstrap/scss/bootstrap';"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 110,
+      "end_line": 121,
+      "code": "/* The following block can be included in a custom.scss */\n\n/* make the customizations */\n$theme-colors: (\n  'info': tomato,\n  'danger': teal\n);\n\n/* import bootstrap to set changes */\n@import '~bootstrap/scss/bootstrap';",
+      "language": "css",
+      "context": "you can create a custom Sass file:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/introduction.mdx",
+      "start_line": 125,
+      "end_line": 128,
+      "code": "/* The following line can be included in a src/App.scss */\n@import 'custom';",
+      "language": "css",
+      "context": "... And import it on the main Sass file."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/react-bootstrap/www/docs/getting-started/rtl.mdx",
+      "start_line": 18,
+      "end_line": 22,
+      "code": "<ThemeProvider dir=\"rtl\">\n  <App />\n</ThemeProvider>",
+      "language": "jsx",
+      "context": "4. Set `dir=\"rtl\"` in a `ThemeProvider`:"
+    }
+  ]
+}

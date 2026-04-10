@@ -1,0 +1,131 @@
+# docker-compose.isolated.yml — Zero-dependency test environment
+#
+# Runs both Fastify and FastAPI servers with NO external services,
+# NO .env files, and NO secrets. All provider SDKs (GitHub, Jira,
+# Figma, etc.) gracefully skip registration when credentials are missing.
+#
+# Usage:
+#   make -f Makefile.isolated up      # recommended
+#   docker compose -f docker-compose.isolated.yml up --build
+
+
+# Makefile.isolated — simple targets:
+
+# Target: up
+# What it does: Build & start both servers in Docker
+# ────────────────────────────────────────
+# Target: up-fastify / up-fastapi
+# What it does: Start one server only
+# ────────────────────────────────────────
+# Target: test
+# What it does: Build, start, wait for healthy, run health checks
+# ────────────────────────────────────────
+# Target: health
+# What it does: Curl /health on both servers and pretty-print JSON
+# ────────────────────────────────────────
+# Target: logs
+# What it does: Tail container logs
+# ────────────────────────────────────────
+# Target: down / clean
+# ────────────────────────────────────────
+# Run it with:
+# make -f Makefile.isolated test
+
+services:
+  # =========================================================================
+  # Fastify Server (Node.js)
+  # =========================================================================
+  fastify:
+    build:
+      context: .
+      dockerfile: Dockerfile.isolated.fastify
+    container_name: mta-isolated-fastify
+    ports:
+      - "${FASTIFY_PORT:-51000}:51000"
+    environment:
+      # Server binding
+      NODE_ENV: production
+      PORT: "51000"
+      LOG_LEVEL: info
+
+      # Build metadata (safe defaults)
+      BUILD_ID: isolated
+      BUILD_VERSION: 0.0.0-isolated
+      GIT_COMMIT: isolated
+      APP_ENV: dev
+
+      # Points to /dev/null — a valid path with no content.
+      # Cannot be empty string: EnvStore.on_startup() raises ValueError on "".
+      VAULT_SECRET_FILE: /dev/null
+
+      # -----------------------------------------------------------------------
+      # All provider tokens are intentionally omitted.
+      # Lifecycle hooks check for these and skip route registration when absent:
+      #   GITHUB_TOKEN, FIGMA_TOKEN, JIRA_API_TOKEN, JIRA_BASE_URL, JIRA_EMAIL,
+      #   SAUCE_USERNAME, SAUCE_ACCESS_KEY, STATSIG_API_KEY,
+      #   CONFLUENCE_BASE_URL, CONFLUENCE_EMAIL, CONFLUENCE_API_TOKEN,
+      #   GEMINI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY
+      # -----------------------------------------------------------------------
+
+      # Database connections — empty disables connection attempts
+      DATABASE_URL: ""
+      REDIS_URL: ""
+      ELASTICSEARCH_URL: ""
+    # Override CMD to use main.mjs directly (no fastify-cli, no --watch)
+    command: ["node", "fastify_server/src/main.mjs"]
+    working_dir: /applications
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:51000/health').then(r=>{process.exit(r.ok?0:1)}).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    restart: "no"
+
+  # =========================================================================
+  # FastAPI Server (Python)
+  # =========================================================================
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.isolated.fastapi
+    container_name: mta-isolated-fastapi
+    ports:
+      - "${FASTAPI_PORT:-52000}:52000"
+    environment:
+      # Server binding
+      PORT: "52000"
+      LOG_LEVEL: info
+      PYTHONUNBUFFERED: "1"
+
+      # Build metadata (safe defaults)
+      BUILD_ID: isolated
+      BUILD_VERSION: 0.0.0-isolated
+      GIT_COMMIT: isolated
+      APP_ENV: dev
+
+      # Points to /dev/null — a valid path with no content.
+      # Cannot be empty string: EnvStore.on_startup() raises ValueError on "".
+      VAULT_SECRET_FILE: /dev/null
+
+      # -----------------------------------------------------------------------
+      # All provider tokens are intentionally omitted (same as Fastify above).
+      # -----------------------------------------------------------------------
+
+      # Database connections — empty disables connection attempts
+      DATABASE_URL: ""
+      REDIS_URL: ""
+      ELASTICSEARCH_URL: ""
+    # Override CMD to bind to correct port
+    # NOTE: working_dir must be /applications/fastapi_server because the Python
+    # package is fastapi_server/fastapi_server/ (nested). Matches: Makefile does
+    # "cd fastapi_server && uvicorn fastapi_server.main:app"
+    command: ["uvicorn", "fastapi_server.main:app", "--host", "0.0.0.0", "--port", "52000"]
+    working_dir: /applications/fastapi_server
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:52000/health')\""]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    restart: "no"

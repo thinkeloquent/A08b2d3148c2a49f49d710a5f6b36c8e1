@@ -1,0 +1,19 @@
+{
+  "name": "@internal/rag-llm-synthesis",
+  "version": "1.0.0",
+  "description": "RAG LLM Synthesis — Multi-provider LLM answer synthesis with structured output (Node.js)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}

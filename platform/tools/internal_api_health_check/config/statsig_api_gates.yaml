@@ -1,0 +1,13 @@
+name: statsig_api_gates
+description: Feature gates endpoints
+
+tests:
+  - id: list-gates
+    description: List all feature gates
+    path: /v1/gates
+    expected_status: [200, 401, 403, 429]
+
+  - id: get-gate
+    description: Get a single gate by ID
+    path: /v1/gates/:gate_id
+    expected_status: [200, 401, 403, 404, 429]

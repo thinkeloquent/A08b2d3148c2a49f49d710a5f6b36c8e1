@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Material UI (MUI)",
+    "owner": "mui",
+    "repo": "material-ui",
+    "url": "https://github.com/mui/material-ui",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Ant Design",
+    "owner": "ant-design",
+    "repo": "ant-design",
+    "url": "https://github.com/ant-design/ant-design",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "shadcn/ui",
+    "owner": "shadcn-ui",
+    "repo": "ui",
+    "url": "https://github.com/shadcn-ui/ui",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Chakra UI",
+    "owner": "chakra-ui",
+    "repo": "chakra-ui",
+    "url": "https://github.com/chakra-ui/chakra-ui",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Mantine",
+    "owner": "mantinedev",
+    "repo": "mantine",
+    "url": "https://github.com/mantinedev/mantine",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "React-Bootstrap",
+    "owner": "react-bootstrap",
+    "repo": "react-bootstrap",
+    "url": "https://github.com/react-bootstrap/react-bootstrap",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Blueprint",
+    "owner": "palantir",
+    "repo": "blueprint",
+    "url": "https://github.com/palantir/blueprint",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Fluent UI",
+    "owner": "microsoft",
+    "repo": "fluentui",
+    "url": "https://github.com/microsoft/fluentui",
+    "stars": "19.8k",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Radix UI Primitives",
+    "owner": "radix-ui",
+    "repo": "primitives",
+    "url": "https://github.com/radix-ui/primitives",
+    "tags": ["ui-component"]
+  },
+  {
+    "name": "Semantic UI React",
+    "owner": "Semantic-Org",
+    "repo": "Semantic-UI-React",
+    "url": "https://github.com/Semantic-Org/Semantic-UI-React",
+    "tags": ["ui-component"]
+  }
+]

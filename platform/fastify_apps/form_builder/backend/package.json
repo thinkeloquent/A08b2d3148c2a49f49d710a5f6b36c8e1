@@ -1,0 +1,34 @@
+{
+  "name": "@internal/fastify-app-form-builder",
+  "version": "1.0.0",
+  "description": "Form Builder - Fastify application",
+  "type": "module",
+  "private": true,
+  "main": "src/index.mjs",
+  "scripts": {
+    "app:dev": "node --watch server.test.mjs",
+    "app:start": "node server.test.mjs",
+    "test": "echo \"No tests yet\" && exit 0",
+    "build": "echo \"No tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "@fastify/sensible": "^6.0.0",
+    "@fastify/static": "^8.0.0",
+    "@internal/form-builder-proto": "file:../protobuf",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.0",
+    "js-yaml": "^4.1.1",
+    "protobufjs": "^7.4.0",
+    "static-app-loader": "workspace:*"
+  },
+  "devDependencies": {
+    "pino-pretty": "^13.0.0"
+  },
+  "keywords": [
+    "fastify",
+    "form-builder"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}

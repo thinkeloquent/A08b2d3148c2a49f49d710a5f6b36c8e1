@@ -1,0 +1,230 @@
+# Parity Test Vectors for healthz-diagnostics
+# These vectors ensure consistent behavior across Python and Node.js implementations.
+#
+# Usage:
+#   - Both languages should produce identical output for identical input
+#   - Use these vectors in language-specific test suites
+#   - Add new vectors when cross-language behavior differs
+
+---
+
+# Timestamp Formatting Vectors
+# Input: Unix epoch milliseconds
+# Output: ISO8601 string without milliseconds (YYYY-MM-DDTHH:MM:SSZ)
+timestamp_vectors:
+  - description: "Standard timestamp (2024-01-15T10:30:00Z)"
+    epoch_ms: 1705312200000
+    expected: "2024-01-15T10:30:00Z"
+
+  - description: "Unix epoch (1970-01-01T00:00:00Z)"
+    epoch_ms: 0
+    expected: "1970-01-01T00:00:00Z"
+
+  - description: "Y2K (2000-01-01T00:00:00Z)"
+    epoch_ms: 946684800000
+    expected: "2000-01-01T00:00:00Z"
+
+  - description: "2021 start"
+    epoch_ms: 1609459200000
+    expected: "2021-01-01T00:00:00Z"
+
+  - description: "2025 start"
+    epoch_ms: 1735689600000
+    expected: "2025-01-01T00:00:00Z"
+
+
+# Latency Calculation Vectors
+# Input: Duration in seconds
+# Output: Milliseconds with 2 decimal precision
+latency_vectors:
+  - description: "Standard 145ms"
+    duration_sec: 0.145
+    expected_ms: 145.0
+
+  - description: "Minimum 1ms"
+    duration_sec: 0.001
+    expected_ms: 1.0
+
+  - description: "One second"
+    duration_sec: 1.0
+    expected_ms: 1000.0
+
+  - description: "Sub-millisecond 0.5ms"
+    duration_sec: 0.0005
+    expected_ms: 0.5
+
+  - description: "Precision test 123.4ms"
+    duration_sec: 0.1234
+    expected_ms: 123.4
+
+
+# Config Sanitizer Vectors
+# Input: Key name
+# Output: Whether key should be redacted
+sanitizer_key_vectors:
+  # Sensitive keys (should redact)
+  - key: "endpoint_api_key"
+    should_redact: true
+
+  - key: "api_key"
+    should_redact: true
+
+  - key: "token"
+    should_redact: true
+
+  - key: "access_token"
+    should_redact: true
+
+  - key: "password"
+    should_redact: true
+
+  - key: "secret"
+    should_redact: true
+
+  - key: "client_secret"
+    should_redact: true
+
+  # Non-sensitive keys (should preserve)
+  - key: "name"
+    should_redact: false
+
+  - key: "endpoint"
+    should_redact: false
+
+  - key: "model"
+    should_redact: false
+
+  - key: "timeout"
+    should_redact: false
+
+  - key: "base_url"
+    should_redact: false
+
+
+# Logger Format Vectors
+# Input: level, package, filename, message
+# Output: Formatted log string
+logger_format_vectors:
+  - description: "Basic INFO log"
+    level: "INFO"
+    package: "healthz-diagnostics"
+    filename: "config_store"
+    message: "Config loaded"
+    expected: "[INFO] [healthz-diagnostics:config_store] Config loaded"
+
+  - description: "DEBUG log"
+    level: "DEBUG"
+    package: "healthz-diagnostics"
+    filename: "executor"
+    message: "Starting request"
+    expected: "[DEBUG] [healthz-diagnostics:executor] Starting request"
+
+  - description: "WARN log"
+    level: "WARN"
+    package: "healthz-diagnostics"
+    filename: "sanitizer"
+    message: "Missing key"
+    expected: "[WARN] [healthz-diagnostics:sanitizer] Missing key"
+
+  - description: "ERROR log"
+    level: "ERROR"
+    package: "healthz-diagnostics"
+    filename: "sdk"
+    message: "Connection failed"
+    expected: "[ERROR] [healthz-diagnostics:sdk] Connection failed"
+
+  - description: "Empty message"
+    level: "INFO"
+    package: "healthz-diagnostics"
+    filename: "test"
+    message: ""
+    expected: "[INFO] [healthz-diagnostics:test] "
+
+
+# DiagnosticEvent Type Vectors
+# Verify event structure for each event type
+diagnostic_event_vectors:
+  - event_type: "request:start"
+    required_fields:
+      - "type"
+      - "timestamp"
+      - "status"      # null for start
+      - "error"       # null for start
+      - "duration_ms" # null for start
+      - "metadata"    # contains url, method
+
+  - event_type: "request:end"
+    required_fields:
+      - "type"
+      - "timestamp"
+      - "status"      # HTTP status code
+      - "error"       # null for success
+      - "duration_ms" # measured duration
+      - "metadata"    # null for end
+
+  - event_type: "request:error"
+    required_fields:
+      - "type"
+      - "timestamp"
+      - "status"      # null for error
+      - "error"       # error message string
+      - "duration_ms" # measured duration
+      - "metadata"    # null for error
+
+
+# HealthCheckResult Structure Vectors
+# Verify result structure matches spec
+health_check_result_vectors:
+  - description: "Successful health check"
+    healthy: true
+    required_fields:
+      - "provider"
+      - "healthy"
+      - "status_code"
+      - "latency_ms"
+      - "error"
+      - "endpoint"
+      - "model"
+      - "timestamp"
+      - "diagnostics"
+
+  - description: "Failed health check"
+    healthy: false
+    required_fields:
+      - "provider"
+      - "healthy"
+      - "status_code"  # may be null
+      - "latency_ms"
+      - "error"        # should contain error message
+      - "endpoint"     # may be null if not configured
+      - "model"        # may be null
+      - "timestamp"
+      - "diagnostics"
+
+
+# Sensitive Key Pattern Matching
+# Test case-insensitive matching behavior
+sensitive_pattern_vectors:
+  - key: "API_KEY"
+    should_redact: true
+    description: "uppercase API_KEY"
+
+  - key: "Api_Key"
+    should_redact: true
+    description: "mixed case Api_Key"
+
+  - key: "my_api_key_value"
+    should_redact: true
+    description: "api_key substring"
+
+  - key: "TOKEN"
+    should_redact: true
+    description: "uppercase TOKEN"
+
+  - key: "bearer_token"
+    should_redact: true
+    description: "token substring"
+
+  - key: "SECRET_VALUE"
+    should_redact: true
+    description: "secret substring"

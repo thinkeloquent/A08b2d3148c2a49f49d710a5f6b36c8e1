@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package form_builder.common;
+
+// Form definition status
+enum FormStatus {
+  FORM_STATUS_UNSPECIFIED = 0;
+  FORM_STATUS_DRAFT = 1;
+  FORM_STATUS_PUBLISHED = 2;
+  FORM_STATUS_ARCHIVED = 3;
+}
+
+// Pagination request parameters
+message PaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+// Pagination response metadata
+message PaginationResponse {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 total_pages = 4;
+}
+
+// Standard error response
+message ErrorResponse {
+  int32 code = 1;
+  string message = 2;
+  string details = 3;
+}
+
+// Timestamp wrapper for consistency
+message Timestamp {
+  string iso8601 = 1;
+}

@@ -1,0 +1,45 @@
+{
+  "name": "@internal/api-rate-limiter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready API rate limiter with queue management and distributed support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "api",
+    "rate-limiter",
+    "queue",
+    "throttle",
+    "redis"
+  ],
+  "author": "MTA",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

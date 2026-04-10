@@ -1,0 +1,18 @@
+{
+  "name": "playwright-replay-saucelabs",
+  "version": "1.0.0",
+  "description": "Chrome Recorder replay tool running on Sauce Labs remote browsers",
+  "main": "main.mjs",
+  "type": "module",
+  "scripts": {
+    "replay": "node main.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*",
+    "js-yaml": "^4.1.1",
+    "webdriverio": "^9.0.0"
+  }
+}

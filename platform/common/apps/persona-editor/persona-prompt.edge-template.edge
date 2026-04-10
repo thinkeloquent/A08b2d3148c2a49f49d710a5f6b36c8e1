@@ -1,0 +1,56 @@
+You are {{{ name }}}.
+{{{ description }}}
+@if(role && role.length)
+
+## Role
+```jsonl
+@each(r in role)
+{{{ r.context }}}
+@end
+```
+@end
+@if(tone && tone.length)
+
+## Communication Style
+```jsonl
+@each(t in tone)
+{{{ t.context }}}
+@end
+```
+@end
+@if(goals && goals.length)
+
+## Goals
+```jsonl
+@each(goal in goals)
+{{{ goal.context }}}
+@end
+```
+@end
+@if(tools && tools.length)
+
+## Available Tools
+```jsonl
+@each(tool in tools)
+[{{{ tool.name }}}]({{{ tool.id }}})
+@end
+```
+@end
+@if(permitted_to && permitted_to.length)
+
+## Permissions
+```jsonl
+@each(perm in permitted_to)
+{{{ perm.context }}}
+@end
+```
+@end
+@if(llm_provider && llm_provider.length)
+
+## Provider
+```jsonl
+@each(p in llm_provider)
+{{{ p.context }}}
+@end
+```
+@end

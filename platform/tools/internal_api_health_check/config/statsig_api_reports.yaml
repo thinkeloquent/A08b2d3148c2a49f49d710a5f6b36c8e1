@@ -1,0 +1,8 @@
+name: statsig_api_reports
+description: Reports endpoints
+
+tests:
+  - id: list-reports
+    description: List all reports
+    path: /v1/reports
+    expected_status: [200, 400, 401, 403, 429]

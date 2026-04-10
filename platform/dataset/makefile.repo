@@ -1,0 +1,66 @@
+# makefile.repo
+# Repo management for UI Components
+#
+# Usage:
+#   make -f makefile.repo all         # Clone all matching repos
+#   make -f makefile.repo clean       # Remove cloned repos
+#   make -f makefile.repo help        # Show help message
+#
+
+# Get the directory where Makefile is located
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# ============================================================================
+# Configuration
+# ============================================================================
+
+REPO_JSON := repo.json
+TARGET_DIR := repos
+PYTHON := python3
+
+# ============================================================================
+# Targets
+# ============================================================================
+
+.PHONY: help all clean info
+
+help:
+	@echo "Repo Management Commands"
+	@echo "========================"
+	@echo ""
+	@echo "Commands:"
+	@echo "  make -f makefile.repo all        - Clone all 'ui-component' repos from repo.json"
+	@echo "  make -f makefile.repo clean      - Remove 'repos' directory"
+	@echo "  make -f makefile.repo info       - Show configuration"
+	@echo "  make -f makefile.repo help       - Show this help message"
+	@echo ""
+	@echo "Configuration:"
+	@echo "  REPO_JSON=$(REPO_JSON)"
+	@echo "  TARGET_DIR=$(TARGET_DIR)"
+	@echo ""
+
+# Clone all repositories tagged with "ui-component"
+all:
+	@echo "Cloning UI Component repositories..."
+	@mkdir -p $(TARGET_DIR)
+	@$(PYTHON) -c "import json, os, subprocess; \
+	data = json.load(open('$(REPO_JSON)')); \
+	target_dir = '$(TARGET_DIR)'; \
+	[subprocess.run(['git', 'clone', r['url'], os.path.join(target_dir, r['repo'])]) \
+	 for r in data if 'ui-component' in r.get('tags', []) and not os.path.exists(os.path.join(target_dir, r['repo']))]"
+	@echo "Done!"
+
+# Clean the repos directory
+clean:
+	@echo "Cleaning repos..."
+	@rm -rf $(TARGET_DIR)
+	@echo "Done!"
+
+# Show configuration information
+info:
+	@echo "Configuration Info"
+	@echo "=================="
+	@echo "REPO_JSON:  $(REPO_JSON)"
+	@echo "TARGET_DIR: $(TARGET_DIR)"
+	@echo "PYTHON:     $(PYTHON)"
+	@echo "PWD:        $(shell pwd)"

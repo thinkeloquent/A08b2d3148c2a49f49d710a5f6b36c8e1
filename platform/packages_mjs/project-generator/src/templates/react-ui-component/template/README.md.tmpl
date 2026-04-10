@@ -1,0 +1,52 @@
+# @internal/{{APP_NAME}}
+
+{{APP_NAME_TITLE}} - A reusable React UI component.
+
+## Installation
+
+```bash
+pnpm add @internal/{{APP_NAME}}
+```
+
+## Usage
+
+```tsx
+import { {{APP_NAME_PASCAL}} } from '@internal/{{APP_NAME}}';
+import '@internal/{{APP_NAME}}/styles.css';
+
+function App() {
+  return (
+    <{{APP_NAME_PASCAL}} className="custom-class">
+      Content here
+    </{{APP_NAME_PASCAL}}>
+  );
+}
+```
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Watch mode for development
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm run test
+
+# Lint code
+npm run lint
+```
+
+## API
+
+### {{APP_NAME_PASCAL}}Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Content to render inside the component |
+| `className` | `string` | `''` | Additional CSS class names |

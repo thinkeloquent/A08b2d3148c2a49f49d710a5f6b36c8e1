@@ -1,0 +1,56 @@
+{
+  "name": "@internal/auth-encoding",
+  "version": "1.0.0",
+  "description": "Polyglot authentication encoding utilities with 15 auth types and Base64 encoding",
+  "main": "dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./sdk": {
+      "types": "./dist/sdk/index.d.ts",
+      "import": "./dist/sdk/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
+    },
+    "./interfaces": {
+      "types": "./dist/interfaces/index.d.ts",
+      "import": "./dist/interfaces/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "fastify": "^4.0.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "fastify": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "fastify": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "auth",
+    "authentication",
+    "encoding",
+    "bearer",
+    "basic",
+    "api-key",
+    "base64",
+    "polyglot"
+  ],
+  "license": "MIT"
+}

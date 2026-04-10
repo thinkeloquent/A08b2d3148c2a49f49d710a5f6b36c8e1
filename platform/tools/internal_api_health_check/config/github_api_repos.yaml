@@ -1,0 +1,38 @@
+name: github_api_repos
+description: Repository CRUD and metadata endpoints
+
+tests:
+  - id: get-repo
+    description: Get repository details
+    path: /repos/:owner/:repo
+    expected_status: 200
+
+  - id: list-user-repos
+    description: List repositories for a user
+    path: /repos/user/:username
+    expected_status: 200
+
+  - id: list-my-repos
+    description: List authenticated user repositories
+    path: /repos/me
+    expected_status: 200
+
+  - id: get-topics
+    description: Get repository topics
+    path: /repos/:owner/:repo/topics
+    expected_status: 200
+
+  - id: get-languages
+    description: Get repository languages
+    path: /repos/:owner/:repo/languages
+    expected_status: 200
+
+  - id: list-contributors
+    description: List repository contributors
+    path: /repos/:owner/:repo/contributors
+    expected_status: 200
+
+  - id: list-forks
+    description: List repository forks
+    path: /repos/:owner/:repo/forks
+    expected_status: 200

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package fqdp;
+
+import "common.proto";
+
+message Workspace {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  EntityStatus status = 5;
+  string metadata_json = 6;
+  string organization_id = 7;
+  string organization_name = 8;
+  int32 team_count = 9;
+  string created_by = 10;
+  string updated_by = 11;
+  string created_at = 12;
+  string updated_at = 13;
+}
+
+message WorkspaceList {
+  repeated Workspace data = 1;
+  PaginationMeta meta = 2;
+}
+
+message CreateWorkspaceRequest {
+  string name = 1;
+  reserved 2;
+  string description = 3;
+  string organization_id = 4;
+  string metadata_json = 5;
+}
+
+message UpdateWorkspaceRequest {
+  string name = 1;
+  reserved 2;
+  string description = 3;
+  EntityStatus status = 4;
+  string metadata_json = 5;
+}

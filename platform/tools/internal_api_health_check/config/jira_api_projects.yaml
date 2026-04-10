@@ -1,0 +1,13 @@
+name: jira_api_projects
+description: Project retrieval and version management endpoints
+
+tests:
+  - id: get-project
+    description: Get project details by key
+    path: /v3/projects/:project_key
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-project-versions
+    description: List all versions for a project
+    path: /v3/projects/:project_key/versions
+    expected_status: [200, 401, 403, 404, 429]

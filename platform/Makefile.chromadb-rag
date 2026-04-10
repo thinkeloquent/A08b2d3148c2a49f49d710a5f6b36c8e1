@@ -1,0 +1,146 @@
+# =============================================================================
+# ChromaDB RAG Ingest Management Makefile
+# =============================================================================
+# Usage:
+#   make -f Makefile.chromadb-rag help
+#   make -f Makefile.chromadb-rag status
+#   make -f Makefile.chromadb-rag ingest SLUG=ant-design
+# =============================================================================
+
+# Get the directory where this Makefile is located (project root)
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# Use local .venv if it exists, otherwise use system Python
+VENV_DIR := $(MAKEFILE_DIR).venv
+PYTHON := $(if $(wildcard $(VENV_DIR)/bin/python),$(VENV_DIR)/bin/python,poetry run python)
+
+# PYTHONPATH for polyglot + fastapi_apps
+PYTHON_PATHS := $(shell for pkg in $(MAKEFILE_DIR)packages_py/*/src; do [ -d "$$pkg" ] && printf "%s:" "$$pkg"; done)
+PYTHON_PATHS := $(PYTHON_PATHS:%:=%)
+RAG_PYTHONPATH := $(MAKEFILE_DIR)fastapi_apps:$(MAKEFILE_DIR)polyglot/rag_ui_component_ingest_config/py:$(PYTHON_PATHS):$(PYTHONPATH)
+
+# Chroma data directory
+CHROMA_DIR := $(MAKEFILE_DIR)data/chroma
+
+.PHONY: help status status-json info ingest-all ingest cleanup-all cleanup reingest-all reingest test-embedding
+
+# Colors for output
+CYAN := \033[0;36m
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+RED := \033[0;31m
+NC := \033[0m # No Color
+
+.DEFAULT_GOAL := help
+
+# =============================================================================
+# HELP
+# =============================================================================
+
+help:
+	@echo ""
+	@echo "$(CYAN)RAG Ingest Management$(NC)"
+	@echo "====================="
+	@echo ""
+	@echo "$(GREEN)Status & Info:$(NC)"
+	@echo "  status            Human-readable status table"
+	@echo "  status-json       JSON output (for tooling)"
+	@echo "  info SLUG=...     Single-framework JSON detail"
+	@echo ""
+	@echo "$(GREEN)Ingest:$(NC)"
+	@echo "  ingest-all        Ingest all enabled auto_ingest frameworks"
+	@echo "  ingest SLUG=...   Ingest a specific framework"
+	@echo ""
+	@echo "$(GREEN)Cleanup:$(NC)"
+	@echo "  cleanup-all       Remove all data/chroma/*/"
+	@echo "  cleanup SLUG=...  Remove data/chroma/{SLUG}/"
+	@echo ""
+	@echo "$(GREEN)Re-ingest:$(NC)"
+	@echo "  reingest-all      cleanup-all + ingest-all"
+	@echo "  reingest SLUG=... cleanup + ingest for one framework"
+	@echo ""
+	@echo "$(GREEN)Diagnostics:$(NC)"
+	@echo "  test-embedding    Test embedding endpoint connectivity"
+	@echo ""
+	@echo "$(YELLOW)Examples:$(NC)"
+	@echo "  make -f Makefile.chromadb-rag status"
+	@echo "  make -f Makefile.chromadb-rag ingest SLUG=ant-design"
+	@echo "  make -f Makefile.chromadb-rag reingest SLUG=material-ui"
+	@echo ""
+
+# =============================================================================
+# STATUS & INFO
+# =============================================================================
+
+status:
+	@cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_status
+
+status-json:
+	@cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_status --json
+
+info:
+ifndef SLUG
+	@echo "$(RED)Error: SLUG not specified$(NC)"
+	@echo "Usage: make -f Makefile.chromadb-rag info SLUG=ant-design"
+	@exit 1
+endif
+	@cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_status --json --slug $(SLUG)
+
+# =============================================================================
+# INGEST
+# =============================================================================
+
+ingest-all:
+	@echo "$(CYAN)Ingesting all enabled frameworks...$(NC)"
+	cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_ingest
+
+ingest:
+ifndef SLUG
+	@echo "$(RED)Error: SLUG not specified$(NC)"
+	@echo "Usage: make -f Makefile.chromadb-rag ingest SLUG=ant-design"
+	@exit 1
+endif
+	@echo "$(CYAN)Ingesting framework: $(SLUG)$(NC)"
+	cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_ingest --slug $(SLUG)
+
+# =============================================================================
+# CLEANUP
+# =============================================================================
+
+cleanup-all:
+	@echo "$(YELLOW)Removing all ChromaDB vector stores...$(NC)"
+	rm -rf $(CHROMA_DIR)/*/
+	@echo "$(GREEN)All vector stores removed.$(NC)"
+
+cleanup:
+ifndef SLUG
+	@echo "$(RED)Error: SLUG not specified$(NC)"
+	@echo "Usage: make -f Makefile.chromadb-rag cleanup SLUG=ant-design"
+	@exit 1
+endif
+	@echo "$(YELLOW)Removing vector store for: $(SLUG)$(NC)"
+	rm -rf $(CHROMA_DIR)/$(SLUG)/
+	@echo "$(GREEN)Vector store for $(SLUG) removed.$(NC)"
+
+# =============================================================================
+# RE-INGEST
+# =============================================================================
+
+reingest-all: cleanup-all ingest-all
+
+reingest:
+ifndef SLUG
+	@echo "$(RED)Error: SLUG not specified$(NC)"
+	@echo "Usage: make -f Makefile.chromadb-rag reingest SLUG=ant-design"
+	@exit 1
+endif
+	@$(MAKE) -f Makefile.chromadb-rag cleanup SLUG=$(SLUG)
+	@$(MAKE) -f Makefile.chromadb-rag ingest SLUG=$(SLUG)
+
+# =============================================================================
+# DIAGNOSTICS
+# =============================================================================
+
+test-embedding:
+	@echo "$(CYAN)Testing embedding endpoint connectivity...$(NC)"
+	@cd $(MAKEFILE_DIR) && PYTHONPATH=$(RAG_PYTHONPATH) $(PYTHON) -m chromadb_rag_ingest.cli_test_embedding

@@ -1,0 +1,7 @@
+{
+  "name": "fetch-client",
+  "test_type": "direct_package_import",
+  "python": "fetch_gemini:GeminiClient",
+  "mjs": "fetch_undici_gemini_openai_protocols:GeminiClient",
+  "app_yaml_section": ["providers", "gemini_openai"]
+}

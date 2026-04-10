@@ -1,0 +1,37 @@
+{
+  "name": "@internal/group-role-management-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "biome lint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@internal/page-menu-offcanvas-template-layout": "workspace:*",
+    "@tanstack/react-query": "^5.90.3",
+    "autoprefixer": "^10.4.21",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.545.0",
+    "postcss": "^8.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.65.0",
+    "react-router-dom": "^7.9.4",
+    "tailwindcss": "^4.1.14",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/node": "^24.7.2",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^5.0.4",
+    "globals": "^16.4.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7"
+  }
+}

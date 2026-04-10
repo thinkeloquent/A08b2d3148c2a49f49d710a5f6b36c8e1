@@ -1,0 +1,28 @@
+name: confluence_api_content_923
+description: Content CRUD endpoints (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: list-content
+    description: List content with default pagination
+    path: /v9/content
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: list-content-pages
+    description: List content filtered by type=page
+    path: /v9/content?type=page&limit=5
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: list-content-by-space
+    description: List content filtered by space key
+    path: /v9/content?spaceKey=:space_key&limit=5
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-content
+    description: Get content by ID
+    path: /v9/content/:content_id
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-content-expanded
+    description: Get content with expanded fields
+    path: /v9/content/:content_id?expand=body.storage,version,space
+    expected_status: [200, 401, 403, 404, 429]

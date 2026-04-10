@@ -1,0 +1,10 @@
+{
+  "name": "@internal/rule-tree-table-frontend-components",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared source components for rule_tree_table frontend and frontend-admin",
+  "peerDependencies": {
+    "lucide-react": ">=0.300.0",
+    "react": ">=18.0.0"
+  }
+}

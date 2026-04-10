@@ -1,0 +1,20 @@
+[project]
+name = "auth_encoding"
+version = "1.0.0"
+description = "Polyglot authentication encoding utilities with 15 auth types and Base64 encoding"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "typing-extensions>=4.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["auth_encoding"]
+
+[tool.pytest.ini_options]
+testpaths = ["__tests__"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

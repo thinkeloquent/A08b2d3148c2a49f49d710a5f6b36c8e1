@@ -1,0 +1,24 @@
+{
+  "name": "@mta/task-graph-proto",
+  "version": "1.0.0",
+  "description": "Protocol Buffer definitions for task-graph",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./proto": "./proto/task_graph.proto"
+  },
+  "scripts": {
+    "build": "pbjs -t static-module -w es6 -o src/task_graph.pb.mjs proto/task_graph.proto && node fix-proto.mjs src/task_graph.pb.mjs && pbts -o src/task_graph.pb.d.ts src/task_graph.pb.mjs"
+  },
+  "dependencies": {
+    "protobufjs": "^7.2.6"
+  },
+  "devDependencies": {
+    "protobufjs-cli": "^1.1.3"
+  },
+  "keywords": [
+    "task-graph",
+    "protobuf"
+  ]
+}

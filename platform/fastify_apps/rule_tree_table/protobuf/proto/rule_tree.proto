@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package rule_tree_table;
+
+import "google/protobuf/struct.proto";
+
+message RuleTree {
+  string id = 1;
+  string name = 2;
+  optional string description = 3;
+  bool is_active = 4;
+  repeated RuleItem items = 5;
+  RuleStats stats = 6;
+  string created_at = 7;
+  string updated_at = 8;
+  string graph_type = 9;
+  string language = 10;
+}
+
+message RuleItem {
+  string id = 1;
+  ItemType type = 2;
+  bool enabled = 3;
+  optional string description = 4;
+  int32 sort_order = 5;
+
+  // Group & Folder fields
+  optional string name = 6;
+  optional LogicType logic = 7;  // Groups only (folders have no logic)
+  optional string color = 8;
+  repeated RuleItem conditions = 9;
+
+  // Condition fields
+  optional string field = 10;
+  optional string operator = 11;
+  optional ValueType value_type = 12;
+  optional string value = 13;
+  optional DataType data_type = 14;
+  optional google.protobuf.Struct metadata = 15;
+}
+
+message RuleStats {
+  int32 total = 1;
+  int32 groups = 2;
+  int32 conditions = 3;
+  int32 enabled = 4;
+  int32 folders = 5;
+}
+
+message ValidationResult {
+  bool is_valid = 1;
+  repeated ValidationError errors = 2;
+}
+
+message ValidationError {
+  string path = 1;
+  string message = 2;
+  optional string item_id = 3;
+}
+
+enum ItemType {
+  ITEM_TYPE_UNSPECIFIED = 0;
+  ITEM_TYPE_GROUP = 1;
+  ITEM_TYPE_CONDITION = 2;
+  ITEM_TYPE_FOLDER = 3;
+}
+
+enum LogicType {
+  LOGIC_TYPE_UNSPECIFIED = 0;
+  LOGIC_TYPE_AND = 1;
+  LOGIC_TYPE_OR = 2;
+  LOGIC_TYPE_NOT = 3;
+  LOGIC_TYPE_XOR = 4;
+}
+
+enum ValueType {
+  VALUE_TYPE_UNSPECIFIED = 0;
+  VALUE_TYPE_VALUE = 1;
+  VALUE_TYPE_FIELD = 2;
+  VALUE_TYPE_FUNCTION = 3;
+  VALUE_TYPE_REGEX = 4;
+}
+
+enum DataType {
+  DATA_TYPE_UNSPECIFIED = 0;
+  DATA_TYPE_STRING = 1;
+  DATA_TYPE_NUMBER = 2;
+  DATA_TYPE_BOOLEAN = 3;
+  DATA_TYPE_DATE = 4;
+}

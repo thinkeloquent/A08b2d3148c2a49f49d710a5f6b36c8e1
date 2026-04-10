@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.example.com/schemas/error-response.json",
+  "title": "ErrorResponse",
+  "description": "Standardized error response envelope for common-exceptions",
+  "type": "object",
+  "required": ["error"],
+  "additionalProperties": false,
+  "properties": {
+    "error": {
+      "$ref": "#/$defs/ErrorDetail"
+    }
+  },
+  "$defs": {
+    "ErrorDetail": {
+      "type": "object",
+      "required": ["code", "message", "status", "timestamp"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]+$",
+          "description": "Machine-readable error code (e.g., AUTH_NOT_AUTHENTICATED)"
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 400,
+          "maximum": 599,
+          "description": "HTTP status code"
+        },
+        "details": {
+          "type": "object",
+          "description": "Additional context (field errors, service info, etc.)",
+          "additionalProperties": true
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Correlation ID for tracing"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Error occurrence timestamp in ISO8601 format"
+        }
+      }
+    },
+    "ValidationErrorDetail": {
+      "type": "object",
+      "required": ["field", "message"],
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "Field path in dot notation (e.g., 'body.user.email')"
+        },
+        "message": {
+          "type": "string",
+          "description": "Validation failure message"
+        },
+        "code": {
+          "type": "string",
+          "description": "Validation rule that failed"
+        }
+      }
+    },
+    "UpstreamErrorDetail": {
+      "type": "object",
+      "required": ["service"],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Name of upstream service"
+        },
+        "operation": {
+          "type": "string",
+          "description": "Operation being performed"
+        },
+        "statusCode": {
+          "type": "integer",
+          "description": "Upstream HTTP status code"
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "description": "Timeout duration in milliseconds"
+        }
+      }
+    }
+  }
+}

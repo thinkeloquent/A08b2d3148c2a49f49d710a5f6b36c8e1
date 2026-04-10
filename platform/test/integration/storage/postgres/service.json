@@ -1,0 +1,7 @@
+{
+  "name": "postgres",
+  "test_type": "direct_package_import",
+  "python": "db_connection_postgres.config:PostgresConfig",
+  "mjs": "@internal/db_connection_postgres",
+  "app_yaml_section": ["storage", "postgres"]
+}

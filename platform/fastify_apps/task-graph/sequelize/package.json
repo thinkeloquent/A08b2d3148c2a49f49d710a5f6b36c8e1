@@ -1,0 +1,29 @@
+{
+  "name": "@mta/task-graph-sequelize",
+  "version": "1.0.0",
+  "description": "Sequelize models for task-graph application",
+  "type": "module",
+  "main": "models/index.mjs",
+  "exports": {
+    ".": "./models/index.mjs",
+    "./models": "./models/index.mjs",
+    "./enums": "./models/enums.mjs"
+  },
+  "scripts": {
+    "setup": "node setup.mjs",
+    "teardown": "node teardown.mjs",
+    "seed": "node seed.mjs",
+    "reseed": "node truncate.mjs && node seed.mjs",
+    "test:connection": "node connection-test.mjs",
+    "reset": "node teardown.mjs && node setup.mjs && node seed.mjs"
+  },
+  "dependencies": {
+    "@internal/db_connection_sequelize": "workspace:*",
+    "sequelize": "^6.37.5"
+  },
+  "keywords": [
+    "task-graph",
+    "sequelize",
+    "models"
+  ]
+}

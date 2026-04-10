@@ -1,0 +1,13 @@
+name: figma_api_library_analytics
+description: Library analytics endpoints
+
+tests:
+  - id: library-actions
+    description: Get library component actions for a team
+    path: /v1/analytics/libraries/:team_id/actions
+    expected_status: [200, 403, 404, 429]
+
+  - id: library-usages
+    description: Get library component usages for a team
+    path: /v1/analytics/libraries/:team_id/usages
+    expected_status: [200, 403, 404, 429]

@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package form_builder.version;
+
+import "common.proto";
+
+// Form version snapshot
+message FormVersion {
+  string id = 1;
+  string form_definition_id = 2;
+  string version = 3;
+  bytes schema_data = 4;
+  bytes metadata_data = 5;
+  string change_summary = 6;
+  form_builder.common.Timestamp created_at = 7;
+}
+
+// List versions request
+message ListVersionsRequest {
+  string form_definition_id = 1;
+}
+
+// List versions response
+message ListVersionsResponse {
+  repeated FormVersion versions = 1;
+}
+
+// Get version request
+message GetVersionRequest {
+  string id = 1;
+}
+
+// Get version response
+message GetVersionResponse {
+  FormVersion version = 1;
+}
+
+// Create version request (snapshot)
+message CreateVersionRequest {
+  string form_definition_id = 1;
+  string change_summary = 2;
+}
+
+// Create version response
+message CreateVersionResponse {
+  FormVersion version = 1;
+}
+
+// Restore version request
+message RestoreVersionRequest {
+  string id = 1;
+}
+
+// Restore version response
+message RestoreVersionResponse {
+  bool success = 1;
+  string restored_version = 2;
+}

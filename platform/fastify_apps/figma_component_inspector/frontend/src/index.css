@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Hide scrollbar on tab nav */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Force always-visible scrollbars on the component tree */
+[data-testid="component-tree"]::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+}
+[data-testid="component-tree"]::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+}
+[data-testid="component-tree"]::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}

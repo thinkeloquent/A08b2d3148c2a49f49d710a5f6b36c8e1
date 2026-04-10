@@ -1,0 +1,2006 @@
+{
+  "scanned_files": 127,
+  "code_blocks_found": 250,
+  "blocks": [
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/CONTRIBUTING.md",
+      "start_line": 25,
+      "end_line": 31,
+      "code": "git clone git@github.com:<username>/blueprint.git\ncd blueprint\npnpm install\npnpm compile\npnpm dist",
+      "language": "sh",
+      "context": "build. Make sure you have an [SSH key set up with your Github account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account#adding-a-new-ssh-key-to-your-account)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/reading-the-docs.md",
+      "start_line": 11,
+      "end_line": 30,
+      "code": "// variables\nconst variableName: varType;\nconst name: string;\nconst disabled: boolean;\n\n// functions (and function variables)\nfunction funcName(arg1: argType, arg2: argType): returnType {}\nconst funcName: (arg1: argType) => returnType;\nfunction split(str: string, delim: string): string[] {}\nfunction map<T, U>(array: T[], iterator: (item: T, index: number) => U): U[];\n\n// interfaces describe plain objects\n// (we use the convention that interfaces begin with \"I\")\ninterface Option {\n    label: string;\n    value: string;\n}\nconst option: Option = { label: \"Name\", value: \"Gilad\" };",
+      "language": "ts",
+      "context": "in our syntax theme."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "    pnpm add @blueprintjs/core react react-dom",
+      "language": "sh",
+      "context": "pulling in all relevant dependencies:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 21,
+      "end_line": 29,
+      "code": "    import { Button, Spinner } from \"@blueprintjs/core\";\n\n    // using JSX:\n    const mySpinner = <Spinner intent=\"primary\" />;\n\n    // use React.createElement if you're not using React.JSX.\n    const myButton = React.createElement(Button, { intent: \"success\" }, \"button text\");",
+      "language": "tsx",
+      "context": "2.  After installation, you'll be able to import the React components in your application:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 34,
+      "end_line": 40,
+      "code": "    // using Node.js-style package resolution in a CSS file:\n    @import \"normalize.css\";\n    @import \"@blueprintjs/core/lib/css/blueprint.css\";\n    // include blueprint-icons.css for icon font support\n    @import \"@blueprintjs/icons/lib/css/blueprint-icons.css\";",
+      "language": "scss",
+      "context": "contains supporting media such as fonts and images."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 42,
+      "end_line": 48,
+      "code": "    // or using a ESM bundler which resolves CSS files as modules:\n    import \"normalize.css\";\n    import \"@blueprintjs/core/lib/css/blueprint.css\";\n    // include blueprint-icons.css for icon font support\n    import \"@blueprintjs/icons/lib/css/blueprint-icons.css\";",
+      "language": "ts",
+      "context": "@import \"@blueprintjs/icons/lib/css/blueprint-icons.css\";"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 50,
+      "end_line": 58,
+      "code": "    <!-- or using plain old HTML -->\n    <head>\n        <link href=\"path/to/node_modules/normalize.css/normalize.css\" rel=\"stylesheet\" />\n        <link href=\"path/to/node_modules/@blueprintjs/core/lib/css/blueprint.css\" rel=\"stylesheet\" />\n        <!-- include blueprint-icons.css for icon font support -->\n        <link href=\"path/to/node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css\" rel=\"stylesheet\" />\n    </head>",
+      "language": "html",
+      "context": "import \"@blueprintjs/icons/lib/css/blueprint-icons.css\";"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 86,
+      "end_line": 89,
+      "code": "# required for all @blueprintjs packages:\nnpm install --save @types/react @types/react-dom",
+      "language": "sh",
+      "context": "install typings for Blueprint's dependencies before you can consume it:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 108,
+      "end_line": 120,
+      "code": "import { Classes, Spinner } from \"@blueprintjs/core\";\nimport { createRoot } from \"react-dom/client\";\n\nconst domNode = document.getElementById(\"root\");\nconst root = createRoot(domNode);\n\n// with JSX\nroot.render(<Spinner className={Classes.SMALL} intent=\"primary\" />);\n\n// with vanilla JS, use React.createElement\nroot.render(React.createElement(Spinner, { className: Classes.SMALL, intent: \"primary\" }));",
+      "language": "tsx",
+      "context": "using a jQuery plugin."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/getting-started.md",
+      "start_line": 124,
+      "end_line": 126,
+      "code": "root.unmount();",
+      "language": "tsx",
+      "context": "To remove the component from the DOM and clean up, unmount it:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/blueprint.md",
+      "start_line": 24,
+      "end_line": 26,
+      "code": "pnpm add @blueprintjs/core react react-dom",
+      "language": "sh",
+      "context": "Install it with your Node.js package manager of choice:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/blueprint.md",
+      "start_line": 42,
+      "end_line": 46,
+      "code": "import { Button } from \"@blueprintjs/core\";\n\n<Button intent=\"success\" text=\"button content\" onClick={incrementCounter} />;",
+      "language": "tsx",
+      "context": "Import React components from the appropriate package."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-app/src/blueprint.md",
+      "start_line": 52,
+      "end_line": 58,
+      "code": "<link href=\"path/to/node_modules/normalize.css/normalize.css\" rel=\"stylesheet\" />\n<link href=\"path/to/node_modules/@blueprintjs/core/lib/css/blueprint.css\" rel=\"stylesheet\" />\n<!-- blueprint-icons.css file must be included alongside blueprint.css for icon font support -->\n<link href=\"path/to/node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css\" rel=\"stylesheet\" />\n<!-- add other blueprint-*.css files here -->",
+      "language": "html",
+      "context": "The following example shows an `index.html` file; the same stylesheets should be loaded if you use a bundler like Webpack."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/README.md",
+      "start_line": 13,
+      "end_line": 15,
+      "code": "npm install --save @blueprintjs/labs",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/src/index.md",
+      "start_line": 26,
+      "end_line": 28,
+      "code": "npm install --save @blueprintjs/labs",
+      "language": "sh",
+      "context": "Make sure to review the [getting started docs for installation info](#blueprint/getting-started)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/src/index.md",
+      "start_line": 32,
+      "end_line": 34,
+      "code": "@import \"@blueprintjs/labs/lib/css/blueprint-labs.css\";",
+      "language": "scss",
+      "context": "Import the package stylesheet in Sass:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/src/index.md",
+      "start_line": 38,
+      "end_line": 40,
+      "code": "<link href=\"path/to/node_modules/@blueprintjs/labs/lib/css/blueprint-labs.css\" rel=\"stylesheet\" />",
+      "language": "html",
+      "context": "...or in plain HTML:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/src/components/box/box.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { Box } from \"@blueprintjs/labs\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/labs/src/components/flex/flex.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { Flex } from \"@blueprintjs/labs\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/README.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "npm install --save @blueprintjs/core",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/context/blueprint-provider.md",
+      "start_line": 18,
+      "end_line": 30,
+      "code": "import { BlueprintProvider } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(\n    <BlueprintProvider>\n        <div>My app has overlays, hotkeys, and portal customization \ud83d\ude0e</div>\n    </BlueprintProvider>,\n);",
+      "language": "tsx",
+      "context": "To use **BlueprintProvider**, wrap your application with it at the root level:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/context/portal/portal-provider.md",
+      "start_line": 22,
+      "end_line": 36,
+      "code": "import { PortalProvider, Dialog } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(\n    <PortalProvider portalClassName=\"my-portal\">\n        <Dialog isOpen={true}>\n            <span>This dialog will have a custom class on its portal element.</span>\n        </Dialog>\n    </PortalProvider>,\n);",
+      "language": "tsx",
+      "context": "To use **PortalProvider**, wrap your application with it at the root level:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/context/overlays/overlays-provider.md",
+      "start_line": 38,
+      "end_line": 50,
+      "code": "import { OverlaysProvider } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(\n    <OverlaysProvider>\n        <div>My app has overlays \ud83d\ude0e</div>\n    </OverlaysProvider>,\n);",
+      "language": "tsx",
+      "context": "To use **OverlaysProvider**, wrap your application with it at the root level:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/context/hotkeys/hotkeys-provider.md",
+      "start_line": 25,
+      "end_line": 37,
+      "code": "import { HotkeysProvider } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(\n    <HotkeysProvider>\n        <div>My app has hotkeys \ud83d\ude0e</div>\n    </HotkeysProvider>,\n);",
+      "language": "tsx",
+      "context": "To use **HotkeysProvider**, wrap your application with it at the root level:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/context/hotkeys/hotkeys-provider.md",
+      "start_line": 47,
+      "end_line": 110,
+      "code": "import { type HotkeyConfig, HotkeysContext, HotkeysProvider, HotkeysTarget } from \"@blueprintjs/core\";\nimport React, { useContext, useEffect, useRef } from \"react\";\nimport { createRoot } from \"react-dom/client\";\n\nfunction App() {\n    const appHotkeys: HotkeyConfig[] = [\n        {\n            combo: \"o\",\n            global: true,\n            label: \"Open\",\n            onKeyDown: () => console.info(\"open\"),\n        },\n    ];\n\n    return (\n        <HotkeysProvider>\n            <div>\n                <HotkeysTarget hotkeys={appHotkeys}>\n                    <div>My app has hotkeys \ud83d\ude0e</div>\n                </HotkeysTarget>\n                <PluginSlot>\n                    <Plugin />\n                </PluginSlot>\n            </div>\n        </HotkeysProvider>\n    );\n}\n\nfunction Plugin() {\n    const pluginHotkeys: HotkeyConfig[] = [\n        {\n            combo: \"f\",\n            global: true,\n            label: \"Search\",\n            onKeyDown: () => console.info(\"search\"),\n        },\n    ];\n\n    return (\n        <HotkeysTarget hotkeys={pluginHotkeys}>\n            <div>This plugin also has hotkeys</div>\n        </HotkeysTarget>\n    );\n}\n\nfunction PluginSlot({ children }: { children: React.ReactNode }) {\n    const hotkeysContext = useContext(HotkeysContext);\n    const ref = useRef<HTMLDivElement>(null);\n\n    useEffect(() => {\n        if (ref.current == null) {\n            return;\n        }\n        const root = createRoot(ref.current);\n        root.render(<HotkeysProvider value={hotkeysContext}>{children}</HotkeysProvider>);\n        return () => {\n            root.unmount();\n        };\n    }, [ref, hotkeysContext, children]);\n\n    return <div ref={ref} />;\n}",
+      "language": "tsx",
+      "context": "which has multiple **HotkeysProviders**."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/colors.md",
+      "start_line": 55,
+      "end_line": 62,
+      "code": "@import \"@blueprintjs/core/lib/scss/variables\";\n\n.rule {\n    color: $pt-link-color;\n    background: $black;\n}",
+      "language": "scss",
+      "context": "Example in Sass:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/colors.md",
+      "start_line": 66,
+      "end_line": 73,
+      "code": "@import \"@blueprintjs/core/lib/less/variables\";\n\n.rule {\n    color: @pt-link-color;\n    background: @black;\n}",
+      "language": "less",
+      "context": "Example in Less:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/colors.md",
+      "start_line": 78,
+      "end_line": 82,
+      "code": "import { Colors } from \"@blueprintjs/core\";\n\n<div style={{ color: Colors.BLUE3, background: Colors.BLACK }} />;",
+      "language": "tsx",
+      "context": "Note that aliases are not currently available in JavaScript."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/accessibility.md",
+      "start_line": 20,
+      "end_line": 24,
+      "code": "import { FocusStyleManager } from \"@blueprintjs/core\";\n\nFocusStyleManager.onlyShowFocusOnTabs();",
+      "language": "ts",
+      "context": "**You must explictly enable this feature in your app (and you probably want to):**"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/accessibility.md",
+      "start_line": 47,
+      "end_line": 55,
+      "code": "import { Classes } from \"@blueprintjs/core\";\n\nconst MyComponent = () => ({\n    <div classname={Classes.FOCUS_STYLE_MANAGER_IGNORE}>\n        // Any components here will always show the focus outline when clicked.\n    </div>\n})",
+      "language": "tsx",
+      "context": "to a container element."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 11,
+      "end_line": 14,
+      "code": "// Don't do this! Avoid hardcoding Blueprint class names.\n<button className=\"@ns-button @ns-large\">Don't do this!</button>",
+      "language": "tsx",
+      "context": "**Avoid referencing hardcoded Blueprint class names in your JS or CSS code.**"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 19,
+      "end_line": 21,
+      "code": "<Button className=\"my-custom-class\" text=\"customized button\" />",
+      "language": "tsx",
+      "context": "that class whenever needed."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 23,
+      "end_line": 27,
+      "code": ".my-custom-class {\n    width: 4000px;\n}",
+      "language": "scss",
+      "context": "<Button className=\"my-custom-class\" text=\"customized button\" />"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 33,
+      "end_line": 37,
+      "code": "// use Classes constants for forward-compatible custom elements.\nimport { Classes } from \"@blueprintjs/core\";\n<a className={Classes.MENU_ITEM}>custom menu item</a>;",
+      "language": "tsx",
+      "context": "be particularly useful when writing UI tests."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 39,
+      "end_line": 45,
+      "code": "// interpolate the $ns variable to generate forward-compatible class names.\n// this approach is *not encouraged* as it increases maintenance cost.\n@import \"@blueprintjs/core/lib/scss/variables\";\n.#{$ns}-menu-item {\n}",
+      "language": "scss",
+      "context": "<a className={Classes.MENU_ITEM}>custom menu item</a>;"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 54,
+      "end_line": 60,
+      "code": "// Prefer props over modifier classes.\n<Button intent=\"primary\" variant=\"minimal\">Good stuff</Button>\n\n// Don't do this!\n<Button className={classNames(Classes.INTENT_PRIMARY, Classes.MINIMAL)}>Don't do this!</Button>",
+      "language": "tsx",
+      "context": "preferrable to use the corresponding prop on a React component."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 83,
+      "end_line": 90,
+      "code": "@use \"@blueprintjs/core/lib/scss/variables.scss\" as bp;\n\n.my-class .#{bp.$ns}-button {\n    // Custom styles for Blueprint buttons within .my-class\n    background-color: red;\n}",
+      "language": "scss",
+      "context": "When writing custom styles that target Blueprint components, you should reference the namespace using the `$ns` Sass variable rather than hardcoding the prefix:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 107,
+      "end_line": 126,
+      "code": "import { sassNodeModulesLoadPaths, sassSvgInlinerFactory } from \"@blueprintjs/node-build-scripts\";\nimport * as sass from \"sass\";\n\nconst result = await sass.compileAsync(\"path/to/input.scss\", {\n    loadPaths: sassNodeModulesLoadPaths,\n    functions: {\n        /**\n         * Sass function to inline a UI icon svg and change its path color.\n         *\n         * Usage:\n         * svg-icon(\"16px/icon-name.svg\", (path: (fill: $color)) )\n         */\n        \"svg-icon($path, $selectors: null)\": sassSvgInlinerFactory(\"path/to/resources/icons\", {\n            optimize: true,\n            encodingFormat: \"uri\",\n        }),\n    },\n});",
+      "language": "js",
+      "context": "for a custom Sass compiler that can import Blueprint `.scss` sources:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 130,
+      "end_line": 167,
+      "code": "// webpack.config.mjs\n\nimport { sassNodeModulesLoadPaths, sassSvgInlinerFactory } from \"@blueprintjs/node-build-scripts\";\nimport * as sass from \"sass\";\n\nconst functions = {\n    /**\n     * Sass function to inline a UI icon svg and change its path color.\n     *\n     * Usage:\n     * svg-icon(\"16px/icon-name.svg\", (path: (fill: $color)) )\n     */\n    \"svg-icon($path, $selectors: null)\": sassSvgInlinerFactory(\"path/to/resources/icons\", {\n        optimize: true,\n        encodingFormat: \"uri\",\n    }),\n};\n\nexport default {\n    module: {\n        rules: [\n            {\n                test: /\\.scss$/,\n                use: {\n                    loader: require.resolve(\"sass-loader\"),\n                    options: {\n                        sassOptions: {\n                            loadPaths: sassNodeModulesLoadPaths,\n                            functions,\n                        },\n                    },\n                },\n            },\n        ],\n    },\n};",
+      "language": "js",
+      "context": "In addition to the JS API, you can specify this configuration with Webpack's sass-loader:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/classes.md",
+      "start_line": 174,
+      "end_line": 180,
+      "code": "plugins: [\n    new webpack.DefinePlugin({\n        BLUEPRINT_NAMESPACE: \"my-custom-namespace\",\n    }),\n];",
+      "language": "js",
+      "context": "2. When bundling your JS JS code, define the `BLUEPRINT_NAMESPACE` variable to the same value; this will update the generated `Classes` constants. The easiest way to do is with webpack's [DefinePlugin](https://webpack.js.org/plugins/define-plugin/)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/variables.md",
+      "start_line": 5,
+      "end_line": 8,
+      "code": "// Sass\n@import \"path/to/@blueprintjs/core/lib/scss/variables\";",
+      "language": "scss",
+      "context": "Available for use with Sass and Less."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/variables.md",
+      "start_line": 10,
+      "end_line": 13,
+      "code": "// Less\n@import \"path/to/@blueprintjs/core/lib/less/variables\";",
+      "language": "less",
+      "context": "@import \"path/to/@blueprintjs/core/lib/scss/variables\";"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/variables.md",
+      "start_line": 44,
+      "end_line": 50,
+      "code": "@import \"@blueprintjs/icons/lib/scss/variables\";\n\n.my-custom-icon {\n    content: map-get($blueprint-icon-codepoints, \"tick\");\n}",
+      "language": "scss",
+      "context": "full list of identifiers):"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/variables.md",
+      "start_line": 52,
+      "end_line": 56,
+      "code": "import { getIconContentString } from \"@blueprintjs/icons\";\n\ndocument.querySelector(\".my-custom-icon\").style.content = getIconContentString(\"tick\");",
+      "language": "ts",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/docs/variables.md",
+      "start_line": 95,
+      "end_line": 101,
+      "code": ".my-component {\n    padding: $pt-spacing * 4; // 16px\n    margin-bottom: $pt-spacing * 2; // 8px\n    gap: $pt-spacing; // 4px\n}",
+      "language": "scss",
+      "context": "Example usage:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/design-tokens/README.md",
+      "start_line": 13,
+      "end_line": 20,
+      "code": ".element {\n  color: var(--bp-typography-color-default-rest);\n  background: var(--bp-surface-background-color-default-rest);\n  border-radius: var(--bp-surface-border-radius);\n  padding: calc(var(--bp-surface-spacing) * 2);\n}",
+      "language": "css",
+      "context": "Tokens are available as CSS custom properties on `:root`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/design-tokens/README.md",
+      "start_line": 35,
+      "end_line": 37,
+      "code": "pnpm run build:tokens  # Generate tokens",
+      "language": "bash",
+      "context": "## Development"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tabs/tabs.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Tab, TabPanel, Tabs } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tabs/tabs.md",
+      "start_line": 22,
+      "end_line": 33,
+      "code": "import { Tab, Tabs } from \"@blueprintjs/core\";\n\n<Tabs id=\"TabsExample\">\n    <Tab id=\"ng\" title=\"Angular\" panel={<AngularPanel />} />\n    <Tab id=\"mb\" title=\"Ember\" panel={<EmberPanel />} panelClassName=\"ember-panel\" />\n    <Tab id=\"rx\" title=\"React\" panel={<ReactPanel />} />\n    <Tab id=\"bb\" disabled title=\"Backbone\" panel={<BackbonePanel />} />\n    <TabsExpander />\n    <input className=\"@ns-input\" type=\"text\" placeholder=\"Search...\" />\n</Tabs>;",
+      "language": "tsx",
+      "context": "you can even insert things _between_ `<Tab>` elements."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tabs/tabs.md",
+      "start_line": 65,
+      "end_line": 88,
+      "code": "import * as React from \"react\";\nimport { Tab, Tabs, TabPanel, type TabId } from \"@blueprintjs/core\";\n\nfunction TabsControlledExample() {\n    const TABS_PARENT_ID = React.useId();\n    const [selectedTabId, setSelectedTabId] = React.useState<TabId>(\"Home\");\n\n    return (\n        <>\n            <Tabs id={TABS_PARENT_ID} onChange={setSelectedTabId} selectedTabId={selectedTabId}>\n                <Tab id=\"Home\" title=\"Home\" />\n                <Tab id=\"Files\" title=\"Files\" />\n            </Tabs>\n            <TabPanel\n                id={selectedTabId}\n                selectedTabId={selectedTabId}\n                parentId={TABS_PARENT_ID}\n                panel={<p>The current panel id is: \"{selectedTabId}\"</p>}\n            />\n        </>\n    );\n}",
+      "language": "tsx",
+      "context": "**TabPanel** wraps a passed `panel` in proper aria attributes, `id`, and `role`, for proper accessibility. A **TabPanel** gets automatically rendered by a _Tab_ when `panel` is supplied and the _Tab_ is active, but **TabPanel** is also exported for cases where you want to render the panel yourself elsewhere in the DOM, while using _Tabs_ in controlled mode:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tree/tree.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Tree } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/navbar/navbar.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Navbar } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/navbar/navbar.md",
+      "start_line": 36,
+      "end_line": 45,
+      "code": "<Navbar>\n    <NavbarGroup align={Alignment.START}>\n        <NavbarHeading>Blueprint</NavbarHeading>\n        <NavbarDivider />\n        <Button className=\"@ns-minimal\" icon=\"home\" text=\"Home\" />\n        <Button className=\"@ns-minimal\" icon=\"document\" text=\"Files\" />\n    </NavbarGroup>\n</Navbar>",
+      "language": "tsx",
+      "context": "DOM attributes."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/drawer/drawer.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Drawer } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tooltip/tooltip.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Tooltip } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tooltip/tooltip.md",
+      "start_line": 52,
+      "end_line": 74,
+      "code": "import { Button, mergeRefs, Popover, Tooltip } from \"@blueprintjs/core\";\n\n<Popover\n    content={<h1>Popover!</h1>}\n    renderTarget={({ isOpen: isPopoverOpen, ref: ref1, ...popoverProps }) => (\n        <Tooltip\n            content=\"I have a popover!\"\n            disabled={isPopoverOpen}\n            openOnTargetFocus={false}\n            renderTarget={({ isOpen: isTooltipOpen, ref: ref2, ...tooltipProps }) => (\n                <Button\n                    {...popoverProps}\n                    {...tooltipProps}\n                    active={isPopoverOpen}\n                    ref={mergeRefs(ref1, ref2)}\n                    text=\"Hover and click me\"\n                />\n            )}\n        />\n    )}\n/>;",
+      "language": "tsx",
+      "context": "automatically when a user doesn't want it to."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/portal/portal.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { Portal } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/portal/portal.md",
+      "start_line": 46,
+      "end_line": 60,
+      "code": "import { Button, Popover, PortalProvider } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(\n    <PortalProvider portalClassName=\"my-custom-class\">\n        <Popover content=\"My portal has a custom class\">\n            <Button text=\"Example\" />\n        </Popover>\n    </PortalProvider>,\n);",
+      "language": "tsx",
+      "context": "(usually, this should be done near the root of your application)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/section/section.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { Section } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/section/section.md",
+      "start_line": 24,
+      "end_line": 29,
+      "code": "<Section>\n    <SectionCard>{/* ... */}</SectionCard>\n    <SectionCard>{/* ... */}</SectionCard>\n</Section>",
+      "language": "tsx",
+      "context": "Multiple **SectionCard** child components can be added under one **Section**, they will be stacked vertically. This layout can be used to further group information."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/card/card.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Card } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/label.md",
+      "start_line": 19,
+      "end_line": 21,
+      "code": "import { Label } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/label.md",
+      "start_line": 25,
+      "end_line": 33,
+      "code": "<Label>\n    Label A\n    <input className={Classes.INPUT} placeholder=\"Placeholder text\" />\n</Label>\n\n<Label htmlFor=\"input-b\">Label B</Label>\n<input className={Classes.INPUT} id=\"input-b\" placeholder=\"Placeholder text\" />",
+      "language": "tsx",
+      "context": "@## Usage"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/text-area.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { TextArea } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/control-group.md",
+      "start_line": 21,
+      "end_line": 23,
+      "code": "import { ControlGroup } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/control-group.md",
+      "start_line": 44,
+      "end_line": 49,
+      "code": "<ControlGroup fill={true} vertical={false}>\n    <Button icon=\"filter\">Filter</Button>\n    <InputGroup placeholder=\"Find filters...\" />\n</ControlGroup>",
+      "language": "tsx",
+      "context": "those listed in the props interface below."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/radio.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Radio, RadioGroup } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/radio.md",
+      "start_line": 20,
+      "end_line": 26,
+      "code": "<RadioGroup label=\"Lunch special\" onChange={handleMealChange} selectedValue={mealType}>\n    <Radio label=\"Soup\" value=\"one\" />\n    <Radio label=\"Salad\" value=\"two\" />\n    <Radio label=\"Sandwich\" value=\"three\" />\n</RadioGroup>",
+      "language": "tsx",
+      "context": "**RadioGroup** is responsible for managing state and interaction."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/numeric-input.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { NumericInput } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/numeric-input.md",
+      "start_line": 67,
+      "end_line": 80,
+      "code": "import { NumericInput } from \"@blueprintjs/core\";\n\nexport class NumericInputExample extends React.Component {\n    public render() {\n        return <NumericInput onValueChange={this.handleValueChange} />;\n    }\n\n    private handleValueChange = (valueAsNumber: number, valueAsString: string) => {\n        console.log(\"Value as number:\", valueAsNumber);\n        console.log(\"Value as string:\", valueAsString);\n    };\n}",
+      "language": "tsx",
+      "context": "like `.` and `-` (for decimals and negative numbers, respectively) more easily."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/numeric-input.md",
+      "start_line": 110,
+      "end_line": 136,
+      "code": "import { NumericInput } from \"@blueprintjs/core\";\nimport * as SomeLibrary from \"some-library\";\n\ninterface NumericInputExampleState = {\n    value?: number | string;\n}\n\nclass NumericInputExample extends React.Component<{}, NumericInputExampleState> {\n    public state = { value: NumericInput.VALUE_EMPTY };\n\n    public render() {\n        return (\n            <NumericInput\n                onValueChange={this.handleValueChange}\n                value={this.state.value}\n            />\n        );\n    }\n\n    private handleValueChange = (_valueAsNumber: number, valueAsString: string) {\n        // Important: use the string value to allow typing decimal places and negative numbers\n        const result = SomeLibrary.evaluateMathExpression(valueAsString);\n        this.setState({ value: result });\n    }\n}",
+      "language": "tsx",
+      "context": "component with support for mathematical expressions as follows:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/checkbox.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Checkbox } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/checkbox.md",
+      "start_line": 18,
+      "end_line": 27,
+      "code": "// simple usage for string labels\n<Checkbox checked={this.state.isEnabled} label=\"Enabled\" onChange={this.handleEnabledChange} />\n\n// advanced usage for JSX content\n<Checkbox checked={this.state.isEnabled} onChange={this.handleEnabledChange}>\n    <Icon icon=\"user\" />\n    John <strong>Doe</strong>\n</Checkbox>",
+      "language": "tsx",
+      "context": "Enable the `indeterminate` prop for a third in-between state."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/file-input.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { FileInput } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/file-input.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "<FileInput disabled={true} text=\"Choose file...\" onInputChange={...} />",
+      "language": "tsx",
+      "context": "@## Usage"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/input-group.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { InputGroup } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/switch.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { Switch } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/form-group.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { FormGroup } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/forms/form-group.md",
+      "start_line": 20,
+      "end_line": 24,
+      "code": "<FormGroup helperText=\"Helper text with details...\" label=\"Label A\" labelFor=\"text-input\" labelInfo=\"(required)\">\n    <InputGroup id=\"text-input\" placeholder=\"Placeholder text\" />\n</FormGroup>",
+      "language": "tsx",
+      "context": "label above and helper text below."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/segmented-control/segmented-control.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { SegmentedControl } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/segmented-control/segmented-control.md",
+      "start_line": 25,
+      "end_line": 43,
+      "code": "<SegmentedControl\n    options={[\n        {\n            label: \"List\",\n            value: \"list\",\n        },\n        {\n            label: \"Grid\",\n            value: \"grid\",\n        },\n        {\n            label: \"Gallery\",\n            value: \"gallery\",\n        },\n    ]}\n    defaultValue=\"list\"\n/>",
+      "language": "tsx",
+      "context": "[HTMLSelect](#core/components/html-select)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/resize-sensor/resize-sensor.md",
+      "start_line": 20,
+      "end_line": 22,
+      "code": "import { ResizeSensor } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/resize-sensor/resize-sensor.md",
+      "start_line": 26,
+      "end_line": 36,
+      "code": "import { ResizeEntry, ResizeSensor } from \"@blueprintjs/core\";\n\nfunction handleResize(entries: ResizeEntry[]) {\n    console.log(entries.map(e => `${e.contentRect.width} x ${e.contentRect.height}`));\n}\n\n<ResizeSensor onResize={handleResize}>\n    <div style={{ width: this.props.width }} />\n</ResizeSensor>;",
+      "language": "tsx",
+      "context": "@## Usage"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/resize-sensor/resize-sensor.md",
+      "start_line": 41,
+      "end_line": 47,
+      "code": "const myRef = React.createRef();\n\n<ResizeSensor targetRef={myRef} onResize={handleResize}>\n    <div ref={myRef} style={{ width: this.props.width }} />\n</ResizeSensor>;",
+      "language": "tsx",
+      "context": "with the `targetRef` prop (otherwise, the component won't be able to attach one itself)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/alert/alert.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Alert } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/entity-title/entity-title.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { EntityTitle } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/progress-bar/progress-bar.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { ProgressBar } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 39,
+      "end_line": 42,
+      "code": "    const myToaster: Toaster = await OverlayToaster.create({ position: \"bottom\" });\n    myToaster.show({ ...toastOptions });",
+      "language": "ts",
+      "context": "1. **Recommended**: use the `OverlayToaster.create()` static method to create a new `Toaster` instance:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 48,
+      "end_line": 55,
+      "code": "    render(\n        <OverlayToaster>\n            <Toast {...toastOptions} />\n        </OverlayToaster>,\n        targetElement,\n    );",
+      "language": "ts",
+      "context": "2. Render an `<OverlayToaster>` with `<Toast>` children:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 58,
+      "end_line": 60,
+      "code": "    render(<OverlayToaster ref={(ref: Toaster | null) => ref?.show({ ...toastOptions })} />, targetElement);",
+      "language": "ts",
+      "context": "- Example with ref callback:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 62,
+      "end_line": 66,
+      "code": "    const myToaster = React.createRef<OverlayToaster>();\n    render(<OverlayToaster ref={myToaster} />, targetElement);\n    myToaster.current?.show({ ...toastOptions });",
+      "language": "ts",
+      "context": "- Example with ref object (note that React type constraints require us to use the more specific `OverlayToaster` type):"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 94,
+      "end_line": 96,
+      "code": "OverlayToaster.create(props?: OverlayToasterProps, options?: OverlayToasterCreateOptions): Promise<Toaster>;",
+      "language": "ts",
+      "context": "hide toasts in its given container."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 112,
+      "end_line": 117,
+      "code": "function synchronousFn() {\n    const toasterPromise = OverlayToaster.create({});\n    toasterPromise.then(toaster => toaster.show({ message: \"Toast!\" }));\n}",
+      "language": "ts",
+      "context": "possible to attach `.then()` handlers to the returned toaster."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 147,
+      "end_line": 155,
+      "code": "import { OverlayToaster, Position } from \"@blueprintjs/core\";\n\n/** Singleton toaster instance. Create separate instances for different options. */\nexport const AppToaster = OverlayToaster.create({\n    className: \"recipe-toaster\",\n    position: Position.TOP,\n});",
+      "language": "ts",
+      "context": "#### `toaster.ts`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 159,
+      "end_line": 173,
+      "code": "import { Button } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport { AppToaster } from \"./toaster\";\n\nexport const App: React.FC = () => {\n    const handleClick = React.useCallback(() => {\n        // create toasts in response to interactions.\n        // in most cases, it's enough to simply create and forget (thanks to timeout).\n        (await AppToaster).show({ message: \"Toasted.\" });\n    }, []);\n\n    return <Button onClick={handleClick} text=\"Toast please\" />;\n}",
+      "language": "tsx",
+      "context": "#### `application.tsx`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/toast/toast.md",
+      "start_line": 187,
+      "end_line": 216,
+      "code": "import { Button, OverlayToaster, Position, Toast, ToastOptions } from \"@blueprintjs/core\";\nimport * as React from \"react\";\n\nfunction MyComponent() {\n    const [toasts, setToasts] = React.useState<ToastOptions[]>([]);\n    const toaster = React.useRef<OverlayToaster>(null);\n\n    const addToastViaRef = React.useCallback(() => {\n        toaster.current?.show({ message: \"Toasted!\" });\n    }, []);\n\n    const addToastLocally = React.useCallback(() => {\n        setToasts(t => [...t, { key: \"toasted\", message: \"Toasted!\" }]);\n    }, []);\n\n    return (\n        <div>\n            <Button onClick={addToastViaRef} text=\"Procure toast remotely\" />\n            <Button onClick={addToastLocally} text=\"Procure toast locally\" />\n            <OverlayToaster position={Position.TOP_RIGHT} ref={toaster}>\n                {/* \"Toasted!\" will appear here after clicking button. */}\n                {toasts.map(toast => (\n                    <Toast key={toast.key} {...toast} />\n                ))}\n            </OverlayToaster>\n        </div>\n    );\n}",
+      "language": "tsx",
+      "context": "always appear _after_ toasts created with `ref.show()`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/hotkeys/hotkeys-target.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { HotkeysTarget } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/hotkeys/hotkeys-target.md",
+      "start_line": 28,
+      "end_line": 63,
+      "code": "import * as React from \"react\";\nimport { HotkeysTarget, InputGroup } from \"@blueprintjs/core\";\n\nexport default class extends React.PureComponent {\n    private inputRef = React.createRef<HTMLInputElement>();\n\n    private hotkeys = [\n        {\n            combo: \"R\",\n            global: true,\n            label: \"Refresh data\",\n            onKeyDown: () => console.info(\"Refreshing data...\"),\n        },\n        {\n            combo: \"F\",\n            group: \"Input\",\n            label: \"Focus text input\",\n            onKeyDown: this.inputRef.current?.focus(),\n        },\n    ];\n\n    public render() {\n        return (\n            <HotkeysTarget hotkeys={this.hotkeys}>\n                {({ handleKeyDown, handleKeyUp }) => (\n                    <div tabIndex={0} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>\n                        Press \"R\" to refresh data, \"F\" to focus the input...\n                        <InputGroup inputRef={this.inputRef} />\n                    </div>\n                )}\n            </HotkeysTarget>\n        );\n    }\n}",
+      "language": "tsx",
+      "context": "Then, to register hotkeys and generate the relevant event handlers, use the component like so:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/slider/sliders.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "import { Slider } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/slider/sliders.md",
+      "start_line": 61,
+      "end_line": 76,
+      "code": "// RangeSlider looks roughly like this:\n<MultiSlider onChange={...}>\n    <MultiSliderHandle\n        value={startValue}\n        type=\"start\"\n        intentAfter={Intent.PRIMARY}\n        htmlProps={handleHtmlProps.start}\n    />\n    <MultiSliderHandle\n        value={endValue}\n        type=\"end\"\n        htmlProps={handleHtmlProps.end}\n    />\n</MultiSlider>",
+      "language": "tsx",
+      "context": "elements, each with their own `value` and other properties."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/collapse/collapse.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Collapse } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/spinner/spinner.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Spinner } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overflow-list/overflow-list.md",
+      "start_line": 18,
+      "end_line": 20,
+      "code": "import { OverflowList } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/editable-text/editable-text.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "import { EditableText } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/control-card/control-card.md",
+      "start_line": 45,
+      "end_line": 63,
+      "code": "import { RadioGroup, RadioCard } from \"@blueprintjs/core\";\nimport React from \"react\";\n\nfunction RadioCardGroupExample() {\n    const [selectedValue, setSelectedValue] = React.useState<string | undefined>();\n    const handleChange = React.useCallback((event: React.FormEvent<HTMLInputElement>) => {\n        setSelectedValue(event.currentTarget.value);\n    }, []);\n\n    return (\n        <RadioGroup selectedValue={selectedValue} onChange={handleChange} label=\"Lunch Special\">\n            <RadioCard label=\"Soup\" value=\"soup\" />\n            <RadioCard label=\"Salad\" value=\"salad\" />\n            <RadioCard label=\"Sandwich\" value=\"sandwich\" />\n        </RadioGroup>\n    );\n}",
+      "language": "tsx",
+      "context": "[**RadioCardGroup**](#core/components/radio.radiogroup) which manages its selection state."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/context-menu/context-menu.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { ContextMenu } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/context-menu/context-menu.md",
+      "start_line": 19,
+      "end_line": 37,
+      "code": "import { ContextMenu, Menu, MenuItem } from \"@blueprintjs/core\";\n\nexport default function ContextMenuExample() {\n    return (\n        <ContextMenu\n            content={\n                <Menu>\n                    <MenuItem text=\"Save\" />\n                    <MenuItem text=\"Save as...\" />\n                    <MenuItem text=\"Delete...\" intent=\"danger\" />\n                </Menu>\n            }\n        >\n            <div className=\"my-context-menu-target\">Right click me!</div>\n        </ContextMenu>\n    );\n}",
+      "language": "tsx",
+      "context": "Create a context menu using the simple function component:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/context-menu/context-menu.md",
+      "start_line": 53,
+      "end_line": 81,
+      "code": "import classNames from \"classnames\";\nimport { ContextMenu, ContextMenuChildrenProps, Menu, MenuItem } from \"@blueprintjs/core\";\n\nexport default function AdvancedContextMenuExample() {\n    return (\n        <ContextMenu\n            content={\n                <Menu>\n                    <MenuItem text=\"Save\" />\n                    <MenuItem text=\"Save as...\" />\n                    <MenuItem text=\"Delete...\" intent=\"danger\" />\n                </Menu>\n            }\n        >\n            {(ctxMenuProps: ContextMenuChildrenProps) => (\n                <div\n                    className={classNames(\"my-context-menu-target\", ctxMenuProps.className)}\n                    onContextMenu={ctxMenuProps.onContextMenu}\n                    ref={ctxMenuProps.ref}\n                >\n                    {ctxMenuProps.popover}\n                    Right click me!\n                </div>\n            )}\n        </ContextMenu>\n    );\n}",
+      "language": "tsx",
+      "context": "all the render props supplied to the `children()` function:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/context-menu/context-menu-popover.md",
+      "start_line": 34,
+      "end_line": 37,
+      "code": "export function showContextMenu(props: ContextMenuPopoverProps, options?: ShowContextMenuOptions): void;\nexport function hideContextMenu(): void;",
+      "language": "ts",
+      "context": "the page:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/callout/callout.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Callout } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/dialog/dialog.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Dialog } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/dialog/dialog.md",
+      "start_line": 51,
+      "end_line": 56,
+      "code": "<Dialog title=\"Informational dialog\" icon=\"info-sign\">\n    <DialogBody>{/* body contents here */}</DialogBody>\n    <DialogFooter actions={<Button intent=\"primary\" text=\"Close\" onClick={/* ... */} />} />\n</Dialog>",
+      "language": "tsx",
+      "context": "to structure its contents:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { Popover } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 88,
+      "end_line": 114,
+      "code": "import { Button, Classes, Popover } from \"@blueprintjs/core\";\n\nexport class PopoverExample extends React.PureComponent {\n    public render() {\n        // popover content gets no padding by default; add the \"@ns-popover-content-sizing\"\n        // class to the popover to set nice padding between its border and content.\n        return (\n            <Popover\n                interactionKind=\"click\"\n                popoverClassName={Classes.POPOVER_CONTENT_SIZING}\n                placement=\"bottom\"\n                content={\n                    <div>\n                        <h5>Popover title</h5>\n                        <p>...</p>\n                        <Button className={Classes.POPOVER_DISMISS} text=\"Dismiss\" />\n                    </div>\n                }\n                renderTarget={({ isOpen, ...targetProps }) => (\n                    <Button {...targetProps} intent=\"primary\" text=\"Popover target\" />\n                )}\n            />\n        );\n    }\n}",
+      "language": "tsx",
+      "context": "</div>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 208,
+      "end_line": 238,
+      "code": "import { Button, Classes, Popover } from \"@blueprintjs/core\";\n\nexport class ControlledPopoverExample extends React.Component<{}, { isOpen: boolean }> {\n    public state = { isOpen: false };\n\n    public render() {\n        return (\n            <Popover\n                content={\n                    <div>\n                        <h5>Popover Title</h5>\n                        <p>...</p>\n                        <Button className={Classes.POPOVER_DISMISS} text=\"Close popover\" />\n                    </div>\n                }\n                interactionKind=\"click\"\n                isOpen={this.state.isOpen}\n                onInteraction={state => this.handleInteraction(state)}\n                placement=\"right\"\n            >\n                <Button intent=\"primary\" text=\"Popover target\" />\n            </Popover>\n        );\n    }\n\n    private handleInteraction(nextOpenState: boolean) {\n        this.setState({ isOpen: nextOpenState });\n    }\n}",
+      "language": "tsx",
+      "context": "#### Example controlled usage"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 290,
+      "end_line": 298,
+      "code": "<div className={Classes.POPOVER_DISMISS}>\n    <button>Click me to dismiss</button>\n    <button disabled={true}>I will not dismiss</button>\n    <div className={Classes.POPOVER_DISMISS_OVERRIDE}>\n        <button>I too shall not dismiss</button>\n    </div>\n</div>",
+      "language": "tsx",
+      "context": "any submenu item will close all submenus, which is desirable behavior for a menu tree."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 377,
+      "end_line": 379,
+      "code": "<Popover content={<div className=\"custom-class\">...</div>}>...</Popover>",
+      "language": "tsx",
+      "context": "scrollable, add a custom class to your popover content element and attach styles to that class:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 381,
+      "end_line": 386,
+      "code": ".custom-class {\n    max-height: $pt-grid-size * 15;\n    overflow-y: auto;\n}",
+      "language": "scss",
+      "context": "<Popover content={<div className=\"custom-class\">...</div>}>...</Popover>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 420,
+      "end_line": 424,
+      "code": "<Popover {...yourProps} usePortal={false} hoverCloseDelay={0} hoverOpenDelay={0}>\n    {yourTarget}\n</Popover>",
+      "language": "tsx",
+      "context": "to delays and transitions; this can be resolved by zeroing the default hover delays."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 434,
+      "end_line": 457,
+      "code": "import { Classes, Overlay2, Popover } from \"@blueprintjs/core\";\nimport { assert } from \"chai\";\nimport { mount } from \"enzyme\";\nimport { Target } from \"react-popper\";\n\nwrapper = mount(\n    <Popover usePortal={false} interactionKind=\"hover\" content={<div>Content</div>}>\n        <div>Target</div>\n    </Popover>,\n);\n\nwrapper.find(Target).simulate(\"mouseenter\");\n\n// hostNodes() is an Enzyme 3 helper that retains only native-HTML nodes.\nwrapper.find(`.${Classes.POPOVER}`).hostNodes().simulate(\"mouseenter\");\nwrapper.find(`.${Classes.POPOVER}`).hostNodes().simulate(\"mouseleave\");\n\nsetTimeout(() => {\n    // Popover delays closing using setTimeout, so need to defer this check too.\n    const isOpen = wrapper.find(Overlay2).prop(\"isOpen\");\n    assert.equal(isOpen, false);\n});",
+      "language": "tsx",
+      "context": "`setTimeout` to wait for asynchronous Popover rendering to catch up:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/popover.md",
+      "start_line": 466,
+      "end_line": 472,
+      "code": "// using mount() from enzyme\nconst wrapper = mount(<Popover content={<div className=\"test\">test</div>} />);\nconst { popoverElement } = wrapper.instance();\n// popoverElement is the parent element of .@ns-popover\npopoverElement.querySelector(\".test\").textContent; // \"test\"",
+      "language": "tsx",
+      "context": "These properties exist primarily to simplify testing; do not rely on them for feature work."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/popover/menu-item.md",
+      "start_line": 40,
+      "end_line": 53,
+      "code": "import { Menu, MenuItem } from \"@blueprintjs/core\";\n\nfunction Example() {\n    return (\n        <Menu>\n            <MenuItem text=\"See more\">\n                <MenuItem text=\"First submenu item\" />\n                <MenuItem text=\"Second submenu item\" />\n            </MenuItem>\n        </Menu>\n    );\n}",
+      "language": "tsx",
+      "context": "be displayed inside a popover next to the active menu item on hover. Here's a code example:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/non-ideal-state/non-ideal-state.md",
+      "start_line": 19,
+      "end_line": 21,
+      "code": "import { NonIdealState } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/button/buttons.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Button } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/button/button-group.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { ButtonGroup } from \"@blueprintjs/core\";",
+      "language": "ts",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/link/link.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { Link } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/divider/divider.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { Divider } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/divider/divider.md",
+      "start_line": 23,
+      "end_line": 25,
+      "code": "<Divider compact />",
+      "language": "tsx",
+      "context": "The `compact` prop removes the margin from the divider, making it flush with adjacent content."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/menu/menu.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Menu } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/menu/menu.md",
+      "start_line": 21,
+      "end_line": 32,
+      "code": "<Menu>\n    <MenuItem icon=\"new-text-box\" onClick={handleClick} text=\"New text box\" />\n    <MenuItem icon=\"new-object\" onClick={handleClick} text=\"New object\" />\n    <MenuItem icon=\"new-link\" onClick={handleClick} text=\"New link\" />\n    <MenuDivider />\n    <MenuItem text=\"Settings...\" icon=\"cog\" intent=\"primary\">\n        <MenuItem icon=\"tick\" text=\"Save on edit\" />\n        <MenuItem icon=\"blank\" text=\"Compile on edit\" />\n    </MenuItem>\n</Menu>",
+      "language": "tsx",
+      "context": "-   [**MenuDivider**](#core/components/menu.menu-divider)"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/menu/menu.md",
+      "start_line": 65,
+      "end_line": 69,
+      "code": "<Popover content={<Menu>...</Menu>} placement=\"bottom\">\n    <Button alignText=\"start\" icon=\"applications\" endIcon=\"caret-down\" text=\"Open with...\" />\n</Popover>",
+      "language": "tsx",
+      "context": "[**Popover**](#core/components/popover) and specify a **Menu** as the `content` property:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/menu/menu.md",
+      "start_line": 89,
+      "end_line": 97,
+      "code": "<Menu>\n    <MenuItem text=\"Submenu\">\n        <MenuItem text=\"Child one\" />\n        <MenuItem text=\"Child two\" />\n        <MenuItem text=\"Child three\" />\n    </MenuItem>\n</Menu>",
+      "language": "tsx",
+      "context": "room to the right."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/card-list/card-list.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { CardList } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/panel-stack/panel-stack.md",
+      "start_line": 16,
+      "end_line": 18,
+      "code": "import { PanelStack } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/panel-stack/panel-stack.md",
+      "start_line": 34,
+      "end_line": 82,
+      "code": "import { Button, PanelProps } from \"@blueprintjs/core\";\n\ntype SettingsPanelInfo = {\n    /* ...  */\n};\ntype AccountSettingsPanelInfo = {\n    /* ...  */\n};\ntype NotificationSettingsPanelInfo = {\n    /* ...  */\n};\n\nconst AccountSettingsPanel: React.FC<PanelProps<AccountSettingsPanelInfo>> = props => {\n    // implementation\n};\n\nconst NotificationSettingsPanel: React.FC<PanelProps<NotificationSettingsPanelInfo>> = props => {\n    // implementation\n};\n\nconst SettingsPanel: React.FC<PanelProps<SettingsPanelInfo>> = props => {\n    const { openPanel, closePanel, ...info } = props;\n\n    const openAccountSettings = () =>\n        openPanel({\n            props: {\n                /* ... */\n            },\n            renderPanel: AccountSettingsPanel,\n            title: \"Account settings\",\n        });\n    const openNotificationSettings = () =>\n        openPanel({\n            props: {\n                /* ... */\n            },\n            renderPanel: NotificationSettingsPanel,\n            title: \"Notification settings\",\n        });\n\n    return (\n        <>\n            <Button onClick={openAccountSettings} text=\"Account settings\" />\n            <Button onClick={openNotificationSettings} text=\"Notification settings\" />\n        </>\n    );\n};",
+      "language": "tsx",
+      "context": "new one on top of it during the panel's lifecycle. For example:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 34,
+      "end_line": 36,
+      "code": "import { Overlay2 } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 53,
+      "end_line": 72,
+      "code": "import { Button, Overlay2, OverlaysProvider } from \"@blueprintjs/core\";\nimport { useCallback, useState } from \"react\";\n\nfunction Example() {\n    const [isOpen, setIsOpen] = useState(false);\n    const toggleOverlay = useCallback(() => setIsOpen(open => !open), [setIsOpen]);\n\n    return (\n        <OverlaysProvider>\n            <div>\n                <Button text=\"Show overlay\" onClick={toggleOverlay} />\n                <Overlay2 isOpen={isOpen} onClose={toggleOverlay}>\n                    Overlaid contents...\n                </Overlay2>\n            </div>\n        </OverlaysProvider>\n    );\n}",
+      "language": "tsx",
+      "context": "such that it will work without one, but this functionality will be removed in a future major version."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 89,
+      "end_line": 91,
+      "code": "<Overlay2 className={Classes.OVERLAY_SCROLL_CONTAINER} />",
+      "language": "tsx",
+      "context": "and the component will take care of the rest."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 121,
+      "end_line": 130,
+      "code": "function Example() {\n    const [isOpen, setIsOpen] = React.useState<boolean>(true);\n    return (\n        <Overlay2 isOpen={isOpen}>\n            <div>Contents</div>\n        </Overlay2>\n    );\n}",
+      "language": "tsx",
+      "context": "to the underlying `<CSSTransition>`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 137,
+      "end_line": 148,
+      "code": "function Example() {\n    const [isOpen, setIsOpen] = React.useState<boolean>(true);\n    const myRef = React.useRef<HTMLElement>();\n\n    return (\n        <Overlay2 isOpen={isOpen} childRef={myRef}>\n            <div ref={myRef}>Contents</div>\n        </Overlay2>\n    );\n}",
+      "language": "tsx",
+      "context": "pass the same ref to `<Overlay2 childRef={..}>`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay2/overlay2.md",
+      "start_line": 156,
+      "end_line": 181,
+      "code": "import { uniqueId } from \"../utils\";\n\nfunction Example() {\n    const [isOpen, setIsOpen] = React.useState<boolean>(true);\n    const [childRefs, setChildRefs] = React.useState<Record<string, React.RefObject<HTMLDivElement>>>({});\n    const [children, setChildren] = React.useState<Array<{ key: string }>>([]);\n    const addChild = React.useCallback(() => {\n        const newRef = React.createRef<HTMLDivElement>();\n        const newKey = uniqueId();\n        setChildren(oldChildren => [...oldChildren, { key: newKey }]);\n        setChildRefs(oldRefs => ({ ...oldRefs, [newKey]: newRef }));\n    }, []);\n\n    return (\n        <div>\n            <Button onClick={addChild}>Add child</Button>\n            <Overlay2 isOpen={isOpen} childRefs={childRefs}>\n                {children.map(child => (\n                    <div key={child.key} ref={childRefs[child.key]} />\n                ))}\n            </Overlay2>\n        </div>\n    );\n}",
+      "language": "tsx",
+      "context": "corresponding React `key` values) to `<Overlay2 childRefs={...}>`."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tag-input/tag-input.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { TagInput } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/text/text.md",
+      "start_line": 8,
+      "end_line": 10,
+      "code": "import { Text } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { Icon } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 51,
+      "end_line": 63,
+      "code": "import { Icon, IconSize } from \"@blueprintjs/core\";\n\n// icon name string literals are type checked\n<Icon icon=\"cross\" />\n<Icon icon=\"globe\" size={20} />\n\n// constants are provided for standard sizes\n<Icon icon=\"graph\" size={IconSize.LARGE} intent=\"primary\" />\n\n// you can also pass all valid HTML props\n<Icon icon=\"add\" onClick={this.handleAdd} onKeyDown={this.handleAddKeys} />",
+      "language": "tsx",
+      "context": "it will be assumed that the icon is decorative since it is unlabeled."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 67,
+      "end_line": 69,
+      "code": "<Icon icon=\"globe\" size={30} />",
+      "language": "tsx",
+      "context": "Custom sizes are supported. The following React element:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 73,
+      "end_line": 79,
+      "code": "<span class=\"@ns-icon @ns-icon-globe\" aria-hidden=\"true\">\n    <svg data-icon=\"globe\" width=\"30\" height=\"30\" viewBox=\"0 0 20 20\" role=\"img\">\n        <path d=\"...\"></path>\n    </svg>\n</span>",
+      "language": "xml",
+      "context": "...renders this HTML markup:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 99,
+      "end_line": 108,
+      "code": "import { Icon } from \"@blueprintjs/core\";\nimport * as React from \"react\";\n\nfunction Example() {\n    const [isDraggable, setIsDraggable] = React.useState();\n    // explicitly declare type of the root element so that we can set the \"draggable\" DOM attribute\n    return <Icon<HTMLSpanElement> icon=\"drag-handle-horizontal\" draggable={isDraggable} />;\n}",
+      "language": "tsx",
+      "context": "specify a type parameter on the component opening tag to (for example) set an HTML-only attribute:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 113,
+      "end_line": 124,
+      "code": "import { Icon } from \"@blueprintjs/core\";\nimport * as React from \"react\";\n\nfunction Example() {\n    const handleClick: React.MouseEventHandler<SVGSVGElement> = () => {\n        /* ... */\n    };\n    // explicitly declare type of the root element so that we can narrow the type of the event handler\n    return <Icon<SVGSVGElement> icon=\"add\" onClick={handleClick} tagName={null} />;\n}",
+      "language": "tsx",
+      "context": "on the root element when _omitting_ the icon wrapper element:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/icon/icon.md",
+      "start_line": 152,
+      "end_line": 157,
+      "code": "<span class=\"@ns-icon-{{size}} @ns-icon-{{name}}\"></span>\n\n<span class=\"@ns-icon-standard @ns-icon-projects\"></span>\n<span class=\"@ns-icon-large @ns-icon-geosearch @ns-intent-success\"></span>",
+      "language": "html",
+      "context": "Icon classes also support the four `.@ns-intent-*` modifiers to color the image."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay/overlay.md",
+      "start_line": 35,
+      "end_line": 37,
+      "code": "import { Overlay } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay/overlay.md",
+      "start_line": 57,
+      "end_line": 64,
+      "code": "<div>\n    <Button text=\"Show overlay\" onClick={this.toggleOverlay} />\n    <Overlay isOpen={this.state.isOpen} onClose={this.toggleOverlay}>\n        Overlaid contents...\n    </Overlay>\n</div>",
+      "language": "tsx",
+      "context": "</div>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/overlay/overlay.md",
+      "start_line": 72,
+      "end_line": 74,
+      "code": "<Overlay className={Classes.OVERLAY_SCROLL_CONTAINER} />",
+      "language": "tsx",
+      "context": "`Classes.OVERLAY_SCROLL_CONTAINER` in the Overlay `className` prop, and the component will take care of the rest."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/breadcrumbs/breadcrumbs.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { Breadcrumbs } from \"@blueprintjs/core\";",
+      "language": "ts",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tag/tag.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { Tag } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/components/tag/compound-tag.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { CompoundTag } from \"@blueprintjs/core\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/hooks/overlays/use-overlay-stack.md",
+      "start_line": 22,
+      "end_line": 82,
+      "code": "import { OverlayInstance, OverlayProps, Portal, useOverlayStack, usePrevious } from \"@blueprintjs/core\";\nimport * as React from \"react\";\n\nexport function Example(props: OverlayProps) {\n    const { autoFocus, children, enforceFocus, hasBackdrop, isOpen, usePortal } = props;\n    const { openOverlay, closeOverlay } = useOverlayStack();\n\n    const containerElement = React.useRef<HTMLDivElement>(null);\n\n    const bringFocusInsideOverlay = React.useCallback(() => {\n        // TODO: implement\n    }, []);\n\n    const handleDocumentFocus = React.useCallback((e: FocusEvent) => {\n        // TODO: implement\n    }, []);\n\n    const id = React.useId();\n    const instance = React.useMemo<OverlayInstance>(\n        () => ({\n            bringFocusInsideOverlay,\n            containerElement,\n            handleDocumentFocus,\n            id,\n            props: {\n                autoFocus,\n                enforceFocus,\n                hasBackdrop,\n                usePortal,\n            },\n        }),\n        [autoFocus, bringFocusInsideOverlay, enforceFocus, handleDocumentFocus, hasBackdrop, id, usePortal],\n    );\n\n    const prevIsOpen = usePrevious(isOpen) ?? false;\n    React.useEffect(() => {\n        if (!prevIsOpen && isOpen) {\n            // just opened\n            openOverlay(instance);\n        }\n\n        if (prevIsOpen && !isOpen) {\n            // just closed\n            closeOverlay(instance);\n        }\n    }, [isOpen, openOverlay, closeOverlay, prevIsOpen, instance]);\n\n    // run once on unmount\n    React.useEffect(() => {\n        return () => {\n            if (isOpen) {\n                closeOverlay(instance);\n            }\n        };\n        // eslint-disable-next-line react-hooks/exhaustive-deps\n    }, []);\n\n    return usePortal ? <Portal>{children}</Portal> : children;\n}",
+      "language": "tsx",
+      "context": "Then, use the hook to interact with the global overlay stack:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/core/src/hooks/hotkeys/use-hotkeys.md",
+      "start_line": 22,
+      "end_line": 58,
+      "code": "import { InputGroup, KeyComboTag, useHotkeys } from \"@blueprintjs/core\";\nimport React, { createRef, useCallback, useMemo } from \"react\";\n\nexport default function () {\n    const inputRef = createRef<HTMLInputElement>();\n    const handleRefresh = useCallback(() => console.info(\"Refreshing data...\"), []);\n    const handleFocus = useCallback(() => inputRef.current?.focus(), [inputRef]);\n\n    // important: hotkeys array must be memoized to avoid infinitely re-binding hotkeys\n    const hotkeys = useMemo(\n        () => [\n            {\n                combo: \"R\",\n                global: true,\n                label: \"Refresh data\",\n                onKeyDown: handleRefresh,\n            },\n            {\n                combo: \"F\",\n                group: \"Input\",\n                label: \"Focus text input\",\n                onKeyDown: handleFocus,\n            },\n        ],\n        [handleRefresh, handleFocus],\n    );\n    const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeys);\n\n    return (\n        <div tabIndex={0} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>\n            Press <KeyComboTag combo=\"R\" /> to refresh data, <KeyComboTag combo=\"F\" /> to focus the input...\n            <InputGroup inputRef={inputRef} />\n        </div>\n    );\n}",
+      "language": "tsx",
+      "context": "Then, to register hotkeys and generate the relevant event handlers, use the hook like so:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/README.md",
+      "start_line": 14,
+      "end_line": 16,
+      "code": "npm install --save @blueprintjs/datetime",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/index.md",
+      "start_line": 24,
+      "end_line": 26,
+      "code": "npm install --save @blueprintjs/datetime",
+      "language": "sh",
+      "context": "Make sure to review the [getting started docs for installation info](#blueprint/getting-started)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/index.md",
+      "start_line": 30,
+      "end_line": 32,
+      "code": "@import \"@blueprintjs/datetime/lib/css/blueprint-datetime.css\";",
+      "language": "scss",
+      "context": "Import the package stylesheet in Sass:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/index.md",
+      "start_line": 36,
+      "end_line": 38,
+      "code": "<link href=\"path/to/node_modules/@blueprintjs/datetime/lib/css/blueprint-datetime.css\" rel=\"stylesheet\" />",
+      "language": "html",
+      "context": "...or in plain HTML:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-input/date-input.md",
+      "start_line": 10,
+      "end_line": 12,
+      "code": "import { DateInput } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-input/date-input.md",
+      "start_line": 57,
+      "end_line": 77,
+      "code": "import { DateInput } from \"@blueprintjs/datetime\";\nimport { useCallback, useState } from \"react\";\n\nfunction Example() {\n    const [dateValue, setDateValue] = useState<string>(null);\n    const handleChange = useCallback(setDateValue, []);\n    const formatDate = useCallback((date: Date) => date.toLocaleString(), []);\n    const parseDate = useCallback((str: string) => new Date(str), []);\n\n    return (\n        <DateInput\n            formatDate={formatDate}\n            onChange={handleChange}\n            parseDate={parseDate}\n            placeholder=\"M/D/YYYY\"\n            value={dateValue}\n        />\n    );\n}",
+      "language": "tsx",
+      "context": "A simple implementation of a custom formatter & parser using built-in browser methods could look like this:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-range-picker/date-range-picker.md",
+      "start_line": 7,
+      "end_line": 9,
+      "code": "import { DateRangePicker } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/time-picker/timepicker.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { TimePicker } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-range-input/date-range-input.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "import { DateRangeInput } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-picker/date-picker.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { DatePicker } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-picker/date-picker.md",
+      "start_line": 80,
+      "end_line": 86,
+      "code": "import { DatePicker } from \"@blueprintjs/datetime\";\n\nfunction Example() {\n    return <DatePicker locale=\"en-US\" />;\n}",
+      "language": "ts",
+      "context": "The component will attempt to dynamically import the corresponding date-fns locale module."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-picker/date-picker.md",
+      "start_line": 90,
+      "end_line": 92,
+      "code": "await import(/* webpackChunkName: \"date-fns-en-US\" */ \"date-fns/locale/en-US\");",
+      "language": "ts",
+      "context": "At runtime, this will trigger a dynamic import like the following statement:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-picker/date-picker.md",
+      "start_line": 100,
+      "end_line": 113,
+      "code": "import { Locale } from \"date-fns\";\nimport React from \"react\";\nimport { DatePicker } from \"@blueprintjs/datetime\";\n\nconst loadDateFnsLocale: (localeCode: string) => Promise<Locale> = async localeCode => {\n    const localeModule = await import(`../node_modules/date-fns/esm/locale/${localeCode}/index.js`);\n    return localeModule.default;\n};\n\nexport const Example: React.FC = () => {\n    return <DatePicker dateFnsLocaleLoader={loadDateFnsLocale} />;\n};",
+      "language": "tsx",
+      "context": "necessary for bundlers like Vite. For example:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/date-picker/date-picker.md",
+      "start_line": 119,
+      "end_line": 126,
+      "code": "import { DatePicker } from \"@blueprintjs/datetime\";\nimport enUS from \"date-fns/locale/en-US\";\n\nfunction Example() {\n    return <DatePicker locale={enUS} />;\n}",
+      "language": "ts",
+      "context": "Use the `locale: Locale` type if you wish to statically load date-fns locale modules:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/timezone-select/timezone-select.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { TimezoneSelect } from \"@blueprintjs/datetime\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/timezone-select/timezone-select.md",
+      "start_line": 22,
+      "end_line": 30,
+      "code": "import { TimezoneSelect } from \"@blueprintjs/datetime\";\nimport React, { useState } from \"react\";\n\nfunction TimezoneExample() {\n    const [timezone, setTimezone] = useState(\"\");\n    return <TimezoneSelect value={timezone} onChange={setTimezone} />;\n}",
+      "language": "tsx",
+      "context": "selected timezone."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/datetime/src/components/timezone-select/timezone-select.md",
+      "start_line": 42,
+      "end_line": 46,
+      "code": "<TimezoneSelect value={...} onChange={...}>\n    <Icon icon=\"globe\" />\n</TimezonePicker>",
+      "language": "tsx",
+      "context": "in this case, all button-specific props will be ignored:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/docs-theme/README.md",
+      "start_line": 13,
+      "end_line": 15,
+      "code": "npm install --save @blueprintjs/docs-theme",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 21,
+      "end_line": 23,
+      "code": "pnpm add --save-dev @blueprintjs/tslint-config tslint",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 31,
+      "end_line": 35,
+      "code": "{\n    \"extends\": \"@blueprintjs/tslint-config\"\n}",
+      "language": "json",
+      "context": "`tslint.json`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 43,
+      "end_line": 49,
+      "code": "{\n  \"extends\": [\n+   \"@blueprintjs/tslint-config/blueprint-rules\"\n  ]\n}",
+      "language": "diff",
+      "context": "`tslint.json`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 63,
+      "end_line": 69,
+      "code": "{\n    \"rules\": {\n        \"blueprint-classes-constants\": true\n    }\n}",
+      "language": "json",
+      "context": "Each `@blueprintjs` package exports a `Classes` object that contains constants for every CSS class defined by the package. While the values of the constants may change between releases, the names of the constants will remain more stable."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 71,
+      "end_line": 74,
+      "code": "-const element = <div className=\"pt-navbar\" />;\n+const element = <div className={Classes.NAVBAR} />;",
+      "language": "diff",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 86,
+      "end_line": 97,
+      "code": "{\n  \"rules\": {\n    // default uses \"component\"\n    \"blueprint-icon-components\": true,\n    // expanded syntax\n    \"blueprint-icon-components\": {\n      \"options\": [\"component\" | \"literal\"] // choose one\n    }\n  }\n}",
+      "language": "js",
+      "context": "This rule is disabled in the `blueprint-rules` config as it is most useful to ensure that the `@blueprintjs/icons` package can be tree-shaken (an opt-in process which requires using components and _never_ `IconName` literals)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 101,
+      "end_line": 104,
+      "code": "-<Button icon=\"tick\" />\n+<Button icon={<TickIcon />} />",
+      "language": "diff",
+      "context": "`\"component\"`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/tslint-config/README.md",
+      "start_line": 108,
+      "end_line": 111,
+      "code": "-<Button icon={<GraphIcon />} />\n+<Button icon=\"graph\" />",
+      "language": "diff",
+      "context": "`\"literal\"`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-config/README.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "pnpm add --save-dev @blueprintjs/eslint-config",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-config/README.md",
+      "start_line": 19,
+      "end_line": 23,
+      "code": "{\n    \"extends\": [\"@blueprintjs/eslint-config\"]\n}",
+      "language": "json",
+      "context": "Enable this configuration in your ESLint configuration file (e.g. `.eslintrc.json`):"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-config/README.md",
+      "start_line": 29,
+      "end_line": 32,
+      "code": "\"editor.formatOnSave\": true,\n\"eslint.format.enable\": true",
+      "language": "json",
+      "context": "If you use VSCode, install the [dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) plugin to lint your code in the editor. We recommend enabling these global VSCode settings:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/README.md",
+      "start_line": 22,
+      "end_line": 24,
+      "code": "npm install --save @blueprintjs/table",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "npm install --save @blueprintjs/table",
+      "language": "sh",
+      "context": "Make sure to review the [getting started docs for installation info](#blueprint/getting-started)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table.md",
+      "start_line": 21,
+      "end_line": 23,
+      "code": "@import \"@blueprintjs/table/lib/css/table.css\";",
+      "language": "scss",
+      "context": "Do not forget to include `table.css` on your page:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table.md",
+      "start_line": 42,
+      "end_line": 50,
+      "code": "import { Column, Table } from \"@blueprintjs/table\";\n\n<Table numRows={5}>\n    <Column />\n    <Column />\n    <Column />\n</Table>;",
+      "language": "tsx",
+      "context": "For example, this code creates an empty table with three columns and five rows:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table.md",
+      "start_line": 59,
+      "end_line": 69,
+      "code": "import { Cell, Column, Table } from \"@blueprintjs/table\";\n\nconst dollarCellRenderer = (rowIndex: number) => <Cell>{`$${(rowIndex * 10).toFixed(2)}`}</Cell>;\nconst euroCellRenderer = (rowIndex: number) => <Cell>{`\u20ac${(rowIndex * 10 * 0.85).toFixed(2)}`}</Cell>;\n\n<Table numRows={10}>\n    <Column name=\"Dollars\" cellRenderer={dollarCellRenderer} />\n    <Column name=\"Euros\" cellRenderer={euroCellRenderer} />\n</Table>;",
+      "language": "tsx",
+      "context": "For example, this creates a table that renders dollar and euro values:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 25,
+      "end_line": 27,
+      "code": "type CellMapper<T> = (rowIndex: number, columnIndex: number) => T;",
+      "language": "ts",
+      "context": "`CellMapper` is a function that takes a cell-coordinate and returns a generic type:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 107,
+      "end_line": 119,
+      "code": "import { Regions } from \"@blueprintjs/table\";\n\nconst singleCellRegion = Regions.cell(0, 0); // { rows: [0, 0], cols: [0, 0] }\nconst singleColumnRegion = Regions.column(0); // { rows: null, cols: [0, 0] }\nconst singleRowRegion = Regions.row(0); // { rows: [0, 0], cols: null }\n\nconst multiCellRegion = Regions.cell(0, 0, 2, 2); // { rows: [0, 2], cols: [0, 2] }\nconst multiColumnRegion = Regions.column(0, 2); // { rows: null, cols: [0, 2] }\nconst multiRowRegion = Regions.row(0, 2); // { rows: [0, 2], cols: null }\n\nconst tableRegion = Regions.table(); // { rows: null, cols: null }",
+      "language": "ts",
+      "context": "**factory methods** to help you construct the appropriate schema for your desired region type:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 131,
+      "end_line": 145,
+      "code": "import { RegionCardinality } from \"@blueprintjs/table\";\n\n// disables selection of all region types\n<Table selectionModes={[]} />\n\n// enables selection of cell regions only\n<Table selectionModes={[RegionCardinality.CELLS]} />\n\n// enables selection of cell and row regions only\n<Table selectionModes={[RegionCardinality.CELLS, RegionCardinality.FULL_ROWS]} />\n\n// enables selection of the full table only\n<Table selectionModes={[RegionCardinality.FULL_TABLE]} />",
+      "language": "tsx",
+      "context": "are selectable:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 149,
+      "end_line": 158,
+      "code": "import { SelectionModes } from \"@blueprintjs/table\";\n\n<Table selectionModes={SelectionModes.ALL} />\n<Table selectionModes={SelectionModes.COLUMNS_AND_CELLS} />\n<Table selectionModes={SelectionModes.COLUMNS_ONLY} />\n<Table selectionModes={SelectionModes.NONE} />\n<Table selectionModes={SelectionModes.ROWS_AND_CELLS} />\n<Table selectionModes={SelectionModes.ROWS_ONLY} />",
+      "language": "tsx",
+      "context": "You may also use the exported `SelectionModes` enumeration to express common selection-mode combinations more concisely:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 163,
+      "end_line": 172,
+      "code": "import { Regions } from \"@blueprintjs/table\";\n\nconst cardinalities = [\n    Regions.getRegionCardinality(Regions.cell(0, 0)), // RegionCardinality.CELLS\n    Regions.getRegionCardinality(Regions.row(0)), // RegionCardinality.FULL_ROWS\n    Regions.getRegionCardinality(Regions.column(0)), // RegionCardinality.FULL_COLUMNS\n    Regions.getRegionCardinality(Regions.table()), // RegionCardinality.FULL_TABLE\n];",
+      "language": "tsx",
+      "context": "the exported `Regions.getRegionCardinality()` function:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 180,
+      "end_line": 187,
+      "code": "const content = \"A very long string...\";\nreturn (\n    <Cell>\n        <TruncatedFormat>{content}</TruncatedFormat>\n    </Cell>\n);",
+      "language": "tsx",
+      "context": "Wrap your cell contents with a **TruncatedFormat** component like so:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/table/src/docs/table-api.md",
+      "start_line": 195,
+      "end_line": 202,
+      "code": "const content = { any: \"javascript variable\", even: [null, \"is\", \"okay\", \"too\"] };\nreturn (\n    <Cell>\n        <JSONFormat>{content}</JSONFormat>\n    </Cell>\n);",
+      "language": "tsx",
+      "context": "Wrap your JavaScript object cell contents with a **JSONFormat** component like so:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/colors/README.md",
+      "start_line": 13,
+      "end_line": 15,
+      "code": "npm install --save @blueprintjs/colors",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/README.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "npm install --save @blueprintjs/icons",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 18,
+      "end_line": 27,
+      "code": "import { Button } from \"@blueprintjs/core\";\nimport { Download } from \"@blueprintjs/icons\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(<Button text=\"Download\" icon={<Download size={16} />} />);",
+      "language": "tsx",
+      "context": "from the icons package."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 44,
+      "end_line": 52,
+      "code": "import { Button } from \"@blueprintjs/core\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\n\nroot.render(<Button text=\"Download\" icon=\"download\" />);",
+      "language": "tsx",
+      "context": "It looks like this in your render code path:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 70,
+      "end_line": 77,
+      "code": "    import { Icons } from \"@blueprintjs/icons\";\n\n    Icons.setLoaderOptions({ loader: \"all\" });\n\n    // optionally, load the icons up-front so that future usage does not trigger a network request\n    await Icons.loadAll();",
+      "language": "ts",
+      "context": "2. Load all icons into a single chunk (do not split by size)"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 83,
+      "end_line": 105,
+      "code": "    import { Icons, IconSize, IconPathsLoader } from \"@blueprintjs/icons\";\n\n    const eagerLoader: IconPathsLoader = async (name, size) => {\n        return (\n            size === IconSize.STANDARD\n                ? await import(\n                      /* webpackChunkName: \"blueprint-icons\" */\n                      /* webpackInclude: /\\.js$/ */\n                      /* webpackMode: \"eager\" */\n                      `@blueprintjs/icons/lib/esm/generated/16px/paths/${name}`\n                  )\n                : await import(\n                      /* webpackChunkName: \"blueprint-icons\" */\n                      /* webpackInclude: /\\.js$/ */\n                      /* webpackMode: \"eager\" */\n                      `@blueprintjs/icons/lib/esm/generated/20px/paths/${name}`\n                  )\n        ).default;\n    };\n\n    Icons.setLoaderOptions({ loader: eagerLoader });",
+      "language": "ts",
+      "context": "This results in the largest bundle size for your main chunk."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 111,
+      "end_line": 133,
+      "code": "    import { Icons, IconSize, IconPathsLoader } from \"@blueprintjs/icons\";\n\n    const lazyLoader: IconPathsLoader = async (name, size) => {\n        return (\n            size === IconSize.STANDARD\n                ? await import(\n                      /* webpackChunkName: \"blueprint-icons-16px\" */\n                      /* webpackInclude: /\\.js$/ */\n                      /* webpackMode: \"lazy\" */\n                      `@blueprintjs/icons/lib/esm/generated/16px/paths/${name}`\n                  )\n                : await import(\n                      /* webpackChunkName: \"blueprint-icons-20px\" */\n                      /* webpackInclude: /\\.js$/ */\n                      /* webpackMode: \"lazy\" */\n                      `@blueprintjs/icons/lib/esm/generated/20px/paths/${name}`\n                  )\n        ).default;\n    };\n\n    Icons.setLoaderOptions({ loader: lazyLoader });",
+      "language": "ts",
+      "context": "Any usage of `<Icon icon=\"...\" />` will trigger a network request to fetch the individual icon contents chunk."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 137,
+      "end_line": 142,
+      "code": "    import { Icons } from \"@blueprintjs/icons\";\n\n    Icons.setLoaderOptions({ loader: lazyLoader });\n    await Icons.load([\"download\", \"caret-down\", \"endorsed\", \"help\", \"lock\"]);",
+      "language": "ts",
+      "context": "5. Load some icon paths up front (dynamically) with network requests, and the rest lazily/on-demand."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/loading-icons.md",
+      "start_line": 146,
+      "end_line": 165,
+      "code": "    import { Icons, IconPaths } from \"@blueprintjs/icons\";\n\n    // see https://vitejs.dev/guide/features.html#glob-import\n    const iconModules: Record<string, { default: IconPaths }> = import.meta.glob(\n        [\n            \"../node_modules/@blueprintjs/icons/lib/esm/generated/16px/paths/*.js\",\n            \"../node_modules/@blueprintjs/icons/lib/esm/generated/20px/paths/*.js\",\n        ],\n        { eager: true },\n    );\n\n    Icons.setLoaderOptions({\n        loader: async (name, size) => (\n            iconModules[\n                `../node_modules/@blueprintjs/icons/lib/esm/generated/${size}px/paths/${name}.js`\n            ].default,\n        ),\n    });",
+      "language": "ts",
+      "context": "6. Use a custom loaders with other bundlers, for example Vite ([see demo Code Sandbox here](https://codesandbox.io/p/sandbox/blueprint-v5-x-sandbox-react-16-wy0ojy))."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/index.md",
+      "start_line": 16,
+      "end_line": 18,
+      "code": "npm install --save @blueprintjs/icons",
+      "language": "sh",
+      "context": "</div>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/index.md",
+      "start_line": 22,
+      "end_line": 24,
+      "code": "@import \"@blueprintjs/icons/lib/css/blueprint-icons.css\";",
+      "language": "js",
+      "context": "For icon font support, import CSS with a bundler like webpack:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/icons/src/index.md",
+      "start_line": 28,
+      "end_line": 30,
+      "code": "<link href=\"path/to/node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css\" rel=\"stylesheet\" />",
+      "language": "html",
+      "context": "...or in plain HTML:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/README.md",
+      "start_line": 17,
+      "end_line": 19,
+      "code": "npm install --save @blueprintjs/select",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/index.md",
+      "start_line": 18,
+      "end_line": 20,
+      "code": "npm install --save @blueprintjs/select",
+      "language": "sh",
+      "context": "Make sure to review the [getting started docs for installation info](#blueprint/getting-started)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/index.md",
+      "start_line": 24,
+      "end_line": 26,
+      "code": "@import \"@blueprintjs/select/lib/css/blueprint-select.css\";",
+      "language": "scss",
+      "context": "Import the package stylesheet in Sass:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/index.md",
+      "start_line": 30,
+      "end_line": 32,
+      "code": "<link href=\"path/to/node_modules/@blueprintjs/select/lib/css/blueprint-select.css\" rel=\"stylesheet\" />",
+      "language": "html",
+      "context": "...or in plain HTML:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/suggest/suggest.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { Suggest } from \"@blueprintjs/select\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/multi-select/multi-select.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { MultiSelect } from \"@blueprintjs/select\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/query-list/query-list.md",
+      "start_line": 5,
+      "end_line": 7,
+      "code": "import { QueryList } from \"@blueprintjs/select\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/omnibar/omnibar.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "import { Omnibar } from \"@blueprintjs/select\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "import { Select } from \"@blueprintjs/select\";",
+      "language": "tsx",
+      "context": "@## Import"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 23,
+      "end_line": 87,
+      "code": "import { Button, MenuItem } from \"@blueprintjs/core\";\nimport { ItemPredicate, ItemRenderer, Select } from \"@blueprintjs/select\";\nimport * as React from \"react\";\nimport * as ReactDOM from \"react-dom/client\";\n\nexport interface Film {\n    title: string;\n    year: number;\n    rank: number;\n}\n\nconst TOP_100_FILMS: Film[] = [\n    { title: \"The Shawshank Redemption\", year: 1994 },\n    { title: \"The Godfather\", year: 1972 },\n    // ...\n].map((f, index) => ({ ...f, rank: index + 1 }));\n\nconst filterFilm: ItemPredicate<Film> = (query, film, _index, exactMatch) => {\n    const normalizedTitle = film.title.toLowerCase();\n    const normalizedQuery = query.toLowerCase();\n\n    if (exactMatch) {\n        return normalizedTitle === normalizedQuery;\n    } else {\n        return `${film.rank}. ${normalizedTitle} ${film.year}`.indexOf(normalizedQuery) >= 0;\n    }\n};\n\nconst renderFilm: ItemRenderer<Film> = (film, { handleClick, handleFocus, modifiers, query }) => {\n    if (!modifiers.matchesPredicate) {\n        return null;\n    }\n    return (\n        <MenuItem\n            active={modifiers.active}\n            disabled={modifiers.disabled}\n            key={film.rank}\n            label={film.year.toString()}\n            onClick={handleClick}\n            onFocus={handleFocus}\n            roleStructure=\"listoption\"\n            text={`${film.rank}. ${film.title}`}\n        />\n    );\n};\n\nconst FilmSelect: React.FC = () => {\n    const [selectedFilm, setSelectedFilm] = React.useState<Film | undefined>();\n    return (\n        <Select<Film>\n            items={TOP_100_FILMS}\n            itemPredicate={filterFilm}\n            itemRenderer={renderFilm}\n            noResults={<MenuItem disabled={true} text=\"No results.\" roleStructure=\"listoption\" />}\n            onItemSelect={setSelectedFilm}\n        >\n            <Button text={selectedFilm?.title ?? \"Select a film\"} endIcon=\"double-caret-vertical\" />\n        </Select>\n    );\n};\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\nroot.render(<FilmSelect />);",
+      "language": "tsx",
+      "context": "without transformation steps, but most props are required as a result."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 120,
+      "end_line": 127,
+      "code": "const MySelectDropdown: React.FC = () => (\n    // many props omitted here for brevity\n    <Select>\n        <Button alignText=\"start\" fill={true} endIcon=\"caret-down\" text=\"Dropdown\">\n    </Select>\n);",
+      "language": "tsx",
+      "context": "button appear like a typical dropdown, apply some common button props such `alignText` and `endIcon`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 134,
+      "end_line": 150,
+      "code": "const MySelectDropdown: React.FC = () => {\n    const [selectedValue, setSelectedValue] = React.useState<string | undefined>(undefined);\n    return (\n        // many props omitted here for brevity\n        <Select<string> onItemSelect={setSelectedValue}>\n            <Button\n                endIcon=\"caret-down\"\n                textClassName={classNames({\n                    [Classes.TEXT_MUTED]: selectedValue === undefined,\n                })}\n                text={selectedValue ?? \"(No selection)\"}\n            />\n        </Select>\n    );\n};",
+      "language": "tsx",
+      "context": "`textClassName` prop to accomplish this:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 156,
+      "end_line": 163,
+      "code": "const FilmSelect: React.FC = () => (\n    // many props omitted here for brevity\n    <Select disabled={true}>\n        <Button disabled={true}>\n    </Select>\n);",
+      "language": "tsx",
+      "context": "Disabling a **Select** requires setting the `disabled={true}` prop _and also_ disabling its children. For example:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 185,
+      "end_line": 199,
+      "code": "const FilmSelect: React.FC = () => (\n    <Select<Film>\n        items={myFilter(ALL_ITEMS, this.state.myQuery)}\n        itemRenderer={...}\n        onItemSelect={...}\n        // controlled active item\n        activeItem={this.state.myActiveItem}\n        onActiveItemChange={this.handleActiveItemChange}\n        // controlled query\n        query={this.state.myQuery}\n        onQueryChange={this.handleQueryChange}\n    />\n);",
+      "language": "tsx",
+      "context": "The focused item (for keyboard interactions) can be controlled with the `activeItem` and `onActiveItemChange` props."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 232,
+      "end_line": 269,
+      "code": "function createFilm(title: string): Film {\n    return {\n        rank: /* ... */,\n        title,\n        year: /* ... */,\n    };\n}\n\nfunction renderCreateFilmOption(\n    query: string,\n    active: boolean,\n    handleClick: React.MouseEventHandler<HTMLElement>,\n) {\n    return (\n        <MenuItem\n            icon=\"add\"\n            text={`Create \"${query}\"`}\n            roleStructure=\"listoption\"\n            active={active}\n            onClick={handleClick}\n            shouldDismissPopover={false}\n        />\n    )\n}\n\nconst FilmSelect: React.FC = () => (\n    <Select<Film>\n        createNewItemFromQuery={createFilm}\n        createNewItemRenderer={renderCreateFilmOption}\n        items={Films.items}\n        itemPredicate={Films.itemPredicate}\n        itemRenderer={Films.itemRenderer}\n        noResults={<MenuItem disabled={true} text=\"No results.\"  roleStructure=\"listoption\" />}\n        onItemSelect={...}\n    />\n);",
+      "language": "tsx",
+      "context": "</div>"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 279,
+      "end_line": 281,
+      "code": "onActiveItemChange(null, true);",
+      "language": "tsx",
+      "context": "When the \"Create Item\" option is present, the callback will emit `activeItem=null` and `isCreateNewItem=true`:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 286,
+      "end_line": 288,
+      "code": "activeItem={isCreateNewItemActive ? getCreateNewItem() : activeItem}",
+      "language": "tsx",
+      "context": "prop (the `getCreateNewItem` function is exported from this package):"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 292,
+      "end_line": 317,
+      "code": "const currentActiveItem: Film | CreateNewItem | null;\nconst isCreateNewItemActive: Film | CreateNewItem | null;\n\nfunction handleActiveItemChange(\n    activeItem: Film | CreateNewItem | null,\n    isCreateNewItem: boolean,\n) {\n    currentActiveItem = activeItem;\n    isCreateNewItemActive = isCreateNewItem;\n}\n\nfunction getActiveItem() {\n    return isCreateNewItemActive ? getCreateNewItem() : currentActiveItem;\n}\n\nconst FilmSelect: React.FC = () => (\n    <Select<Film>\n        {...} // Other required props (see previous examples).\n        activeItem={getActiveItem()}\n        createNewItemFromQuery={...}\n        createNewItemRenderer={...}\n        onActiveItemChange={handleActiveItemChange}\n    />\n);",
+      "language": "tsx",
+      "context": "Altogether, the code might look something like this:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 332,
+      "end_line": 365,
+      "code": "import { Classes, MenuItem } from \"@blueprintjs/core\";\nimport { ItemRenderer, ItemPredicate, Select } from \"@blueprintjs/select\";\n\nconst filterFilm: ItemPredicate<Film> = (query, film) => {\n    return film.title.toLowerCase().indexOf(query.toLowerCase()) >= 0;\n};\n\nconst renderFilm: ItemRenderer<Film> = (film, { handleClick, handleFocus, modifiers }) => {\n    if (!modifiers.matchesPredicate) {\n        return null;\n    }\n    return (\n        <MenuItem\n            text={film.title}\n            label={film.year}\n            roleStructure=\"listoption\"\n            active={modifiers.active}\n            key={film.title}\n            onClick={handleClick}\n            onFocus={handleFocus}\n        />\n    );\n};\n\nconst FilmSelect: React.FC = () => (\n    <Select<Film>\n        itemPredicate={filterFilm}\n        itemRenderer={renderFilm}\n        items={...}\n        onItemSelect={...}\n    />\n);",
+      "language": "tsx",
+      "context": "-   Also, don't forget to define a `key` for each item, or face React's console wrath!"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/select/src/components/select/select-component.md",
+      "start_line": 373,
+      "end_line": 399,
+      "code": "import { ItemListRenderer } from \"@blueprintjs/select\";\n\nconst renderMenu: ItemListRenderer<Film> = ({ items, itemsParentRef, query, renderItem, menuProps }) => {\n    const renderedItems = items.map(renderItem).filter(item => item != null);\n    return (\n        <Menu role=\"listbox\" ulRef={itemsParentRef} {...menuProps}>\n            <MenuItem\n                disabled={true}\n                text={`Found ${renderedItems.length} items matching \"${query}\"`}\n                roleStructure=\"listoption\"\n            />\n            {renderedItems}\n        </Menu>\n    );\n};\n\nconst FilmSelect: React.FC = () => (\n    <Select<Film>\n        itemListRenderer={renderMenu}\n        itemPredicate={filterFilm}\n        itemRenderer={renderFilm}\n        items={...}\n        onItemSelect={...}\n    />\n);",
+      "language": "tsx",
+      "context": "If provided, the `itemListRenderer` prop will be called to render the contents of the dropdown menu. It has access to the items, the current query, and a `renderItem` callback for rendering a single item. A ref handler (`itemsParentRef`) is given as well; it should be attached to the parent element of the rendered menu items so that the currently selected item can be scrolled into view automatically."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/monaco-editor-theme/README.md",
+      "start_line": 11,
+      "end_line": 13,
+      "code": "npm install --save @blueprintjs/monaco-editor-theme",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "pnpm add --save-dev @blueprintjs/stylelint-plugin",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 25,
+      "end_line": 34,
+      "code": "{\n    \"plugins\": [\"@blueprintjs/stylelint-plugin\"],\n    \"rules\": {\n        \"@blueprintjs/no-color-literal\": true,\n        \"@blueprintjs/no-prefix-literal\": true,\n        \"@blueprintjs/prefer-spacing-variable\": true\n    }\n}",
+      "language": "json",
+      "context": "`.stylelintrc`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 42,
+      "end_line": 48,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/no-color-literal\": true\n    }\n}",
+      "language": "json",
+      "context": "Enforce usage of the color variables instead of color literals."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 50,
+      "end_line": 59,
+      "code": "-.my-class {\n-    border: 1px solid #137CBD;\n-}\n+ @use \"@blueprintjs/core/lib/scss/variables.scss\" as bp;\n+\n+.my-class {\n+    border: 1px solid bp.$blue3;\n+}",
+      "language": "diff",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 73,
+      "end_line": 79,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/no-prefix-literal\": true\n    }\n}",
+      "language": "json",
+      "context": "Using the variable instead of hardcoding the prefix means that your code will still work when new major version of Blueprint is released."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 81,
+      "end_line": 90,
+      "code": "-.bp3-button > div {\n-    border: 1px solid black;\n-}\n+ @use \"@blueprintjs/core/lib/scss/variables.scss\" as bp;\n+\n+.#{bp.$ns}-button > div {\n+    border: 1px solid black;\n+}",
+      "language": "diff",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 103,
+      "end_line": 109,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/prefer-spacing-variable\": true\n    }\n}",
+      "language": "json",
+      "context": "Blueprint is migrating from a 10px-based grid system (`$pt-grid-size`) to a 4px-based spacing system (`$pt-spacing`) to provide more flexible spacing options and improve consistency. This rule helps automate the migration by detecting deprecated variable usage and automatically converting expressions with proper multiplier adjustments."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/stylelint-plugin/README.md",
+      "start_line": 111,
+      "end_line": 122,
+      "code": "-.my-class {\n-    padding: $pt-grid-size;\n-    margin: $pt-grid-size * 2;\n-    width: $pt-grid-size / 2;\n-}\n+.my-class {\n+    padding: $pt-spacing * 2.5;\n+    margin: $pt-spacing * 5;\n+    width: $pt-spacing / 0.8;\n+}",
+      "language": "diff",
+      "context": "}"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "pnpm add --save-dev @blueprintjs/eslint-plugin",
+      "language": null,
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 23,
+      "end_line": 27,
+      "code": "{\n    \"plugins\": [\"@blueprintjs\"]\n}",
+      "language": "json",
+      "context": "Add the `\"@blueprintjs\"` plugin to your ESLint config:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 33,
+      "end_line": 37,
+      "code": "{\n    \"extends\": [\"plugin:@blueprintjs/recommended\"]\n}",
+      "language": "json",
+      "context": "To enable _all_ rules provided by the plugin the Blueprint-specific rules, extend the `plugin:@blueprintjs/recommended` configuration:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 43,
+      "end_line": 50,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/classes-constants\"\n        \"@blueprintjs/no-deprecated-components\": \"error\"\n    }\n}",
+      "language": "json",
+      "context": "Alternatively, you may enable specific rules provided the plugin:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 63,
+      "end_line": 69,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/classes-constants\": \"error\"\n    }\n}",
+      "language": "json",
+      "context": "version bumps of Blueprint where the class namespace (e.g. `bp6-`) changes."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 73,
+      "end_line": 76,
+      "code": "- const element = <div className=\"pt-navbar\" />;\n+ const element = <div className={Classes.NAVBAR} />;",
+      "language": "diff",
+      "context": "**Has auto-fixer**: \u2705"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 92,
+      "end_line": 98,
+      "code": "{\n    \"rules\": {\n        \"@blueprintjs/html-components\": [\"error\"]\n    }\n}",
+      "language": "json",
+      "context": "**Has auto-fixer**: \u2705"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 113,
+      "end_line": 122,
+      "code": "{\n  \"rules\": {\n    // default uses \"component\"\n    \"@blueprintjs/icon-components\"\n    // expanded syntax\n    \"@blueprintjs/icon-components\": [\"error\", \"component\" | \"literal\"] // choose one\n  }\n}",
+      "language": "js",
+      "context": "This rule is disabled in the `blueprint-rules` config as it is most useful to ensure that the `@blueprintjs/icons` package can be tree-shaken (an opt-in process which requires using components and _never_ `IconName` literals)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 126,
+      "end_line": 129,
+      "code": "-<Button icon=\"tick\" />\n+<Button icon={<TickIcon />} />",
+      "language": "diff",
+      "context": "`\"component\"`"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/blueprint/packages/eslint-plugin/README.md",
+      "start_line": 133,
+      "end_line": 136,
+      "code": "-<Button icon={<GraphIcon />} />\n+<Button icon=\"graph\" />",
+      "language": "diff",
+      "context": "`\"literal\"`"
+    }
+  ]
+}

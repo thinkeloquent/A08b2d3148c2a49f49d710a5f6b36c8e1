@@ -1,0 +1,8 @@
+name: figma_api_dev_resources
+description: Developer resource endpoints
+
+tests:
+  - id: list-dev-resources
+    description: List dev resources for a file
+    path: /v1/files/:file_key/dev_resources
+    expected_status: [200, 403, 404, 429]

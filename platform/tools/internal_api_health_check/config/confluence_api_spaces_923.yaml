@@ -1,0 +1,23 @@
+name: confluence_api_spaces_923
+description: Space retrieval endpoints (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: list-spaces
+    description: List spaces with default pagination
+    path: /v9/space
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: list-spaces-paginated
+    description: List spaces with pagination parameters
+    path: /v9/space?start=0&limit=5
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-space
+    description: Get space by key
+    path: /v9/space/:space_key
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-space-expanded
+    description: Get space with expanded fields
+    path: /v9/space/:space_key?expand=description.plain,homepage
+    expected_status: [200, 401, 403, 404, 429]

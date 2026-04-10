@@ -1,0 +1,7 @@
+{
+  "name": "jira-sdk",
+  "test_type": "direct_package_import",
+  "python": "jira_api:AsyncJiraClient",
+  "mjs": "@mta/jira-api:JiraFetchClient",
+  "app_yaml_section": ["providers", "jira"]
+}

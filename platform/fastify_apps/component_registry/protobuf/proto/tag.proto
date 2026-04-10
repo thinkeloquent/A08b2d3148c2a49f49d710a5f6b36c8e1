@@ -1,0 +1,24 @@
+syntax = "proto3";
+package component_registry;
+
+message Tag {
+  string id = 1;
+  string name = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+
+message TagWithUsage {
+  string id = 1;
+  string name = 2;
+  int32 usage_count = 3;
+  string created_at = 4;
+}
+
+message ListTagsResponse {
+  repeated TagWithUsage tags = 1;
+}
+
+message CreateTagRequest {
+  string name = 1;
+}

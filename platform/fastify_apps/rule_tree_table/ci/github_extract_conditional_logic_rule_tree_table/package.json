@@ -1,0 +1,28 @@
+{
+  "name": "@ci/github-extract-conditional-logic-rule-tree-table",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Extract conditional logic from a GitHub repo and convert to rule tree structures using AST parsing",
+  "bin": {
+    "github_extract_conditional_logic_rule_tree_table": "./bin/extract.mjs",
+    "github_extract_conditional_logic_rule_tree_table_cli": "./cli.mjs"
+  },
+  "scripts": {
+    "start": "node bin/extract.mjs",
+    "cli": "node cli.mjs"
+  },
+  "dependencies": {
+    "@internal/github-api-sdk-cli": "file:../../../../packages_mjs/github-api-sdk-cli",
+    "@internal/api-rate-limiter": "file:../../../../packages_mjs/api-rate-limiter-main",
+    "@internal/env-resolver": "workspace:*",
+    "@clack/prompts": "^0.9.1",
+    "acorn": "^8.14.0",
+    "acorn-loose": "^8.4.0",
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0",
+    "octokit": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

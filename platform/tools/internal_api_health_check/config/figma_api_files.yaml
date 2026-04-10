@@ -1,0 +1,28 @@
+name: figma_api_files
+description: File retrieval, nodes, images, and version endpoints
+
+tests:
+  - id: get-file
+    description: Get file data
+    path: /v1/files/:file_key
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-file-nodes
+    description: Get specific nodes from a file
+    path: /v1/files/:file_key/nodes?ids=:node_id
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-images
+    description: Render images from a file
+    path: /v1/images/:file_key?ids=:node_id
+    expected_status: [200, 400, 403, 404, 429]
+
+  - id: get-image-fills
+    description: Get image fill URLs for a file
+    path: /v1/files/:file_key/images
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-file-versions
+    description: Get version history for a file
+    path: /v1/files/:file_key/versions
+    expected_status: [200, 403, 404, 429]

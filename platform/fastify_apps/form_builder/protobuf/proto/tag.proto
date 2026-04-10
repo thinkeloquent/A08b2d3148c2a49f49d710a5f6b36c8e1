@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package form_builder.tag;
+
+import "common.proto";
+
+// Tag entity
+message Tag {
+  string id = 1;
+  string name = 2;
+  string color = 3;
+  form_builder.common.Timestamp created_at = 4;
+  form_builder.common.Timestamp updated_at = 5;
+}
+
+// List tags response
+message TagListResponse {
+  repeated Tag tags = 1;
+}
+
+// Create tag request
+message CreateTagRequest {
+  string name = 1;
+  string color = 2;
+}
+
+// Create tag response
+message CreateTagResponse {
+  Tag tag = 1;
+}
+
+// Update tag request
+message UpdateTagRequest {
+  string id = 1;
+  string name = 2;
+  string color = 3;
+}
+
+// Update tag response
+message UpdateTagResponse {
+  Tag tag = 1;
+}
+
+// Get tag request
+message GetTagRequest {
+  string id = 1;
+}
+
+// Get tag response
+message GetTagResponse {
+  Tag tag = 1;
+}
+
+// Delete tag request
+message DeleteTagRequest {
+  string id = 1;
+}
+
+// Delete tag response
+message DeleteTagResponse {
+  bool success = 1;
+}

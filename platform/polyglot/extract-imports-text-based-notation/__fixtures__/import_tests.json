@@ -1,0 +1,214 @@
+{
+  "import_tests": [
+    {
+      "id": "T-IMP-001",
+      "name": "JS default import",
+      "applies_to": ["mjs"],
+      "input": "import defaultExport from \"module-name\";",
+      "expected": [["module-name", ["default: defaultExport"]]]
+    },
+    {
+      "id": "T-IMP-002",
+      "name": "JS namespace import",
+      "applies_to": ["mjs"],
+      "input": "import * as name from \"module-name\";",
+      "expected": [["module-name", ["namespace: name"]]]
+    },
+    {
+      "id": "T-IMP-003",
+      "name": "JS named import",
+      "applies_to": ["mjs"],
+      "input": "import { export1 } from \"module-name\";",
+      "expected": [["module-name", ["named: export1"]]]
+    },
+    {
+      "id": "T-IMP-004",
+      "name": "JS aliased named import",
+      "applies_to": ["mjs"],
+      "input": "import { export1 as alias1 } from \"module-name\";",
+      "expected": [["module-name", ["named: export1 as alias1"]]]
+    },
+    {
+      "id": "T-IMP-005",
+      "name": "JS default as named import",
+      "applies_to": ["mjs"],
+      "input": "import { default as myDefault } from \"module-name\";",
+      "expected": [["module-name", ["named: default as myDefault"]]]
+    },
+    {
+      "id": "T-IMP-006",
+      "name": "JS multiple named imports",
+      "applies_to": ["mjs"],
+      "input": "import { foo, bar } from \"module-name\";",
+      "expected": [["module-name", ["named: foo", "named: bar"]]]
+    },
+    {
+      "id": "T-IMP-007",
+      "name": "JS side-effect import",
+      "applies_to": ["mjs"],
+      "input": "import \"module-name\";",
+      "expected": [["module-name", []]]
+    },
+    {
+      "id": "T-IMP-008",
+      "name": "JS combined default and named",
+      "applies_to": ["mjs"],
+      "input": "import defaultExport, { namedExport } from \"module-name\";",
+      "expected": [["module-name", ["default: defaultExport", "named: namedExport"]]]
+    },
+    {
+      "id": "T-IMP-009",
+      "name": "JS combined default and namespace",
+      "applies_to": ["mjs"],
+      "input": "import defaultExport, * as name from \"module-name\";",
+      "expected": [["module-name", ["default: defaultExport", "namespace: name"]]]
+    },
+    {
+      "id": "T-IMP-010",
+      "name": "Python import module",
+      "applies_to": ["py"],
+      "input": "import os",
+      "expected": [["os", ["namespace: os"]]]
+    },
+    {
+      "id": "T-IMP-011",
+      "name": "Python import module alias",
+      "applies_to": ["py"],
+      "input": "import os as o",
+      "expected": [["os", ["namespace: os as o"]]]
+    },
+    {
+      "id": "T-IMP-012",
+      "name": "Python from import named",
+      "applies_to": ["py"],
+      "input": "from os import path",
+      "expected": [["os", ["named: path"]]]
+    },
+    {
+      "id": "T-IMP-013",
+      "name": "Python from import aliased",
+      "applies_to": ["py"],
+      "input": "from os import path as p",
+      "expected": [["os", ["named: path as p"]]]
+    },
+    {
+      "id": "T-IMP-014",
+      "name": "Python from import star",
+      "applies_to": ["py"],
+      "input": "from os import *",
+      "expected": [["os", ["namespace: *"]]]
+    },
+    {
+      "id": "T-IMP-014a",
+      "name": "Python relative import",
+      "applies_to": ["py"],
+      "input": "from . import sibling",
+      "expected": [[".", ["named: sibling"]]]
+    },
+    {
+      "id": "T-IMP-014b",
+      "name": "Python double-dot relative import",
+      "applies_to": ["py"],
+      "input": "from ..pkg import mod",
+      "expected": [["..pkg", ["named: mod"]]]
+    },
+    {
+      "id": "T-IMP-015",
+      "name": "Go basic import",
+      "applies_to": ["go"],
+      "input": "package main\n\nimport \"fmt\"",
+      "expected": [["fmt", []]]
+    },
+    {
+      "id": "T-IMP-016",
+      "name": "Go aliased import",
+      "applies_to": ["go"],
+      "input": "package main\n\nimport f \"fmt\"",
+      "expected": [["fmt", ["named: fmt as f"]]]
+    },
+    {
+      "id": "T-IMP-017",
+      "name": "Go dot import",
+      "applies_to": ["go"],
+      "input": "package main\n\nimport . \"fmt\"",
+      "expected": [["fmt", ["namespace: ."]]]
+    },
+    {
+      "id": "T-IMP-018",
+      "name": "Go blank import",
+      "applies_to": ["go"],
+      "input": "package main\n\nimport _ \"fmt\"",
+      "expected": [["fmt", ["side-effect: _"]]]
+    },
+    {
+      "id": "T-IMP-019",
+      "name": "Rust use module",
+      "applies_to": ["rs"],
+      "input": "use std::io;",
+      "expected": [["std::io", []]]
+    },
+    {
+      "id": "T-IMP-020",
+      "name": "Rust use named item",
+      "applies_to": ["rs"],
+      "input": "use std::io::Read;",
+      "expected": [["std::io", ["named: Read"]]]
+    },
+    {
+      "id": "T-IMP-021",
+      "name": "Rust use group",
+      "applies_to": ["rs"],
+      "input": "use std::io::{Read, Write};",
+      "expected": [["std::io", ["named: Read", "named: Write"]]]
+    },
+    {
+      "id": "T-IMP-021a",
+      "name": "Rust use rename",
+      "applies_to": ["rs"],
+      "input": "use std::io::Read as IoRead;",
+      "expected": [["std::io", ["named: Read as IoRead"]]]
+    },
+    {
+      "id": "T-IMP-022",
+      "name": "Rust use glob",
+      "applies_to": ["rs"],
+      "input": "use std::io::*;",
+      "expected": [["std::io", ["namespace: *"]]]
+    },
+    {
+      "id": "T-IMP-024",
+      "name": "Java single type import",
+      "applies_to": ["java"],
+      "input": "package test;\nimport java.util.List;\npublic class Test {}",
+      "expected": [["java.util", ["named: List"]]]
+    },
+    {
+      "id": "T-IMP-025",
+      "name": "Java wildcard import",
+      "applies_to": ["java"],
+      "input": "package test;\nimport java.util.*;\npublic class Test {}",
+      "expected": [["java.util", ["namespace: *"]]]
+    },
+    {
+      "id": "T-IMP-026",
+      "name": "Java static import",
+      "applies_to": ["java"],
+      "input": "package test;\nimport static java.lang.Math.PI;\npublic class Test {}",
+      "expected": [["static java.lang.Math", ["named: PI"]]]
+    },
+    {
+      "id": "T-IMP-027",
+      "name": "Java static wildcard import",
+      "applies_to": ["java"],
+      "input": "package test;\nimport static java.lang.Math.*;\npublic class Test {}",
+      "expected": [["static java.lang.Math", ["namespace: *"]]]
+    },
+    {
+      "id": "T-IMP-023",
+      "name": "Parse error handling",
+      "applies_to": ["mjs", "py", "go", "rs", "java"],
+      "input": "this is not valid code in any language {{{{",
+      "expected_error": true
+    }
+  ]
+}

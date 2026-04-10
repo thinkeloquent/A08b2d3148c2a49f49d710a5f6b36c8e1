@@ -1,0 +1,15 @@
+{
+  "name": "app-yaml-endpoints-fastify-example",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Fastify integration example for Smart Fetch Router",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "dependencies": {
+    "fastify": "^4.0.0",
+    "pino-pretty": "^10.0.0"
+  }
+}

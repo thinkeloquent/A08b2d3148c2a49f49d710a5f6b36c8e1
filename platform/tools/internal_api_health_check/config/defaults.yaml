@@ -1,0 +1,90 @@
+servers:
+  - name: fastify
+    base_url: http://localhost:51000
+    description: Fastify Node.js server
+  - name: fastapi
+    base_url: http://localhost:52000
+    description: FastAPI Python server
+
+providers:
+  github_api:
+    prefix: /~/api/rest/:api_release_date/providers/github_api/2022-11-28
+    release_date_key: provider_github
+    variables:
+      owner: carlosmarte
+      repo: figma-api-module
+      username: carlosmarte
+      org: github
+      branch: main
+      base: main
+      head: main
+      tag: v1.0.0
+      release_id: "1"
+      hook_id: "1"
+      ruleset_id: "1"
+      basehead: "main...main"
+
+  figma_api:
+    prefix: /~/api/rest/:api_release_date/providers/figma_api
+    release_date_key: provider_figma
+    variables:
+      file_key: kLg14bu1m9sjG59kE4DFZL
+      node_id: "0:7"
+      team_id: "12345"
+      project_id: "67890"
+      comment_id: "1"
+      key: abc123def
+      webhook_id: "1"
+      dev_resource_id: "1"
+
+  statsig_api:
+    prefix: /~/api/rest/:api_release_date/providers/statsig_api
+    release_date_key: provider_statsig
+    variables:
+      experiment_id: "1"
+      gate_id: "1"
+
+  saucelabs_api:
+    prefix: /~/api/rest/:api_release_date/providers/saucelabs_api
+    release_date_key: provider_saucelabs
+    variables:
+      job_id: "1"
+      username: demo_user
+      automation_api: webdriver
+
+  jira_api:
+    prefix: /~/api/rest/:api_release_date/providers/jira_api
+    release_date_key: provider_jira
+    variables:
+      identifier: "000000:00000000-0000-0000-0000-000000000000"
+      issue_key: TEST-1
+      project_key: TEST
+      email: test@example.com
+      query: test
+
+  confluence_api:
+    prefix: /~/api/rest/:api_release_date/providers/confluence_api
+    release_date_key: provider_confluence_api
+    variables:
+      content_id: "1"
+      space_key: TEST
+      group_name: confluence-users
+      cql: 'type = "page"'
+
+  healthz:
+    prefix: ""
+    variables: {}
+
+  llm_gemini:
+    prefix: /api/llm/gemini-openai-v1
+    variables: {}
+
+  runtime_app_config:
+    prefix: /api/runtime-app-config
+    variables:
+      name: default
+      intent: default
+
+suite_defaults:
+  timeout: 10.0
+  headers: {}

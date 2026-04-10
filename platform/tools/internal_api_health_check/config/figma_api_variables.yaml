@@ -1,0 +1,13 @@
+name: figma_api_variables
+description: Design variable endpoints
+
+tests:
+  - id: get-local-variables
+    description: Get local variables for a file
+    path: /v1/files/:file_key/variables/local
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-published-variables
+    description: Get published variables for a file
+    path: /v1/files/:file_key/variables/published
+    expected_status: [200, 403, 404, 429]

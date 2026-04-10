@@ -1,0 +1,75 @@
+name: llm_gemini_endpoints
+description: Gemini OpenAI LLM API endpoints
+
+tests:
+  - id: health
+    description: LLM Gemini OpenAI health check
+    path: /health
+    expected_status: 200
+
+  - id: chat
+    description: Chat completion endpoint
+    path: /chat
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      prompt: "hello"
+    expected_status: [200, 400]
+
+  - id: conversation
+    description: Conversation endpoint
+    path: /conversation
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      messages:
+        - role: "user"
+          content: "hello"
+    expected_status: [200, 400]
+
+  - id: json
+    description: JSON mode endpoint
+    path: /json
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      prompt: "hello"
+    expected_status: [200, 400]
+
+  - id: stream
+    description: Streaming endpoint
+    path: /stream
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      prompt: "hello"
+    expected_status: [200, 400]
+
+  - id: structure
+    description: Structured output endpoint
+    path: /structure
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      prompt: "hello"
+      schema:
+        type: "object"
+        properties:
+          answer:
+            type: "string"
+    expected_status: [200, 400]
+
+  - id: tool-call
+    description: Tool call endpoint
+    path: /tool-call
+    method: POST
+    headers:
+      Content-Type: application/json
+    body:
+      prompt: "hello"
+    expected_status: [200, 400]

@@ -1,0 +1,144 @@
+{
+  "export_tests": [
+    {
+      "id": "T-EXP-001",
+      "name": "JS default export named function",
+      "applies_to": ["mjs"],
+      "input": "export default function App() {}",
+      "expected": [["<self>", ["export-default: App"]]]
+    },
+    {
+      "id": "T-EXP-001a",
+      "name": "JS default export anonymous",
+      "applies_to": ["mjs"],
+      "input": "export default () => {}",
+      "expected": [["<self>", ["export-default: <anonymous>"]]]
+    },
+    {
+      "id": "T-EXP-002",
+      "name": "JS named export const",
+      "applies_to": ["mjs"],
+      "input": "export const foo = 1;",
+      "expected": [["<self>", ["export-named: foo"]]]
+    },
+    {
+      "id": "T-EXP-002a",
+      "name": "JS named export function",
+      "applies_to": ["mjs"],
+      "input": "export function bar() {}",
+      "expected": [["<self>", ["export-named: bar"]]]
+    },
+    {
+      "id": "T-EXP-003",
+      "name": "JS re-export",
+      "applies_to": ["mjs"],
+      "input": "export { x } from 'm';",
+      "expected": [["m", ["export-named: x"]]]
+    },
+    {
+      "id": "T-EXP-003a",
+      "name": "JS re-export with alias",
+      "applies_to": ["mjs"],
+      "input": "export { x as y } from 'm';",
+      "expected": [["m", ["export-named: x as y"]]]
+    },
+    {
+      "id": "T-EXP-004",
+      "name": "JS barrel export",
+      "applies_to": ["mjs"],
+      "input": "export * from 'm';",
+      "expected": [["m", ["export-all"]]]
+    },
+    {
+      "id": "T-EXP-004a",
+      "name": "JS namespace re-export",
+      "applies_to": ["mjs"],
+      "input": "export * as ns from 'm';",
+      "expected": [["m", ["export-namespace: ns"]]]
+    },
+    {
+      "id": "T-EXP-005",
+      "name": "Python __all__ exports",
+      "applies_to": ["py"],
+      "input": "__all__ = ['foo', 'bar']",
+      "expected": [["<self>", ["export-named: foo", "export-named: bar"]]]
+    },
+    {
+      "id": "T-EXP-005a",
+      "name": "Python top-level function",
+      "applies_to": ["py"],
+      "input": "def hello():\n    pass",
+      "expected": [["<self>", ["export-named: hello"]]]
+    },
+    {
+      "id": "T-EXP-005b",
+      "name": "Python private excluded",
+      "applies_to": ["py"],
+      "input": "def _private():\n    pass\ndef public():\n    pass",
+      "expected": [["<self>", ["export-named: public"]]]
+    },
+    {
+      "id": "T-EXP-006",
+      "name": "Go exported function",
+      "applies_to": ["go"],
+      "input": "package main\n\nfunc Hello() {}\nfunc hello() {}",
+      "expected": [["<self>", ["export-named: Hello"]]]
+    },
+    {
+      "id": "T-EXP-006a",
+      "name": "Go exported type and const",
+      "applies_to": ["go"],
+      "input": "package main\n\ntype User struct{}\nconst MaxRetries = 3",
+      "expected": [["<self>", ["export-named: User", "export-named: MaxRetries"]]]
+    },
+    {
+      "id": "T-EXP-007",
+      "name": "Rust pub function",
+      "applies_to": ["rs"],
+      "input": "pub fn hello() {}\nfn private() {}",
+      "expected": [["<self>", ["export-named: hello"]]]
+    },
+    {
+      "id": "T-EXP-007a",
+      "name": "Rust pub struct and trait",
+      "applies_to": ["rs"],
+      "input": "pub struct User {}\npub trait Handler {}",
+      "expected": [["<self>", ["export-named: User", "export-named: Handler"]]]
+    },
+    {
+      "id": "T-EXP-008",
+      "name": "Rust pub(crate) excluded",
+      "applies_to": ["rs"],
+      "input": "pub fn exported() {}\npub(crate) fn internal() {}",
+      "expected": [["<self>", ["export-named: exported"]]]
+    },
+    {
+      "id": "T-EXP-009",
+      "name": "Java public class",
+      "applies_to": ["java"],
+      "input": "public class UserService {}",
+      "expected": [["<self>", ["export-named: UserService"]]]
+    },
+    {
+      "id": "T-EXP-010",
+      "name": "Java package-private excluded",
+      "applies_to": ["java"],
+      "input": "class PackagePrivate {}\npublic class Public {}",
+      "expected": [["<self>", ["export-named: Public"]]]
+    },
+    {
+      "id": "T-EXP-011",
+      "name": "Java public interface",
+      "applies_to": ["java"],
+      "input": "public interface Repository {}",
+      "expected": [["<self>", ["export-named: Repository"]]]
+    },
+    {
+      "id": "T-EXP-012",
+      "name": "Java public enum",
+      "applies_to": ["java"],
+      "input": "public enum Status { ACTIVE, INACTIVE }",
+      "expected": [["<self>", ["export-named: Status"]]]
+    }
+  ]
+}

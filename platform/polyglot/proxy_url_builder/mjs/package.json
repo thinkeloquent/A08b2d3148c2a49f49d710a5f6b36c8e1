@@ -1,0 +1,33 @@
+{
+  "name": "@internal/proxy-url-builder",
+  "version": "1.0.0",
+  "description": "Polyglot utility to build authenticated proxy URLs from separate credentials and host",
+  "main": "dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "keywords": [
+    "proxy",
+    "url",
+    "builder",
+    "credentials",
+    "encoding",
+    "polyglot"
+  ],
+  "license": "MIT"
+}

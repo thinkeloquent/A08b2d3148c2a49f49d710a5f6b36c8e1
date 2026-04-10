@@ -1,0 +1,1083 @@
+# File-Based Cache Storage
+
+This guide shows how to implement file-based caching for `fetch_httpx` to persist HTTP responses to the local filesystem with configurable TTL (time-to-live) in seconds.
+
+## FileStorage Implementation
+
+First, create the `FileStorage` class that implements the `CacheStorage` interface:
+
+```python
+import os
+import json
+import hashlib
+import time
+import asyncio
+import logging
+import aiofiles
+from pathlib import Path
+from fetch_httpx import CacheStorage, CacheEntry, CacheStats, CacheEntryMetadata
+
+# Configure logging
+logger = logging.getLogger("FileStorage")
+
+
+class FileStorageError(Exception):
+    """Base exception for FileStorage errors."""
+    pass
+
+
+class FileStorage(CacheStorage):
+    def __init__(
+        self,
+        cache_dir: str = ".cache",
+        ttl: float = 60.0,
+        max_size_mb: float = 100.0,
+        cleanup_interval: float = 300.0,
+        file_extension: str = ".cache",
+        create_dir: bool = True,
+        debug: bool = False,
+    ):
+        self.cache_dir = Path(cache_dir).resolve()  # Use absolute path
+        self.ttl = ttl
+        self.max_size_bytes = int(max_size_mb * 1024 * 1024)
+        self.cleanup_interval = cleanup_interval
+        self.file_extension = file_extension
+        self._stats = CacheStats()
+        self._cleanup_task: asyncio.Task | None = None
+        self._debug = debug
+
+        # Configure logging level
+        if debug:
+            logger.setLevel(logging.DEBUG)
+            if not logger.handlers:
+                handler = logging.StreamHandler()
+                handler.setFormatter(logging.Formatter(
+                    "[%(name)s %(levelname)s] %(message)s"
+                ))
+                logger.addHandler(handler)
+
+        logger.debug(f"Initializing FileStorage: cache_dir={self.cache_dir}")
+
+        if create_dir:
+            try:
+                self.cache_dir.mkdir(parents=True, exist_ok=True)
+                logger.debug(f"Cache directory created/verified: {self.cache_dir}")
+            except OSError as e:
+                logger.error(f"Failed to create cache directory: {e}")
+                raise FileStorageError(f"Failed to create cache directory: {e}") from e
+
+        # Verify directory is writable
+        if not os.access(self.cache_dir, os.W_OK):
+            logger.error(f"Cache directory is not writable: {self.cache_dir}")
+            raise FileStorageError(f"Cache directory is not writable: {self.cache_dir}")
+
+        logger.info(f"FileStorage initialized: {self.cache_dir} (ttl={ttl}s)")
+
+    def _key_to_filename(self, key: str) -> Path:
+        """Convert cache key to filesystem-safe filename."""
+        hashed = hashlib.sha256(key.encode()).hexdigest()[:16]
+        filepath = self.cache_dir / f"{hashed}{self.file_extension}"
+        logger.debug(f"Key '{key[:50]}...' -> {filepath.name}")
+        return filepath
+
+    async def get(self, key: str) -> CacheEntry | None:
+        filepath = self._key_to_filename(key)
+        logger.debug(f"GET: {key[:50]}... -> {filepath}")
+
+        if not filepath.exists():
+            logger.debug(f"MISS (not found): {filepath}")
+            self._stats.misses += 1
+            return None
+
+        try:
+            async with aiofiles.open(filepath, "r", encoding="utf-8") as f:
+                content = await f.read()
+                logger.debug(f"Read {len(content)} bytes from {filepath.name}")
+                data = json.loads(content)
+
+            entry = CacheEntry(
+                key=data["key"],
+                data=data["data"],
+                created_at=data["created_at"],
+                expires_at=data["expires_at"],
+                metadata=CacheEntryMetadata(**data["metadata"]),
+            )
+
+            # Check if expired
+            if entry.is_expired:
+                logger.debug(f"MISS (expired): {key[:50]}... expired at {entry.expires_at}")
+                await self.delete(key)
+                self._stats.misses += 1
+                return None
+
+            logger.debug(f"HIT: {key[:50]}... (ttl remaining: {entry.ttl_remaining:.1f}s)")
+            self._stats.hits += 1
+            return entry
+
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON decode error for {filepath}: {e}")
+            self._stats.misses += 1
+            return None
+        except KeyError as e:
+            logger.error(f"Missing key in cache entry {filepath}: {e}")
+            self._stats.misses += 1
+            return None
+        except OSError as e:
+            logger.error(f"OS error reading {filepath}: {e}")
+            self._stats.misses += 1
+            return None
+        except Exception as e:
+            logger.exception(f"Unexpected error reading cache {filepath}: {e}")
+            self._stats.misses += 1
+            return None
+
+    async def set(self, key: str, entry: CacheEntry) -> None:
+        filepath = self._key_to_filename(key)
+        logger.debug(f"SET: {key[:50]}... -> {filepath}")
+
+        try:
+            data = {
+                "key": entry.key,
+                "data": entry.data,
+                "created_at": entry.created_at,
+                "expires_at": entry.expires_at,
+                "metadata": {
+                    "status_code": entry.metadata.status_code,
+                    "headers": dict(entry.metadata.headers) if entry.metadata.headers else {},
+                    "url": entry.metadata.url,
+                    "method": entry.metadata.method,
+                    "content_type": entry.metadata.content_type,
+                    "size": entry.metadata.size,
+                },
+            }
+
+            json_data = json.dumps(data, ensure_ascii=False, indent=None)
+            logger.debug(f"Writing {len(json_data)} bytes to {filepath.name}")
+
+            async with aiofiles.open(filepath, "w", encoding="utf-8") as f:
+                await f.write(json_data)
+
+            # Verify file was written
+            if filepath.exists():
+                file_size = filepath.stat().st_size
+                logger.debug(f"STORED: {filepath.name} ({file_size} bytes)")
+                self._stats.size += 1
+            else:
+                logger.error(f"File not created after write: {filepath}")
+                raise FileStorageError(f"File not created: {filepath}")
+
+        except json.JSONEncodeError as e:
+            logger.error(f"JSON encode error for key {key[:50]}...: {e}")
+            raise FileStorageError(f"Failed to serialize cache entry: {e}") from e
+        except OSError as e:
+            logger.error(f"OS error writing {filepath}: {e}")
+            raise FileStorageError(f"Failed to write cache file: {e}") from e
+        except Exception as e:
+            logger.exception(f"Unexpected error writing cache {filepath}: {e}")
+            raise FileStorageError(f"Unexpected error: {e}") from e
+
+    async def has(self, key: str) -> bool:
+        filepath = self._key_to_filename(key)
+        if not filepath.exists():
+            logger.debug(f"HAS: {key[:50]}... -> False (not found)")
+            return False
+
+        entry = await self.get(key)
+        result = entry is not None
+        logger.debug(f"HAS: {key[:50]}... -> {result}")
+        return result
+
+    async def delete(self, key: str) -> bool:
+        filepath = self._key_to_filename(key)
+        logger.debug(f"DELETE: {key[:50]}... -> {filepath}")
+
+        try:
+            if filepath.exists():
+                filepath.unlink()
+                self._stats.size = max(0, self._stats.size - 1)
+                logger.debug(f"DELETED: {filepath.name}")
+                return True
+            logger.debug(f"DELETE skipped (not found): {filepath.name}")
+            return False
+        except OSError as e:
+            logger.error(f"Failed to delete {filepath}: {e}")
+            return False
+
+    async def delete_pattern(self, pattern: str) -> int:
+        """Delete cache entries matching a glob pattern."""
+        import fnmatch
+
+        logger.debug(f"DELETE_PATTERN: {pattern}")
+        deleted = 0
+
+        for filepath in self.cache_dir.glob(f"*{self.file_extension}"):
+            try:
+                async with aiofiles.open(filepath, "r", encoding="utf-8") as f:
+                    data = json.loads(await f.read())
+                    if fnmatch.fnmatch(data["key"], pattern):
+                        filepath.unlink()
+                        deleted += 1
+                        logger.debug(f"Deleted (pattern match): {filepath.name}")
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Error processing {filepath}: {e}")
+                continue
+
+        self._stats.size = max(0, self._stats.size - deleted)
+        logger.debug(f"DELETE_PATTERN complete: {deleted} files deleted")
+        return deleted
+
+    async def clear(self) -> None:
+        """Remove all cache files."""
+        logger.debug("CLEAR: Removing all cache files")
+        count = 0
+
+        for filepath in self.cache_dir.glob(f"*{self.file_extension}"):
+            try:
+                filepath.unlink()
+                count += 1
+            except OSError as e:
+                logger.warning(f"Failed to delete {filepath}: {e}")
+
+        self._stats = CacheStats()
+        logger.info(f"CLEAR complete: {count} files removed")
+
+    async def keys(self, pattern: str | None = None) -> list[str]:
+        """List all cache keys, optionally filtered by pattern."""
+        import fnmatch
+
+        logger.debug(f"KEYS: pattern={pattern}")
+        result = []
+
+        for filepath in self.cache_dir.glob(f"*{self.file_extension}"):
+            try:
+                async with aiofiles.open(filepath, "r", encoding="utf-8") as f:
+                    data = json.loads(await f.read())
+                    key = data["key"]
+                    if pattern is None or fnmatch.fnmatch(key, pattern):
+                        result.append(key)
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Error reading {filepath}: {e}")
+                continue
+
+        logger.debug(f"KEYS: found {len(result)} keys")
+        return result
+
+    async def stats(self) -> CacheStats:
+        """Return cache statistics."""
+        count = sum(1 for _ in self.cache_dir.glob(f"*{self.file_extension}"))
+        self._stats.size = count
+        logger.debug(
+            f"STATS: size={self._stats.size}, hits={self._stats.hits}, "
+            f"misses={self._stats.misses}, evictions={self._stats.evictions}"
+        )
+        return self._stats
+
+    async def cleanup_expired(self) -> int:
+        """Remove expired cache entries."""
+        logger.debug("CLEANUP: Starting expired entry cleanup")
+        removed = 0
+        now = time.time()
+
+        for filepath in self.cache_dir.glob(f"*{self.file_extension}"):
+            try:
+                async with aiofiles.open(filepath, "r", encoding="utf-8") as f:
+                    data = json.loads(await f.read())
+                    if data["expires_at"] < now:
+                        filepath.unlink()
+                        removed += 1
+                        logger.debug(f"Expired: {filepath.name}")
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Error during cleanup of {filepath}: {e}")
+                continue
+
+        self._stats.evictions += removed
+        logger.info(f"CLEANUP complete: {removed} expired entries removed")
+        return removed
+
+    async def start_cleanup_task(self) -> None:
+        """Start background cleanup task."""
+        logger.debug(f"Starting cleanup task (interval={self.cleanup_interval}s)")
+
+        async def cleanup_loop():
+            while True:
+                await asyncio.sleep(self.cleanup_interval)
+                await self.cleanup_expired()
+
+        self._cleanup_task = asyncio.create_task(cleanup_loop())
+
+    async def close(self) -> None:
+        """Stop cleanup task and close storage."""
+        logger.debug("Closing FileStorage")
+        if self._cleanup_task:
+            self._cleanup_task.cancel()
+            try:
+                await self._cleanup_task
+            except asyncio.CancelledError:
+                pass
+        logger.info("FileStorage closed")
+
+    def debug_info(self) -> dict:
+        """Return debug information about the storage."""
+        files = list(self.cache_dir.glob(f"*{self.file_extension}"))
+        return {
+            "cache_dir": str(self.cache_dir),
+            "cache_dir_exists": self.cache_dir.exists(),
+            "cache_dir_writable": os.access(self.cache_dir, os.W_OK),
+            "ttl": self.ttl,
+            "file_extension": self.file_extension,
+            "file_count": len(files),
+            "files": [f.name for f in files[:10]],  # First 10 files
+            "stats": {
+                "size": self._stats.size,
+                "hits": self._stats.hits,
+                "misses": self._stats.misses,
+                "evictions": self._stats.evictions,
+            },
+        }
+```
+
+---
+
+## Enable Debug Logging
+
+```python
+# Enable debug mode to see all cache operations
+storage = FileStorage(
+    cache_dir=".cache/http",
+    ttl=300.0,
+    debug=True,  # Enables verbose logging
+)
+
+# Or check debug info programmatically
+print(storage.debug_info())
+# Output:
+# {
+#     "cache_dir": "/absolute/path/.cache/http",
+#     "cache_dir_exists": True,
+#     "cache_dir_writable": True,
+#     "ttl": 300.0,
+#     "file_extension": ".cache",
+#     "file_count": 5,
+#     "files": ["a1b2c3d4e5f6.cache", ...],
+#     "stats": {"size": 5, "hits": 10, "misses": 2, "evictions": 0}
+# }
+```
+
+---
+
+## Quick Start
+
+```python
+from fetch_httpx import CachingClient, CacheConfig
+
+# Using the FileStorage implementation above
+storage = FileStorage(cache_dir=".cache/http", ttl=300.0)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        ttl=300.0,  # 5 minutes
+        storage=storage
+    )
+) as client:
+    # First request fetches from network and saves to file
+    response1 = await client.get("/users")
+
+    # Second request loads from cached file
+    response2 = await client.get("/users")
+
+    # Cache persists across application restarts
+
+await storage.close()
+```
+
+### With Full Client Configuration
+
+`CachingClient` accepts all parameters supported by `httpx.AsyncClient`:
+
+```python
+import httpx
+from fetch_httpx import CachingClient, CacheConfig
+
+storage = FileStorage(cache_dir=".cache/http", ttl=300.0)
+
+# Configure connection limits
+limits = httpx.Limits(
+    max_keepalive_connections=20,
+    max_connections=100,
+    keepalive_expiry=30.0,
+)
+
+# Configure custom transport (optional)
+transport = httpx.AsyncHTTPTransport(
+    retries=3,
+    http2=True,
+)
+
+# Event hooks for logging/monitoring
+async def log_request(request: httpx.Request):
+    print(f"Request: {request.method} {request.url}")
+
+async def log_response(response: httpx.Response):
+    print(f"Response: {response.status_code}")
+
+async with CachingClient(
+    # Base configuration
+    base_url="https://api.example.com",
+
+    # Cache configuration
+    cache=CacheConfig(
+        ttl=300.0,
+        storage=storage,
+    ),
+
+    # Authentication & Headers
+    headers={"User-Agent": "MyApp/1.0"},
+    cookies={"session": "*****"},
+    auth=("*****", "*****"),  # or httpx.BasicAuth, httpx.DigestAuth
+
+    # SSL/TLS configuration
+    verify=True,              # SSL verification (True, False, or path to CA bundle)
+    cert=None,                # Client certificate (path or tuple of (cert, key))
+    trust_env=True,           # Trust environment variables for proxy/SSL settings
+
+    # Redirect handling
+    follow_redirects=True,    # Automatically follow redirects
+    max_redirects=10,         # Maximum number of redirects to follow
+
+    # Connection settings
+    limits=limits,            # Connection pool limits
+    timeout=httpx.Timeout(
+        connect=5.0,
+        read=30.0,
+        write=30.0,
+        pool=10.0,
+    ),
+
+    # HTTP/2 support (requires h2 package)
+    http2=True,
+
+    # Custom transport
+    transport=transport,
+
+    # Proxy configuration
+    mounts={
+        "https://internal.example.com": httpx.AsyncHTTPTransport(proxy=None),
+        "all://": httpx.AsyncHTTPTransport(proxy="http://proxy.example.com:8080"),
+    },
+
+    # Event hooks
+    event_hooks={
+        "request": [log_request],
+        "response": [log_response],
+    },
+) as client:
+    response = await client.get("/users")
+    print(response.json())
+
+await storage.close()
+```
+
+---
+
+## File Storage Configuration
+
+### Basic Setup
+
+```python
+from fetch_httpx import CachingClient, CacheConfig
+
+storage = FileStorage(
+    cache_dir=".cache/http",  # Directory to store cache files
+    ttl=60.0,                 # Default TTL in seconds
+)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(storage=storage, ttl=60.0)
+) as client:
+    response = await client.get("/users")
+
+await storage.close()
+```
+
+### Advanced Configuration
+
+```python
+from fetch_httpx import CachingClient, CacheConfig
+
+storage = FileStorage(
+    cache_dir="/var/cache/myapp/http",  # Absolute path
+    ttl=300.0,                          # 5 minutes default TTL
+    max_size_mb=100,                    # Max cache size in MB
+    cleanup_interval=600.0,             # Cleanup expired files every 10 minutes
+    file_extension=".cache",            # Custom file extension
+    create_dir=True,                    # Create directory if not exists
+)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        storage=storage,
+        ttl=300.0,
+        methods=["GET", "HEAD"],
+    )
+) as client:
+    response = await client.get("/data")
+
+await storage.close()
+```
+
+---
+
+## TTL (Time-To-Live) Configuration
+
+TTL is specified in **seconds** for the Python implementation.
+
+### Global TTL
+
+```python
+from fetch_httpx import CachingClient, CacheConfig
+
+storage = FileStorage(cache_dir=".cache", ttl=120.0)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        storage=storage,
+        ttl=120.0  # 2 minutes for all cached responses
+    )
+) as client:
+    response = await client.get("/users")
+
+await storage.close()
+```
+
+### Per-Request TTL Override
+
+```python
+from fetch_httpx import CachingClient, CacheConfig, RequestCacheOptions
+
+storage = FileStorage(cache_dir=".cache", ttl=60.0)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        storage=storage,
+        ttl=60.0  # Default: 1 minute
+    )
+) as client:
+    # Use default TTL (60 seconds)
+    users = await client.get("/users")
+
+    # Short-lived cache (10 seconds)
+    volatile = await client.get(
+        "/live-data",
+        cache_options=RequestCacheOptions(ttl=10.0)
+    )
+
+    # Long-lived cache (1 hour)
+    static = await client.get(
+        "/static-config",
+        cache_options=RequestCacheOptions(ttl=3600.0)
+    )
+
+await storage.close()
+```
+
+---
+
+## Cache File Structure
+
+Cache files are organized by hashed keys in the specified directory:
+
+```
+.cache/http/
+├── a1b2c3d4e5f6.cache      # GET:https://api.example.com/users
+├── f6e5d4c3b2a1.cache      # GET:https://api.example.com/posts
+├── 1234567890ab.cache      # GET:https://api.example.com/data?page=1
+└── _metadata.json          # Cache index and statistics
+```
+
+### Cache Entry Format
+
+Each cache file contains JSON with response data and metadata:
+
+```json
+{
+  "key": "GET:https://api.example.com/users",
+  "data": "<response body>",
+  "created_at": 1705600000.0,
+  "expires_at": 1705600300.0,
+  "metadata": {
+    "status_code": 200,
+    "headers": { "content-type": "application/json" },
+    "url": "https://api.example.com/users",
+    "method": "GET",
+    "content_type": "application/json",
+    "size": 1024
+  }
+}
+```
+
+---
+
+## Complete Example
+
+```python
+import asyncio
+from fetch_httpx import (
+    CachingClient,
+    CacheConfig,
+    RequestCacheOptions,
+    create_dot_notation_key_strategy,
+)
+
+async def main():
+    # Configure file storage
+    storage = FileStorage(
+        cache_dir=".cache/api",
+        ttl=300.0,              # 5 minutes default
+        max_size_mb=50.0,       # Max 50 MB
+        cleanup_interval=60.0,  # Cleanup every minute
+    )
+
+    # Start background cleanup
+    await storage.start_cleanup_task()
+
+    # Custom key strategy including auth header
+    key_strategy = create_dot_notation_key_strategy([
+        "headers.Authorization",
+        "params.page",
+    ])
+
+    async with CachingClient(
+        base_url="https://api.example.com",
+        cache=CacheConfig(
+            storage=storage,
+            ttl=300.0,
+            key_strategy=key_strategy,
+        )
+    ) as client:
+        # First request: fetches from network, saves to file
+        print("Fetching users...")
+        users = await client.get(
+            "/users",
+            headers={"Authorization": "Bearer token123"},
+            params={"page": 1}
+        )
+        print(f"Status: {users.status_code}")
+
+        # Second request: loads from cached file
+        print("Fetching users again (from cache)...")
+        users_cached = await client.get(
+            "/users",
+            headers={"Authorization": "Bearer token123"},
+            params={"page": 1}
+        )
+        print(f"Status: {users_cached.status_code}")
+
+        # Force refresh
+        print("Force refreshing...")
+        users_fresh = await client.get(
+            "/users",
+            headers={"Authorization": "Bearer token123"},
+            params={"page": 1},
+            cache_options=RequestCacheOptions(force_refresh=True)
+        )
+
+        # Short TTL for volatile data (30 seconds)
+        live_data = await client.get(
+            "/live-stats",
+            cache_options=RequestCacheOptions(ttl=30.0)
+        )
+
+        # Long TTL for static data (1 hour)
+        config = await client.get(
+            "/app-config",
+            cache_options=RequestCacheOptions(ttl=3600.0)
+        )
+
+        # Check cache stats
+        stats = await client.cache.stats()
+        print(f"Cache stats: {stats.hits} hits, {stats.misses} misses")
+
+        # List cached keys
+        keys = await client.cache.keys()
+        print(f"Cached keys: {keys}")
+
+        # Invalidate specific endpoint
+        await client.cache.invalidate_pattern("*:/users*")
+
+    # Cleanup
+    await storage.close()
+
+asyncio.run(main())
+```
+
+---
+
+## Comparison with Memory Storage
+
+| Feature     | FileStorage                 | MemoryStorage       |
+| ----------- | --------------------------- | ------------------- |
+| Persistence | Survives restarts           | Lost on restart     |
+| Speed       | Slower (disk I/O)           | Faster (in-memory)  |
+| Capacity    | Limited by disk             | Limited by RAM      |
+| Sharing     | Can share between processes | Single process only |
+| TTL units   | Seconds                     | Seconds             |
+
+---
+
+## Best Practices
+
+1. **Choose appropriate TTL values** based on data volatility
+2. **Set max size limits** to prevent disk space exhaustion
+3. **Enable cleanup tasks** for automatic expiration handling
+4. **Use SSD storage** for better performance
+5. **Consider cache warming** for frequently accessed endpoints
+6. **Monitor cache statistics** to tune TTL and size settings
+
+```python
+# Example: Cache warming on startup
+async def warm_cache(client: CachingClient):
+    endpoints = ["/config", "/users", "/categories"]
+    await asyncio.gather(*[client.get(ep) for ep in endpoints])
+```
+
+---
+
+## Using Cache with Existing Client
+
+If you have an existing `AsyncClient` instance, you can add file-based caching using the `with_cache` higher-order function or event hooks.
+
+### Higher-Order Function (Recommended)
+
+```python
+from fetch_httpx import AsyncClient, with_cache, CacheConfig
+
+async def main():
+    # Create your existing client
+    client = AsyncClient(base_url="https://api.example.com")
+
+    # Configure file storage
+    storage = FileStorage(
+        cache_dir=".cache/http",
+        ttl=300.0,
+    )
+
+    # Define fetch function (must be async def, not lambda)
+    async def fetch(method: str, url: str, **kwargs):
+        return await client.request(method, url, **kwargs)
+
+    # Wrap with caching
+    cached_fetch = with_cache(fetch, CacheConfig(
+        ttl=300.0,
+        storage=storage,
+    ))
+
+    # Use the cached version
+    response = await cached_fetch("GET", "/users")
+
+    # With headers
+    response = await cached_fetch(
+        "GET",
+        "/users",
+        headers={"Authorization": "Bearer token123"},
+    )
+
+    # With JSON body (typically for POST/PUT)
+    response = await cached_fetch(
+        "POST",
+        "/users",
+        json={"name": "John", "email": "john@example.com"},
+    )
+
+    # With headers, JSON, and query params
+    response = await cached_fetch(
+        "POST",
+        "/users",
+        headers={"Authorization": "Bearer token123"},
+        json={"name": "John"},
+        params={"notify": "true"},
+    )
+
+    # Access cache operations
+    await cached_fetch.cache.invalidate("GET:https://api.example.com/users")
+    await cached_fetch.cache.clear()
+
+    # Cleanup
+    await client.aclose()
+    await storage.close()
+```
+
+### Event Hooks
+
+For integrating with the client's event system (note: hooks cannot short-circuit requests):
+
+```python
+from fetch_httpx import AsyncClient, create_cache_hooks, CacheConfig
+
+storage = FileStorage(cache_dir=".cache/http", ttl=300.0)
+
+hooks = create_cache_hooks(CacheConfig(
+    ttl=300.0,
+    storage=storage,
+))
+
+client = AsyncClient(
+    base_url="https://api.example.com",
+    event_hooks={
+        "request": hooks["request"],
+        "response": hooks["response"],
+    }
+)
+
+# Use client normally
+async with client:
+    response = await client.get("/users")
+
+await storage.close()
+```
+
+### Cache-Aware Client
+
+For full cache-first behavior with an existing configuration:
+
+```python
+from fetch_httpx import create_cache_aware_client, CacheConfig
+
+storage = FileStorage(cache_dir=".cache/http", ttl=300.0)
+
+client, cache_manager = create_cache_aware_client(
+    CacheConfig(ttl=300.0, storage=storage),
+    base_url="https://api.example.com",
+)
+
+async def cached_get(url: str):
+    """Manual cache-first pattern."""
+    cache_key = cache_manager.generate_key("GET", url)
+    entry = await cache_manager.get(cache_key)
+    if entry:
+        return cache_manager.create_response_from_cache(entry)
+    return await client.get(url)
+
+async with client:
+    response = await cached_get("/users")
+
+await storage.close()
+```
+
+---
+
+## Circuit Breaker with File Cache
+
+Combine file-based caching with circuit breaker to prevent cascading failures and improve resilience.
+
+```python
+from fetch_httpx import (
+    CachingClient,
+    CacheConfig,
+    CircuitBreakerConfig,
+    CircuitOpenError,
+    Response,
+)
+
+async def fetch_with_circuit_breaker(
+    base_url: str,
+    endpoint: str,
+    headers: dict[str, str] | None = None,
+    params: dict[str, str] | None = None,
+) -> Response | None:
+    """
+    Fetch data with file caching and circuit breaker protection.
+
+    Returns:
+        Response object if successful, None if circuit is open.
+    """
+    storage = FileStorage(
+        cache_dir=".cache/http",
+        ttl=300.0,
+        debug=True,
+    )
+
+    try:
+        async with CachingClient(
+            base_url=base_url,
+            cache=CacheConfig(ttl=300.0, storage=storage),
+            circuit_breaker=CircuitBreakerConfig(
+                failure_threshold=5,    # Open after 5 consecutive failures
+                success_threshold=2,    # Close after 2 successes in half-open
+                timeout=30.0,           # Try half-open after 30 seconds
+            ),
+        ) as client:
+            # Check circuit state before request
+            if client.circuit_breaker:
+                print(f"Circuit state: {client.circuit_breaker.state.value}")
+                print(f"Failure count: {client.circuit_breaker.failure_count}")
+
+                if client.circuit_breaker.is_open:
+                    print("Circuit is open - returning None")
+                    return None
+
+            # Make request
+            response = await client.get(
+                endpoint,
+                headers=headers,
+                params=params,
+            )
+
+            # Check circuit state after request
+            if client.circuit_breaker:
+                print(f"Circuit state after request: {client.circuit_breaker.state.value}")
+
+            return response
+
+    except CircuitOpenError as e:
+        print(f"Circuit breaker open: {e}")
+        return None
+
+    finally:
+        await storage.close()
+
+
+async def main():
+    # Example usage
+    response = await fetch_with_circuit_breaker(
+        base_url="https://api.example.com",
+        endpoint="/users",
+        headers={"Authorization": "Bearer token123"},
+        params={"page": "1"},
+    )
+
+    if response:
+        print(f"Status: {response.status_code}")
+        print(f"Data: {response.json()}")
+    else:
+        print("Request failed or circuit is open")
+
+
+# Run
+import asyncio
+asyncio.run(main())
+```
+
+### Circuit Breaker States
+
+| State       | Description                                   |
+| ----------- | --------------------------------------------- |
+| `closed`    | Normal operation, requests pass through       |
+| `open`      | Failures exceeded threshold, requests blocked |
+| `half_open` | Testing if service recovered                  |
+
+### Reusable Client with Circuit Breaker
+
+```python
+from dataclasses import dataclass
+from typing import Any
+
+@dataclass
+class CachedClientConfig:
+    base_url: str
+    cache_dir: str = ".cache/http"
+    cache_ttl: float = 300.0
+    failure_threshold: int = 5
+    success_threshold: int = 2
+    circuit_timeout: float = 30.0
+    debug: bool = False
+
+
+class CachedHttpClient:
+    """Reusable HTTP client with file caching and circuit breaker."""
+
+    def __init__(self, config: CachedClientConfig):
+        self.config = config
+        self.storage = FileStorage(
+            cache_dir=config.cache_dir,
+            ttl=config.cache_ttl,
+            debug=config.debug,
+        )
+        self._client: CachingClient | None = None
+
+    async def __aenter__(self) -> "CachedHttpClient":
+        self._client = CachingClient(
+            base_url=self.config.base_url,
+            cache=CacheConfig(ttl=self.config.cache_ttl, storage=self.storage),
+            circuit_breaker=CircuitBreakerConfig(
+                failure_threshold=self.config.failure_threshold,
+                success_threshold=self.config.success_threshold,
+                timeout=self.config.circuit_timeout,
+            ),
+        )
+        await self._client.__aenter__()
+        return self
+
+    async def __aexit__(self, *args) -> None:
+        if self._client:
+            await self._client.__aexit__(*args)
+        await self.storage.close()
+
+    @property
+    def circuit_state(self) -> str | None:
+        if self._client and self._client.circuit_breaker:
+            return self._client.circuit_breaker.state.value
+        return None
+
+    @property
+    def is_circuit_open(self) -> bool:
+        if self._client and self._client.circuit_breaker:
+            return self._client.circuit_breaker.is_open
+        return False
+
+    async def get(
+        self,
+        endpoint: str,
+        headers: dict[str, str] | None = None,
+        params: dict[str, Any] | None = None,
+    ) -> Response | None:
+        """GET request with circuit breaker protection."""
+        if not self._client:
+            raise RuntimeError("Client not initialized. Use 'async with'.")
+
+        try:
+            return await self._client.get(endpoint, headers=headers, params=params)
+        except CircuitOpenError:
+            return None
+
+    async def post(
+        self,
+        endpoint: str,
+        json: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> Response | None:
+        """POST request with circuit breaker protection."""
+        if not self._client:
+            raise RuntimeError("Client not initialized. Use 'async with'.")
+
+        try:
+            return await self._client.post(endpoint, json=json, headers=headers)
+        except CircuitOpenError:
+            return None
+
+
+# Usage
+async def main():
+    config = CachedClientConfig(
+        base_url="https://api.example.com",
+        cache_dir=".cache/api",
+        cache_ttl=300.0,
+        failure_threshold=3,
+        debug=True,
+    )
+
+    async with CachedHttpClient(config) as client:
+        print(f"Circuit state: {client.circuit_state}")
+
+        response = await client.get("/users", params={"page": 1})
+        if response:
+            return response.json()
+
+        return None
+
+asyncio.run(main())
+```

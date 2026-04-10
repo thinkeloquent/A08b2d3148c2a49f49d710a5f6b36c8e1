@@ -1,0 +1,39 @@
+{
+  "name": "@internal/extract-imports-text-based-notation",
+  "version": "1.0.0",
+  "description": "Extract import/export declarations from JS/TS source code into text-based notation",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "extract-imports": "./dist/bin/extract-imports.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check src/ __tests__/",
+    "format": "biome format --write src/ __tests__/"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.26.0",
+    "@babel/traverse": "^7.26.0",
+    "@babel/types": "^7.28.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/babel__traverse": "^7.20.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

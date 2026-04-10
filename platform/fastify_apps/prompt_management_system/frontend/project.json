@@ -1,0 +1,23 @@
+{
+  "name": "@internal/prompt-management-system-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "fastify_apps/prompt_management_system/frontend/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:frontend"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev",
+        "cwd": "fastify_apps/prompt_management_system/frontend"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build",
+        "cwd": "fastify_apps/prompt_management_system/frontend"
+      }
+    }
+  }
+}

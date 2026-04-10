@@ -1,0 +1,16 @@
+{
+  "name": "code-repositories-sequelize",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "connection-test": "node connection-test.mjs",
+    "setup": "node setup.mjs",
+    "teardown": "node teardown.mjs",
+    "seed": "node seed.mjs",
+    "reseed": "node truncate.mjs && node seed.mjs",
+    "reset": "node teardown.mjs && node setup.mjs && node seed.mjs"
+  },
+  "dependencies": {
+    "@internal/db_connection_sequelize": "workspace:*"
+  }
+}

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package code_repositories.tag;
+
+import "common.proto";
+
+// Tag entity
+message Tag {
+  int32 id = 1;
+  string name = 2;
+  code_repositories.common.Timestamp created_at = 3;
+  code_repositories.common.Timestamp updated_at = 4;
+}
+
+// List tags response
+message TagListResponse {
+  repeated Tag tags = 1;
+}
+
+// Create tag request
+message CreateTagRequest {
+  string name = 1;
+}
+
+// Create tag response
+message CreateTagResponse {
+  Tag tag = 1;
+}
+
+// Update tag request
+message UpdateTagRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+// Update tag response
+message UpdateTagResponse {
+  Tag tag = 1;
+}
+
+// Get tag request
+message GetTagRequest {
+  int32 id = 1;
+}
+
+// Get tag response
+message GetTagResponse {
+  Tag tag = 1;
+}
+
+// Delete tag request
+message DeleteTagRequest {
+  int32 id = 1;
+}
+
+// Delete tag response
+message DeleteTagResponse {
+  bool success = 1;
+}

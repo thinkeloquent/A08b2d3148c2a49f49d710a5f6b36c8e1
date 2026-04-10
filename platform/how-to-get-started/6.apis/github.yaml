@@ -1,0 +1,963 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# GitHub API Provider — Endpoint Reference
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# Base prefix:
+#   /~/api/rest/{api_release_date}/providers/github_api/2022-11-28
+#
+# Current release date: 02-01-2026
+# Full prefix example:
+#   /~/api/rest/02-01-2026/providers/github_api/2022-11-28
+#
+# Servers:
+#   Fastify  → http://localhost:51000
+#   FastAPI  → http://localhost:52000
+#
+# Authentication:
+#   Resolved from (in order): server config providers.github.token,
+#   GITHUB_TOKEN, GH_TOKEN, GITHUB_ACCESS_TOKEN, GITHUB_PAT env vars.
+#
+# SDK source:
+#   MJS:  polyglot/github_api/mjs/src/
+#   Py:   polyglot/github_api/py/github_api/
+#
+# Lifecycle hooks:
+#   Fastify: fastify_server/config/lifecycle/500.github_sdk.lifecycle.mjs
+#   FastAPI: fastapi_server/config/lifecycle/500_github_sdk.lifecycle.py
+#
+# ──────────────────────────────────────────────────────────────────────────────
+
+api:
+  name: GitHub API Provider
+  github_api_version: "2022-11-28"
+  prefix: /~/api/rest/{api_release_date}/providers/github_api/2022-11-28
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Health
+  # ────────────────────────────────────────────────────────────────────────────
+
+  health:
+    - path: /health
+      methods: [GET]
+      summary: Basic health check
+      description: >
+        Returns server status, timestamp, and last-known rate limit info.
+      response:
+        200:
+          body:
+            status: ok
+            timestamp: "2026-02-06T12:00:00.000Z"
+            rateLimit: { limit: 5000, remaining: 4998, reset: 1738843200 }
+
+    - path: /health/rate-limit
+      methods: [GET]
+      summary: Full GitHub API rate limit status
+      description: >
+        Calls the GitHub /rate_limit endpoint and returns the full
+        rate limit breakdown (core, search, graphql, etc.).
+      response:
+        200:
+          body: "{ resources: { core: {...}, search: {...}, ... } }"
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Repositories
+  # ────────────────────────────────────────────────────────────────────────────
+
+  repos:
+
+    # ── Authenticated user repos ──────────────────────────────────────────
+
+    - path: /repos/me
+      methods: [GET]
+      summary: List repositories for the authenticated user
+      query_params:
+        type: { type: string, enum: [all, owner, public, private, member], default: all }
+        sort: { type: string, enum: [created, updated, pushed, full_name], default: full_name }
+        direction: { type: string, enum: [asc, desc] }
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of repository objects
+
+    - path: /repos
+      methods: [POST]
+      summary: Create a repository for the authenticated user
+      request_body:
+        name: { type: string, required: true }
+        description: { type: string }
+        private: { type: boolean, default: false }
+        auto_init: { type: boolean, default: false }
+        gitignore_template: { type: string }
+        license_template: { type: string }
+      response:
+        201: Created repository object
+
+    # ── User repos ────────────────────────────────────────────────────────
+
+    - path: /repos/user/{username}
+      methods: [GET]
+      summary: List repositories for a specific user
+      path_params:
+        username: { type: string, required: true }
+      query_params:
+        type: { type: string, enum: [all, owner, member] }
+        sort: { type: string, enum: [created, updated, pushed, full_name] }
+        direction: { type: string, enum: [asc, desc] }
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of repository objects
+
+    # ── Organization repos ────────────────────────────────────────────────
+
+    - path: /repos/org/{org}
+      methods: [GET, POST]
+      summary: List or create organization repositories
+      path_params:
+        org: { type: string, required: true }
+      GET:
+        summary: List repositories for an organization
+        query_params:
+          type: { type: string, enum: [all, public, private, forks, sources, member] }
+          sort: { type: string, enum: [created, updated, pushed, full_name] }
+          direction: { type: string, enum: [asc, desc] }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200: Array of repository objects
+      POST:
+        summary: Create a repository in an organization
+        request_body:
+          name: { type: string, required: true }
+          description: { type: string }
+          private: { type: boolean, default: false }
+          auto_init: { type: boolean }
+        response:
+          201: Created repository object
+
+    # ── Single repository CRUD ────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}
+      methods: [GET, PATCH, DELETE]
+      summary: Get, update, or delete a repository
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: Get a repository
+        response:
+          200: Repository object
+          404: Not found
+      PATCH:
+        summary: Update a repository
+        request_body:
+          name: { type: string }
+          description: { type: string }
+          homepage: { type: string }
+          private: { type: boolean }
+          default_branch: { type: string }
+          has_issues: { type: boolean }
+          has_projects: { type: boolean }
+          has_wiki: { type: boolean }
+          archived: { type: boolean }
+        response:
+          200: Updated repository object
+      DELETE:
+        summary: Delete a repository
+        response:
+          204: No content
+
+    # ── Topics ────────────────────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/topics
+      methods: [GET, PUT]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: Get repository topics
+        response:
+          200: "{ names: ['topic1', 'topic2'] }"
+      PUT:
+        summary: Replace all repository topics
+        request_body:
+          names: { type: "string[]", required: true }
+        response:
+          200: "{ names: ['new-topic'] }"
+
+    # ── Languages ─────────────────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/languages
+      methods: [GET]
+      summary: Get repository languages
+      description: >
+        Returns a hash of language → bytes of code.
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      response:
+        200: "{ JavaScript: 12345, Python: 6789 }"
+
+    # ── Contributors ──────────────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/contributors
+      methods: [GET]
+      summary: List repository contributors
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      query_params:
+        anon: { type: string, description: "Set to '1' to include anonymous contributors" }
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of contributor objects
+
+    # ── Forks ─────────────────────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/forks
+      methods: [GET, POST]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: List forks
+        query_params:
+          sort: { type: string, enum: [newest, oldest, stargazers, watchers] }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200: Array of fork repository objects
+      POST:
+        summary: Fork a repository
+        request_body:
+          organization: { type: string, description: "Org to fork into (optional)" }
+          name: { type: string, description: "Name for the fork (optional)" }
+        response:
+          202: Fork in progress (repository object)
+
+    # ── Subscription (watch/unwatch) ──────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/subscription
+      methods: [PUT, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      PUT:
+        summary: Watch a repository
+        response:
+          200: Subscription object
+      DELETE:
+        summary: Unwatch a repository
+        response:
+          204: No content
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Branches
+  # ────────────────────────────────────────────────────────────────────────────
+
+  branches:
+
+    - path: /repos/{owner}/{repo}/branches
+      methods: [GET]
+      summary: List branches
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      query_params:
+        protected: { type: boolean }
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of branch objects
+
+    - path: /repos/{owner}/{repo}/branches/{branch}
+      methods: [GET]
+      summary: Get a branch
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        branch: { type: string, required: true }
+      response:
+        200: Branch object with commit and protection status
+
+    - path: /repos/{owner}/{repo}/branches/{branch}/protection
+      methods: [GET, PUT, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        branch: { type: string, required: true }
+      GET:
+        summary: Get branch protection rules
+        response:
+          200: Branch protection object
+      PUT:
+        summary: Update branch protection
+        request_body:
+          required_status_checks: { type: object, description: "Status check config (context, strict)" }
+          enforce_admins: { type: boolean }
+          required_pull_request_reviews: { type: object }
+          restrictions: { type: object }
+        response:
+          200: Updated branch protection object
+      DELETE:
+        summary: Remove branch protection
+        response:
+          204: No content
+
+    - path: /repos/{owner}/{repo}/branches/{branch}/rename
+      methods: [POST]
+      summary: Rename a branch
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        branch: { type: string, required: true }
+      request_body:
+        new_name: { type: string, required: true }
+      response:
+        201: Renamed branch object
+
+    - path: /repos/{owner}/{repo}/merges
+      methods: [POST]
+      summary: Merge two branches
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      request_body:
+        base: { type: string, required: true, description: "Branch to merge into" }
+        head: { type: string, required: true, description: "Branch to merge from" }
+        commit_message: { type: string }
+      response:
+        201: Merge commit object
+        204: Nothing to merge (already merged)
+        404: Not found
+        409: Merge conflict
+
+    - path: /repos/{owner}/{repo}/compare/{base}...{head}
+      methods: [GET]
+      summary: Compare two commits/branches/tags
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        base: { type: string, required: true, description: "Base ref (branch, tag, or SHA)" }
+        head: { type: string, required: true, description: "Head ref (branch, tag, or SHA)" }
+      response:
+        200: Comparison object (status, ahead_by, behind_by, commits, files)
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Collaborators
+  # ────────────────────────────────────────────────────────────────────────────
+
+  collaborators:
+
+    - path: /repos/{owner}/{repo}/collaborators
+      methods: [GET]
+      summary: List collaborators
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      query_params:
+        affiliation: { type: string, enum: [outside, direct, all], default: all }
+        permission: { type: string, enum: [pull, triage, push, maintain, admin] }
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of collaborator user objects
+
+    - path: /repos/{owner}/{repo}/collaborators/{username}
+      methods: [PUT, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        username: { type: string, required: true }
+      PUT:
+        summary: Add a collaborator
+        request_body:
+          permission: { type: string, enum: [pull, triage, push, maintain, admin], default: push }
+        response:
+          201: Invitation object (or 204 if already a collaborator)
+      DELETE:
+        summary: Remove a collaborator
+        response:
+          204: No content
+
+    - path: /repos/{owner}/{repo}/collaborators/{username}/permission
+      methods: [GET]
+      summary: Check a collaborator's permission level
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        username: { type: string, required: true }
+      response:
+        200: "{ permission: 'admin', user: {...} }"
+
+    - path: /repos/{owner}/{repo}/invitations
+      methods: [GET]
+      summary: List repository invitations
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      response:
+        200: Array of invitation objects
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Tags & Releases
+  # ────────────────────────────────────────────────────────────────────────────
+
+  tags:
+
+    - path: /repos/{owner}/{repo}/tags
+      methods: [GET]
+      summary: List tags
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      query_params:
+        per_page: { type: integer, default: 30 }
+        page: { type: integer, default: 1 }
+      response:
+        200: Array of tag objects (name, zipball_url, tarball_url, commit)
+
+  releases:
+
+    - path: /repos/{owner}/{repo}/releases
+      methods: [GET, POST]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: List releases
+        query_params:
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200: Array of release objects
+      POST:
+        summary: Create a release
+        request_body:
+          tag_name: { type: string, required: true }
+          target_commitish: { type: string, description: "Branch or commit SHA" }
+          name: { type: string }
+          body: { type: string, description: "Release notes (markdown)" }
+          draft: { type: boolean, default: false }
+          prerelease: { type: boolean, default: false }
+          generate_release_notes: { type: boolean, default: false }
+        response:
+          201: Created release object
+
+    - path: /repos/{owner}/{repo}/releases/latest
+      methods: [GET]
+      summary: Get the latest published release
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      response:
+        200: Release object
+
+    - path: /repos/{owner}/{repo}/releases/tags/{tag}
+      methods: [GET]
+      summary: Get a release by tag name
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        tag: { type: string, required: true }
+      response:
+        200: Release object
+        404: No release for this tag
+
+    - path: /repos/{owner}/{repo}/releases/{release_id}
+      methods: [GET, PATCH, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        release_id: { type: integer, required: true }
+      GET:
+        summary: Get a release by ID
+        response:
+          200: Release object
+      PATCH:
+        summary: Update a release
+        request_body:
+          tag_name: { type: string }
+          name: { type: string }
+          body: { type: string }
+          draft: { type: boolean }
+          prerelease: { type: boolean }
+        response:
+          200: Updated release object
+      DELETE:
+        summary: Delete a release
+        response:
+          204: No content
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Webhooks
+  # ────────────────────────────────────────────────────────────────────────────
+
+  webhooks:
+
+    - path: /repos/{owner}/{repo}/hooks
+      methods: [GET, POST]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: List webhooks
+        query_params:
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200: Array of webhook objects
+      POST:
+        summary: Create a webhook
+        request_body:
+          config:
+            url: { type: string, required: true, description: "Payload delivery URL" }
+            content_type: { type: string, enum: [json, form], default: json }
+            secret: { type: string }
+            insecure_ssl: { type: string, enum: ["0", "1"], default: "0" }
+          events: { type: "string[]", default: ["push"] }
+          active: { type: boolean, default: true }
+        response:
+          201: Created webhook object
+
+    - path: /repos/{owner}/{repo}/hooks/{hook_id}
+      methods: [GET, PATCH, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        hook_id: { type: integer, required: true }
+      GET:
+        summary: Get a webhook
+        response:
+          200: Webhook object
+      PATCH:
+        summary: Update a webhook
+        request_body:
+          config: { type: object }
+          events: { type: "string[]" }
+          active: { type: boolean }
+          add_events: { type: "string[]" }
+          remove_events: { type: "string[]" }
+        response:
+          200: Updated webhook object
+      DELETE:
+        summary: Delete a webhook
+        response:
+          204: No content
+
+    - path: /repos/{owner}/{repo}/hooks/{hook_id}/tests
+      methods: [POST]
+      summary: Test a webhook (trigger a push event)
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        hook_id: { type: integer, required: true }
+      response:
+        204: No content
+
+    - path: /repos/{owner}/{repo}/hooks/{hook_id}/pings
+      methods: [POST]
+      summary: Ping a webhook
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        hook_id: { type: integer, required: true }
+      response:
+        204: No content
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Security
+  # ────────────────────────────────────────────────────────────────────────────
+
+  security:
+
+    # ── Vulnerability Alerts ──────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/vulnerability-alerts
+      methods: [GET, PUT, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: Check if vulnerability alerts are enabled
+        response:
+          204: Enabled
+          404: Disabled
+      PUT:
+        summary: Enable vulnerability alerts
+        response:
+          204: No content
+      DELETE:
+        summary: Disable vulnerability alerts
+        response:
+          204: No content
+
+    # ── Rulesets ──────────────────────────────────────────────────────────
+
+    - path: /repos/{owner}/{repo}/rulesets
+      methods: [GET, POST]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+      GET:
+        summary: List rulesets
+        response:
+          200: Array of ruleset objects
+      POST:
+        summary: Create a ruleset
+        request_body:
+          name: { type: string, required: true }
+          target: { type: string, enum: [branch, tag] }
+          enforcement: { type: string, enum: [disabled, active, evaluate] }
+          rules: { type: "object[]" }
+          conditions: { type: object }
+        response:
+          201: Created ruleset object
+
+    - path: /repos/{owner}/{repo}/rulesets/{ruleset_id}
+      methods: [GET, PUT, DELETE]
+      path_params:
+        owner: { type: string, required: true }
+        repo: { type: string, required: true }
+        ruleset_id: { type: integer, required: true }
+      GET:
+        summary: Get a ruleset
+        response:
+          200: Ruleset object
+      PUT:
+        summary: Update a ruleset
+        request_body:
+          name: { type: string }
+          enforcement: { type: string, enum: [disabled, active, evaluate] }
+          rules: { type: "object[]" }
+          conditions: { type: object }
+        response:
+          200: Updated ruleset object
+      DELETE:
+        summary: Delete a ruleset
+        response:
+          204: No content
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Actions — Workflows
+  # ────────────────────────────────────────────────────────────────────────────
+
+  actions:
+
+    workflows:
+
+      - path: /repos/{owner}/{repo}/actions/workflows
+        methods: [GET]
+        summary: List workflows
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+        query_params:
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            workflows: Array of workflow objects (id, name, path, state, html_url, badge_url)
+
+      - path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}
+        methods: [GET]
+        summary: Get a workflow
+        description: >
+          workflow_id can be an integer ID or a filename (e.g. "ci.yml").
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          workflow_id: { type: "integer | string", required: true }
+        response:
+          200: Workflow object (id, name, path, state, html_url, badge_url)
+
+      - path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs
+        methods: [GET]
+        summary: List workflow runs for a specific workflow
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          workflow_id: { type: "integer | string", required: true }
+        query_params:
+          actor: { type: string }
+          branch: { type: string }
+          event: { type: string, description: "e.g. push, pull_request, schedule" }
+          status: { type: string, enum: [completed, in_progress, queued, requested, waiting, pending] }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            workflow_runs: Array of workflow run objects
+
+    # ── Workflow Runs ─────────────────────────────────────────────────────
+
+    runs:
+
+      - path: /repos/{owner}/{repo}/actions/runs
+        methods: [GET]
+        summary: List workflow runs for a repository
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+        query_params:
+          actor: { type: string }
+          branch: { type: string }
+          event: { type: string }
+          status: { type: string, enum: [completed, in_progress, queued, requested, waiting, pending] }
+          created: { type: string, description: "Date filter, e.g. >=2025-01-01" }
+          exclude_pull_requests: { type: boolean }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            workflow_runs: Array of workflow run objects
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}
+        methods: [GET]
+        summary: Get a workflow run
+        description: >
+          Returns full metadata for a workflow run including status, conclusion,
+          timing, actor, head commit, and URLs for jobs/logs/artifacts.
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        response:
+          200:
+            description: Workflow run object
+            key_fields:
+              id: integer
+              name: string
+              status: "queued | in_progress | completed | waiting | requested | pending"
+              conclusion: "success | failure | cancelled | skipped | timed_out | action_required | neutral | stale | null"
+              workflow_id: integer
+              run_number: integer
+              run_attempt: integer
+              event: string
+              display_title: string
+              html_url: string
+              created_at: datetime
+              updated_at: datetime
+              run_started_at: datetime
+              jobs_url: string
+              logs_url: string
+              artifacts_url: string
+              actor: user object
+              head_commit: commit object
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}/cancel
+        methods: [POST]
+        summary: Cancel a workflow run
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        response:
+          202: Accepted
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
+        methods: [POST]
+        summary: Re-run an entire workflow
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        response:
+          201: Created (re-run queued)
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs
+        methods: [POST]
+        summary: Re-run only the failed jobs in a workflow run
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        response:
+          201: Created (re-run queued)
+
+    # ── Jobs ──────────────────────────────────────────────────────────────
+
+    jobs:
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}/jobs
+        methods: [GET]
+        summary: List jobs for a workflow run
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        query_params:
+          filter: { type: string, enum: [latest, all], default: latest, description: "'latest' returns only the latest attempt" }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            jobs:
+              - description: Array of job objects
+                key_fields:
+                  id: integer
+                  run_id: integer
+                  name: string
+                  status: "queued | in_progress | completed | waiting | pending"
+                  conclusion: "success | failure | cancelled | skipped | timed_out | action_required | neutral | null"
+                  started_at: datetime
+                  completed_at: datetime
+                  html_url: string
+                  steps:
+                    - name: string
+                      status: string
+                      conclusion: string
+                      number: integer
+                      started_at: datetime
+                      completed_at: datetime
+                  labels: "string[]"
+                  runner_id: integer
+                  runner_name: string
+                  workflow_name: string
+
+      - path: /repos/{owner}/{repo}/actions/jobs/{job_id}
+        methods: [GET]
+        summary: Get a specific job
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          job_id: { type: integer, required: true }
+        response:
+          200: Job object (same shape as jobs array items above)
+
+    # ── Artifacts ─────────────────────────────────────────────────────────
+
+    artifacts:
+
+      - path: /repos/{owner}/{repo}/actions/artifacts
+        methods: [GET]
+        summary: List artifacts for a repository
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+        query_params:
+          name: { type: string, description: "Filter by artifact name" }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            artifacts:
+              - description: Array of artifact objects
+                key_fields:
+                  id: integer
+                  name: string
+                  size_in_bytes: integer
+                  archive_download_url: string
+                  expired: boolean
+                  created_at: datetime
+                  expires_at: datetime
+
+      - path: /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts
+        methods: [GET]
+        summary: List artifacts for a specific workflow run
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          run_id: { type: integer, required: true }
+        query_params:
+          name: { type: string, description: "Filter by artifact name" }
+          per_page: { type: integer, default: 30 }
+          page: { type: integer, default: 1 }
+        response:
+          200:
+            total_count: integer
+            artifacts: Array of artifact objects
+
+      - path: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+        methods: [GET, DELETE]
+        path_params:
+          owner: { type: string, required: true }
+          repo: { type: string, required: true }
+          artifact_id: { type: integer, required: true }
+        GET:
+          summary: Get an artifact
+          response:
+            200: Artifact object
+        DELETE:
+          summary: Delete an artifact
+          response:
+            204: No content
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # OpenAPI Spec (auto-generated stubs)
+  # ────────────────────────────────────────────────────────────────────────────
+
+  openapi:
+
+    - path: /openapi.json
+      methods: [GET]
+      summary: OpenAPI specification (JSON)
+      description: >
+        Stub route — actual handler provided by the 490_openapi_dynamic lifecycle hook.
+
+    - path: /openapi.yaml
+      methods: [GET]
+      summary: OpenAPI specification (YAML)
+      description: >
+        Stub route — actual handler provided by the 490_openapi_dynamic lifecycle hook.
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Quick-start examples
+# ──────────────────────────────────────────────────────────────────────────────
+
+examples:
+
+  get_workflow_run:
+    description: Get metadata for a specific GitHub Actions run
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/repos/thinkeloquent/mta-v800/actions/runs/21757393699
+
+  list_jobs_for_run:
+    description: List jobs and their statuses for a workflow run
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/repos/thinkeloquent/mta-v800/actions/runs/21757393699/jobs
+
+  list_artifacts_for_run:
+    description: List artifacts produced by a workflow run
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/repos/thinkeloquent/mta-v800/actions/runs/21757393699/artifacts
+
+  get_repository:
+    description: Get repository metadata
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/repos/thinkeloquent/mta-v800
+
+  list_branches:
+    description: List all branches in a repository
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/repos/thinkeloquent/mta-v800/branches
+
+  health_check:
+    description: Check API health and rate limit status
+    curl: |
+      curl http://localhost:51000/~/api/rest/02-01-2026/providers/github_api/2022-11-28/health
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Endpoint summary (44 routes from Fastify route table)
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# Domain          Endpoints  Methods
+# ─────────────   ─────────  ──────────────────────────────────────
+# Health          2          GET
+# Repos           12         GET, POST, PATCH, DELETE, PUT
+# Branches        5          GET, POST, PUT, DELETE
+# Collaborators   4          GET, PUT, DELETE
+# Tags            1          GET
+# Releases        5          GET, POST, PATCH, DELETE
+# Webhooks        5          GET, POST, PATCH, DELETE
+# Security        5          GET, PUT, DELETE, POST
+# Actions         14         GET, POST, DELETE
+# OpenAPI         2          GET
+# ─────────────   ─────────  ──────────────────────────────────────
+# Total           55         ~87 method-route combinations

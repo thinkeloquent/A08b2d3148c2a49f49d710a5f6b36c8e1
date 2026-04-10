@@ -1,0 +1,6 @@
+{
+  "name": "github-oss-httpx",
+  "test_type": "direct_package_import",
+  "python": "httpx:AsyncClient",
+  "app_yaml_section": ["providers", "github"]
+}

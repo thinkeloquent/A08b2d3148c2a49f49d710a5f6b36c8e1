@@ -1,0 +1,12 @@
+{
+  "name": "@internal/csv-upload-widget",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "lucide-react": "^0.303.0"
+  }
+}

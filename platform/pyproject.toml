@@ -1,0 +1,119 @@
+[project]
+name = "mta-v800"
+version = "0.1.0"
+requires-python = ">=3.11,<3.12"
+
+[tool.poetry]
+name = "mta-v800"
+version = "0.1.0"
+description = "MTA Monorepo"
+authors = ["Admin <admin@example.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+fastapi = "==0.128.0"
+uvicorn = {extras = ["standard"], version = "==0.40.0"}
+pydantic = "==2.12.5"
+pydantic-settings = "==2.12.0"
+python-dotenv = "==1.2.1"
+python-multipart = "==0.0.21"
+pyyaml = "==6.0.3"
+aiohttp = "==3.13.3"
+deepmerge = "==2.0"
+sqlalchemy = {extras = ["asyncio"], version = "==2.0.22"}
+greenlet = "==3.3.1"
+asyncpg = "==0.31.0"
+psycopg2-binary = "==2.9.11"
+alembic = "==1.18.1"
+redis = "==7.1.0"
+elasticsearch = ">=8.0.0,<9.0.0"
+aiofiles = "==25.1.0"
+urllib3 = "==2.6.3"
+aiobotocore = {extras = ["boto3"], version = "==3.1.1"}
+unstructured = ">=0.16.0"
+langchain = ">=1.0.2,<=1.2.10"
+langchain-community = "==0.4.1"
+langgraph = ">=1.0.1,<=1.0.8"
+langchain-text-splitters = "1.1.0"
+langchain-chroma = ">=1.0.0"
+langchain-openai = ">=1.0.0"
+nltk = ">=3.8.0"
+rank-bm25 = ">=0.2.0"
+numpy = ">=1.24.0"
+numba = "==0.63.1"
+markdown = ">=3.5.0"
+openai = ">=1.0.0"
+pypdfium2 = "==5.4.0"
+fsspec = "==2026.2.0"
+httpx = {extras = ["http2"], version = ">=0.28.1"}
+typing-extensions = ">=4.0.0"
+click = ">=8.1.0"
+rich = ">=13.0.0"
+typer = ">=0.9.0"
+jinja2 = ">=3.1.0"
+python-liquid = ">=1.0.0"
+chromadb = "1.5.0"
+langchain_classic = "1.0.1"
+
+# Local packages
+auth_config = {path = "packages_py/auth_config", develop = true}
+auth_encoding = {path = "packages_py/auth_encoding", develop = true}
+can_use_http2 = {path = "packages_py/can_use_http2", develop = true}
+db_connection_elasticsearch = {path = "packages_py/db_connection_elasticsearch", develop = true}
+db_connection_postgres = {path = "packages_py/db_connection_postgres", develop = true}
+db_connection_redis = {path = "packages_py/db_connection_redis", develop = true}
+env_resolve = {path = "packages_py/env_resolve", develop = true}
+env_resolver = {path = "packages_py/env_resolver", develop = true}
+fetch_httpx = {path = "packages_py/fetch_httpx", develop = true}
+fetch_httpx_clients = {path = "packages_py/fetch_httpx_clients", develop = true}
+fetch_httpx_gemini_openai_constant = {path = "packages_py/fetch_httpx_gemini_openai_constant", develop = true}
+fetch_httpx_gemini_openai_protocols = {path = "packages_py/fetch_httpx_gemini_openai_protocols", develop = true}
+hello = {path = "packages_py/hello", develop = true}
+json_file_storage = {path = "packages_py/json_file_storage", develop = true}
+json_redis_storage = {path = "packages_py/json_redis_storage", develop = true}
+
+# Polyglot packages (Python)
+app-yaml-endpoints = {path = "polyglot/app_yaml_endpoints/py", develop = true}
+app_yaml_load = {path = "polyglot/app_yaml_load/py", develop = true}
+app_yaml_overwrites = {path = "polyglot/app_yaml_overwrites/py", develop = true}
+app_yaml_static_config = {path = "polyglot/app_yaml_static_config/py", develop = true}
+aws-s3-client = {path = "polyglot/aws_s3_client/py", develop = true}
+cache_json_awss3_storage = {path = "polyglot/cache_json_awss3_storage/py", develop = true}
+computed-url-builder = {path = "polyglot/computed_url_builder/py", develop = true}
+confluence-api = {path = "polyglot/confluence_api/py", develop = true}
+extract_imports_text_based_notation = {path = "polyglot/extract-imports-text-based-notation/py", develop = true}
+fetch_http_cache_response = {path = "polyglot/fetch_http_cache_response/py", develop = true}
+figma-api = {path = "polyglot/figma_api/py", develop = true}
+fmt-sdk = {path = "polyglot/fmt_sdk/py", develop = true}
+gemini_openai_sdk = {path = "polyglot/gemini_openai_sdk/py", develop = true}
+github-api = {path = "polyglot/github_api/py", develop = true}
+github-sdk-api-component-usage-audit = {path = "polyglot/github_sdk_api_component_usage_audit/py", develop = true}
+healthz_diagnostics = {path = "polyglot/healthz_diagnostics/py", develop = true}
+jira-api = {path = "polyglot/jira_api/py", develop = true}
+langgraph-flow-serializer = {path = "polyglot/langgraph-flow-serializer/py", develop = true}
+runtime_template_resolver = {path = "polyglot/overwrite_from_context/py", develop = true}
+proxy-url-builder = {path = "polyglot/proxy_url_builder/py", develop = true}
+rag-embedding-client = {path = "polyglot/rag_embedding_client/py", develop = true}
+rag-embedding-config = {path = "polyglot/rag_embedding_config/py", develop = true}
+rag-llm-synthesis = {path = "polyglot/rag_llm_synthesis/py", develop = true}
+rag-search-algorithms = {path = "polyglot/rag_search_algorithms/py", develop = true}
+rag-ui-component-ingest-config = {path = "polyglot/rag_ui_component_ingest_config/py", develop = true}
+common-exceptions = {path = "polyglot/raise_exceptions/py", develop = true}
+saucelabs-api-client = {path = "polyglot/saucelabs_api/py", develop = true}
+polyglot-server = {path = "polyglot/server/py", develop = true}
+server_provider_cache = {path = "polyglot/server_provider_cache/py", develop = true}
+static-app-loader = {path = "polyglot/static_app_loader/py", develop = true}
+statsig-api-client = {path = "polyglot/statsig_api/py", develop = true}
+vault-file = {path = "polyglot/vault_file/py", develop = true}
+
+# Platform core packages
+platform-core-fastapi = {path = "platform-core/fastapi", develop = true}
+
+[tool.pytest.ini_options]
+testpaths = ["packages_py", "fastapi_apps", "fastapi_server"]
+python_files = "test_*.py"
+python_functions = "test_*"
+norecursedirs = ["__STAGE__", "__SPECS__", "__REVIEW__", ".git", "node_modules", ".venv", "dist", "build"]
+addopts = "--ignore=__STAGE__ --ignore=__SPECS__ --import-mode=importlib"
+asyncio_mode = "auto"

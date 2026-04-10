@@ -1,0 +1,51 @@
+{
+  "name": "@internal/db_connection_postgres",
+  "version": "1.0.0",
+  "description": "Unified PostgreSQL connection package",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "postgres",
+    "database",
+    "connection",
+    "sequelize"
+  ],
+  "author": "MTA",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@internal/env-resolve": "workspace:*",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.0",
+    "sequelize": "^6.35.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

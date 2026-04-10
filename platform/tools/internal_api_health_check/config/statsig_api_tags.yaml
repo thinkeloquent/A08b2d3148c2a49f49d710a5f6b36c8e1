@@ -1,0 +1,8 @@
+name: statsig_api_tags
+description: Tags endpoints
+
+tests:
+  - id: list-tags
+    description: List all tags
+    path: /v1/tags
+    expected_status: [200, 401, 403, 429]

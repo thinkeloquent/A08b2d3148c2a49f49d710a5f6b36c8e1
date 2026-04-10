@@ -1,0 +1,19 @@
+{
+  "name": "@internal/fqdp-management-system-protobuf",
+  "version": "1.0.0",
+  "description": "FQDP Management System - Protocol Buffer definitions",
+  "type": "module",
+  "private": true,
+  "main": "src/index.mjs",
+  "scripts": {
+    "generate": "pbjs -t static-module -w es6 -o generated/proto.js proto/*.proto && pbts -o generated/proto.d.ts generated/proto.js",
+    "build": "npm run generate"
+  },
+  "dependencies": {
+    "protobufjs": "^7.2.0"
+  },
+  "devDependencies": {
+    "protobufjs-cli": "^1.1.3"
+  },
+  "license": "UNLICENSED"
+}

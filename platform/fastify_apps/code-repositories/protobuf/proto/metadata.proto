@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package code_repositories.metadata;
+
+import "common.proto";
+
+// Metadata entity for code repository
+message Metadata {
+  int32 id = 1;
+  string name = 2;
+  string content_type = 3;
+  string source_url = 4;
+  string source_hash_id = 5;
+  repeated string labels = 6;
+  string repository_id = 7;
+  code_repositories.common.Timestamp created_at = 8;
+  code_repositories.common.Timestamp updated_at = 9;
+}
+
+// List metadata response
+message MetadataListResponse {
+  repeated Metadata items = 1;
+}
+
+// Create metadata request
+message CreateMetadataRequest {
+  string name = 1;
+  string content_type = 2;
+  string source_url = 3;
+  string source_hash_id = 4;
+  repeated string labels = 5;
+  string repository_id = 6;
+}
+
+// Create metadata response
+message CreateMetadataResponse {
+  Metadata metadata = 1;
+}
+
+// Update metadata request
+message UpdateMetadataRequest {
+  int32 id = 1;
+  string name = 2;
+  string content_type = 3;
+  string source_url = 4;
+  string source_hash_id = 5;
+  repeated string labels = 6;
+}
+
+// Update metadata response
+message UpdateMetadataResponse {
+  Metadata metadata = 1;
+}
+
+// Get metadata request
+message GetMetadataRequest {
+  int32 id = 1;
+}
+
+// Get metadata response
+message GetMetadataResponse {
+  Metadata metadata = 1;
+}
+
+// Delete metadata request
+message DeleteMetadataRequest {
+  int32 id = 1;
+}
+
+// Delete metadata response
+message DeleteMetadataResponse {
+  bool success = 1;
+}

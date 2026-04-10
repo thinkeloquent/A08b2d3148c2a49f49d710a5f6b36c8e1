@@ -1,0 +1,263 @@
+{
+  "_comment": "OpenAPI 3.0.3 component schemas and operation details for endpoints. Keyed by 'METHOD path'.",
+  "components": {
+    "schemas": {
+      "ChatRequest": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": { "type": "string", "description": "The user prompt to send to the model" },
+          "model": { "type": "string", "default": "flash", "description": "Model variant (e.g. flash, pro)" },
+          "temperature": { "type": "number", "default": 0.7, "minimum": 0, "maximum": 2, "description": "Sampling temperature" },
+          "max_tokens": { "type": "integer", "default": 1000, "minimum": 1, "description": "Maximum tokens in the response" }
+        }
+      },
+      "StructureRequest": {
+        "type": "object",
+        "required": ["prompt", "schema"],
+        "properties": {
+          "prompt": { "type": "string", "description": "The user prompt describing the data to extract" },
+          "schema": { "type": "object", "description": "JSON Schema defining the expected output structure" }
+        }
+      },
+      "ToolCallRequest": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": { "type": "string", "description": "The user prompt for tool selection" },
+          "tools": {
+            "type": "array",
+            "nullable": true,
+            "items": { "type": "object" },
+            "description": "Tool definitions (OpenAI function-calling format)"
+          }
+        }
+      },
+      "JsonRequest": {
+        "type": "object",
+        "required": ["prompt"],
+        "properties": {
+          "prompt": { "type": "string", "description": "The user prompt — response will be valid JSON" },
+          "model": { "type": "string", "default": "flash", "description": "Model variant" }
+        }
+      },
+      "ConversationRequest": {
+        "type": "object",
+        "required": ["messages"],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["role", "content"],
+              "properties": {
+                "role": { "type": "string", "enum": ["system", "user", "assistant"] },
+                "content": { "type": "string" }
+              }
+            },
+            "description": "Conversation history as an array of message objects"
+          },
+          "model": { "type": "string", "default": "flash", "description": "Model variant" },
+          "temperature": { "type": "number", "default": 0.7, "minimum": 0, "maximum": 2, "description": "Sampling temperature" },
+          "max_tokens": { "type": "integer", "default": 1000, "minimum": 1, "description": "Maximum tokens in the response" }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["ok", "error"] },
+          "model": { "type": "string" },
+          "provider": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string", "description": "The model response text" },
+          "model": { "type": "string", "description": "Model used for generation" },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "prompt_tokens": { "type": "integer" },
+              "completion_tokens": { "type": "integer" },
+              "total_tokens": { "type": "integer" }
+            }
+          },
+          "finish_reason": { "type": "string" }
+        }
+      },
+      "StructureResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "object", "description": "Extracted structured data matching the provided schema" },
+          "model": { "type": "string" },
+          "usage": { "type": "object" }
+        }
+      },
+      "ToolCallResponse": {
+        "type": "object",
+        "properties": {
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "arguments": { "type": "object" }
+              }
+            },
+            "description": "Tool invocations selected by the model"
+          },
+          "content": { "type": "string" },
+          "model": { "type": "string" },
+          "usage": { "type": "object" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "description": "Error message" }
+        }
+      }
+    }
+  },
+  "operations": {
+    "GET /api/llm/gemini-openai-v1/health": {
+      "operationId": "llm_health",
+      "summary": "SDK health check",
+      "description": "Returns connectivity and model availability status for the Gemini OpenAI SDK.",
+      "responses": {
+        "200": { "description": "Health status", "schema": "HealthResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/chat": {
+      "operationId": "llm_chat",
+      "summary": "Chat completion",
+      "description": "Send a single prompt and receive a complete chat response using Gemini via OpenAI-compatible API.",
+      "requestBody": { "required": true, "schema": "ChatRequest" },
+      "responses": {
+        "200": { "description": "Chat completion result", "schema": "ChatResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/stream": {
+      "operationId": "llm_stream",
+      "summary": "SSE streaming chat completion",
+      "description": "Send a prompt and receive a streaming response via Server-Sent Events. Each event contains a text chunk. Stream ends with `data: [DONE]`.",
+      "requestBody": { "required": true, "schema": "ChatRequest" },
+      "responses": {
+        "200": { "description": "SSE event stream", "contentType": "text/event-stream" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/structure": {
+      "operationId": "llm_structure",
+      "summary": "Structured JSON output",
+      "description": "Extract structured data from a prompt using a provided JSON Schema. The model returns data conforming to the schema.",
+      "requestBody": { "required": true, "schema": "StructureRequest" },
+      "responses": {
+        "200": { "description": "Structured extraction result", "schema": "StructureResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/tool-call": {
+      "operationId": "llm_tool_call",
+      "summary": "Function calling",
+      "description": "Analyze a prompt and invoke appropriate tools from the provided tool definitions (OpenAI function-calling format).",
+      "requestBody": { "required": true, "schema": "ToolCallRequest" },
+      "responses": {
+        "200": { "description": "Tool call result", "schema": "ToolCallResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/json": {
+      "operationId": "llm_json_mode",
+      "summary": "JSON mode",
+      "description": "Send a prompt and receive the response as valid JSON. Useful for programmatic consumption of LLM output.",
+      "requestBody": { "required": true, "schema": "JsonRequest" },
+      "responses": {
+        "200": { "description": "JSON response from model", "contentType": "application/json" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1/conversation": {
+      "operationId": "llm_conversation",
+      "summary": "Multi-turn conversation",
+      "description": "Send a conversation history (array of role/content messages) and receive the next assistant response.",
+      "requestBody": { "required": true, "schema": "ConversationRequest" },
+      "responses": {
+        "200": { "description": "Conversation response", "schema": "ChatResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "GET /api/llm/gemini-openai-v1-router/health": {
+      "operationId": "llm_router_health",
+      "summary": "SDK health check (routed)",
+      "description": "Returns connectivity and model availability status via the router variant.",
+      "responses": {
+        "200": { "description": "Health status", "schema": "HealthResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/chat": {
+      "operationId": "llm_router_chat",
+      "summary": "Chat completion (routed)",
+      "description": "Chat completion via the router variant.",
+      "requestBody": { "required": true, "schema": "ChatRequest" },
+      "responses": {
+        "200": { "description": "Chat completion result", "schema": "ChatResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/stream": {
+      "operationId": "llm_router_stream",
+      "summary": "SSE streaming (routed)",
+      "description": "SSE streaming chat completion via the router variant.",
+      "requestBody": { "required": true, "schema": "ChatRequest" },
+      "responses": {
+        "200": { "description": "SSE event stream", "contentType": "text/event-stream" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/structure": {
+      "operationId": "llm_router_structure",
+      "summary": "Structured output (routed)",
+      "description": "Structured JSON extraction via the router variant.",
+      "requestBody": { "required": true, "schema": "StructureRequest" },
+      "responses": {
+        "200": { "description": "Structured extraction result", "schema": "StructureResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/tool-call": {
+      "operationId": "llm_router_tool_call",
+      "summary": "Function calling (routed)",
+      "description": "Function calling via the router variant.",
+      "requestBody": { "required": true, "schema": "ToolCallRequest" },
+      "responses": {
+        "200": { "description": "Tool call result", "schema": "ToolCallResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/json": {
+      "operationId": "llm_router_json_mode",
+      "summary": "JSON mode (routed)",
+      "description": "JSON mode via the router variant.",
+      "requestBody": { "required": true, "schema": "JsonRequest" },
+      "responses": {
+        "200": { "description": "JSON response", "contentType": "application/json" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    },
+    "POST /api/llm/gemini-openai-v1-router/conversation": {
+      "operationId": "llm_router_conversation",
+      "summary": "Multi-turn conversation (routed)",
+      "description": "Multi-turn conversation via the router variant.",
+      "requestBody": { "required": true, "schema": "ConversationRequest" },
+      "responses": {
+        "200": { "description": "Conversation response", "schema": "ChatResponse" },
+        "400": { "description": "Invalid request", "schema": "ErrorResponse" }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+name: statsig_api_metrics
+description: Metrics endpoints
+
+tests:
+  - id: list-metrics
+    description: List all metrics
+    path: /v1/metrics/list
+    expected_status: [200, 400, 401, 403, 429]

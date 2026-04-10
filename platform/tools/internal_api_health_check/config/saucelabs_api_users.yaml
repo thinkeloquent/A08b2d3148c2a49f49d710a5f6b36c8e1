@@ -1,0 +1,13 @@
+name: saucelabs_api_users
+description: User account and concurrency endpoints
+
+tests:
+  - id: get-user
+    description: Get user account information
+    path: /v1/users/:username
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-concurrency
+    description: Get user concurrency and usage statistics
+    path: /v1/users/:username/concurrency
+    expected_status: [200, 401, 403, 404, 429]

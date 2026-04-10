@@ -1,0 +1,13 @@
+{
+  "name": "@internal/github-sdk-api-security-alerts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@internal/github-api-sdk-cli": "file:../../../packages_mjs/github-api-sdk-cli",
+    "octokit": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

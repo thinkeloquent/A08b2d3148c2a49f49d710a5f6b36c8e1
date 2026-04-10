@@ -1,0 +1,6 @@
+{
+  "name": "figma-native-mjs",
+  "test_type": "native_package",
+  "mjs": "undici:request",
+  "app_yaml_section": null
+}

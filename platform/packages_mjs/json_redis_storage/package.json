@@ -1,0 +1,53 @@
+{
+  "name": "json_redis_storage",
+  "version": "1.0.0",
+  "description": "Redis-based JSON storage with size limits, TTL, and configurable eviction policies",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "node --test",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "redis",
+    "cache",
+    "storage",
+    "json",
+    "ttl",
+    "lru",
+    "lfu",
+    "fifo"
+  ],
+  "author": "MTA",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "ioredis": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
+  }
+}

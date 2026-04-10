@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.platform/schemas/lifecycle.schema.json",
+  "title": "Lifecycle Hook",
+  "description": "Defines the contract for lifecycle hooks that run during server startup/shutdown.",
+  "type": "object",
+  "required": ["name", "order"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable lifecycle hook name."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Numeric prefix that determines execution order."
+    },
+    "setup": {
+      "type": "object",
+      "description": "Setup function signature: (server, config) => void. Runs during server startup.",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          },
+          "prefixItems": [
+            { "properties": { "name": { "const": "server" }, "type": { "const": "Server" } } },
+            { "properties": { "name": { "const": "config" }, "type": { "const": "Config" } } }
+          ]
+        },
+        "returns": { "type": "string", "const": "void" }
+      }
+    },
+    "shutdown": {
+      "type": "object",
+      "description": "Shutdown function signature: (server) => void. Runs during graceful shutdown.",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          },
+          "prefixItems": [
+            { "properties": { "name": { "const": "server" }, "type": { "const": "Server" } } }
+          ]
+        },
+        "returns": { "type": "string", "const": "void" }
+      }
+    },
+    "category": {
+      "type": "string",
+      "enum": ["core", "providers", "persistence", "apps"],
+      "description": "Classification of the lifecycle hook."
+    }
+  },
+  "additionalProperties": false
+}

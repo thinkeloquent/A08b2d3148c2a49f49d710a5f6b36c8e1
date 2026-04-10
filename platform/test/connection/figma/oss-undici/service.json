@@ -1,0 +1,6 @@
+{
+  "name": "figma-oss-undici",
+  "test_type": "direct_package_import",
+  "mjs": "undici:request",
+  "app_yaml_section": ["providers", "figma"]
+}

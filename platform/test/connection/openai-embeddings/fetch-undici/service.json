@@ -1,0 +1,6 @@
+{
+  "name": "openai-embeddings-fetch-undici",
+  "test_type": "direct_package_import",
+  "mjs": "fetch-undici:AsyncClient",
+  "app_yaml_section": ["providers", "openai_embeddings"]
+}

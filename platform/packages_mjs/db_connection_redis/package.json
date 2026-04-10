@@ -1,0 +1,47 @@
+{
+  "name": "@internal/db_connection_redis",
+  "version": "1.0.0",
+  "description": "Unified Redis connection package",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "node --test",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "redis",
+    "connection",
+    "config",
+    "ioredis"
+  ],
+  "author": "MTA",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@internal/env-resolve": "workspace:*",
+    "@internal/env-resolver": "workspace:*",
+    "ioredis": "^5.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

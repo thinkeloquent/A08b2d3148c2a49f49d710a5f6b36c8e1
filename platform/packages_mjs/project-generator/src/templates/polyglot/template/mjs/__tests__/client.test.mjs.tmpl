@@ -1,0 +1,9 @@
+import { describe, it, expect } from 'vitest';
+import { {{APP_NAME_PASCAL}} } from '../src/index.mjs';
+
+describe('{{APP_NAME_PASCAL}}', () => {
+  it('should create an instance with baseUrl', () => {
+    const client = new {{APP_NAME_PASCAL}}({ baseUrl: 'https://example.com' });
+    expect(client.baseUrl).toBe('https://example.com');
+  });
+});

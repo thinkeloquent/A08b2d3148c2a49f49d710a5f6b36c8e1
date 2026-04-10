@@ -1,0 +1,625 @@
+# Response Caching
+
+`fetch_undici` provides a flexible caching middleware for HTTP responses with multiple API patterns, pluggable storage backends, and customizable cache key strategies.
+
+## Quick Start
+
+```typescript
+import { CachingClient, CacheConfig } from 'fetch_undici'
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: { ttl: 60000 } // 1 minute TTL
+})
+
+// First request fetches from network
+const response1 = await client.get('/users')
+
+// Second request returns from cache
+const response2 = await client.get('/users')
+
+// Manual cache operations
+await client.cache.invalidate('GET:https://api.example.com/users')
+await client.cache.clear()
+
+await client.close()
+```
+
+---
+
+## API Patterns
+
+### 1. Wrapper Class (Recommended)
+
+The `CachingClient` wraps `AsyncClient` and adds transparent caching for GET/HEAD requests.
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    ttl: 60000, // Cache TTL in ms
+    maxEntries: 500, // Max cached responses
+    methods: ['GET'] // Methods to cache
+  }
+})
+
+// Automatic caching
+const users = await client.get('/users')
+
+// Per-request cache control
+const fresh = await client.get('/users', {
+  cacheOptions: { noCache: true } // Skip cache
+})
+
+const forced = await client.get('/users', {
+  cacheOptions: { forceRefresh: true } // Refresh cache
+})
+
+// Custom TTL for specific request
+const shortLived = await client.get('/volatile-data', {
+  cacheOptions: { ttl: 5000 } // 5 second TTL
+})
+
+// Access cache manager
+const stats = await client.cache.stats()
+console.log(`Cache hits: ${stats.hits}, misses: ${stats.misses}`)
+
+await client.close()
+```
+
+### 2. Higher-Order Function
+
+Wrap any fetch function with caching using `withCache`.
+
+```typescript
+import { AsyncClient, withCache } from 'fetch_undici'
+
+const client = new AsyncClient({ baseUrl: 'https://api.example.com' })
+
+// Wrap the request method
+const cachedRequest = withCache((method, url, options) => client.request(method, url, options), {
+  ttl: 60000
+})
+
+// Use the cached version
+const response = await cachedRequest('GET', '/users')
+
+// Access cache for manual operations
+await cachedRequest.cache.invalidate('GET:https://api.example.com/users')
+
+await client.close()
+```
+
+### 3. Decorator Pattern
+
+Use the `@cached` decorator on class methods.
+
+```typescript
+import { AsyncClient, cached } from 'fetch_undici'
+
+class UserService {
+  private client: AsyncClient
+
+  constructor() {
+    this.client = new AsyncClient({ baseUrl: 'https://api.example.com' })
+  }
+
+  @cached({ ttl: 60000 })
+  async getUsers(): Promise<Response> {
+    return this.client.get('/users')
+  }
+
+  @cached({ ttl: 300000 }) // 5 minutes
+  async getUserById(id: string): Promise<Response> {
+    return this.client.get(`/users/${id}`)
+  }
+
+  // Custom cache key
+  @cached({
+    ttl: 60000,
+    keyFn: (page, limit) => `users:page:${page}:limit:${limit}`
+  })
+  async listUsers(page: number, limit: number): Promise<Response> {
+    return this.client.get('/users', { params: { page, limit } })
+  }
+}
+```
+
+### 4. Event Hooks Middleware
+
+Integrate caching with AsyncClient's event hooks system.
+
+```typescript
+import { AsyncClient, createCacheHooks } from 'fetch_undici'
+
+const { cacheManager, requestHook, responseHook } = createCacheHooks({
+  ttl: 60000
+})
+
+const client = new AsyncClient({
+  baseUrl: 'https://api.example.com',
+  eventHooks: {
+    request: [requestHook],
+    response: [responseHook]
+  }
+})
+
+// Note: Event hooks can't short-circuit requests
+// Use createCacheAwareClient for full caching support
+```
+
+For full cache-first behavior with hooks:
+
+```typescript
+import { createCacheAwareClient } from 'fetch_undici'
+
+const { client, cacheManager, cachedRequest } = createCacheAwareClient(
+  {
+    ttl: 60000
+  },
+  {
+    baseUrl: 'https://api.example.com'
+  }
+)
+
+// Use cachedRequest for cache-first behavior
+const response = await cachedRequest('GET', '/users')
+
+await client.close()
+```
+
+---
+
+## Cache Key Strategies
+
+### Default Strategy
+
+The default strategy generates keys as `METHOD:URL`:
+
+```typescript
+// Key: "GET:https://api.example.com/users"
+await client.get('/users')
+
+// Key: "GET:https://api.example.com/users?page=1&limit=10"
+await client.get('/users', { params: { page: 1, limit: 10 } })
+```
+
+### Dot Notation Strategy
+
+Include specific request properties in the cache key using dot notation paths:
+
+```typescript
+import { CachingClient, createDotNotationKeyStrategy } from 'fetch_undici'
+
+const keyStrategy = createDotNotationKeyStrategy([
+  'headers.Authorization', // Include auth header
+  'headers.Accept-Language', // Include language preference
+  'params.page', // Include pagination
+  'body.filters' // Include request body fields
+])
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    ttl: 60000,
+    keyStrategy
+  }
+})
+
+// Key includes Authorization header value
+// "GET:https://api.example.com/users:headers.Authorization=Bearer *****:****.page=1"
+await client.get('/users', {
+  headers: { Authorization: 'Bearer ****' },
+  params: { page: 1 }
+})
+```
+
+Available dot notation paths:
+
+- `method` - HTTP method
+- `url` - Full URL
+- `headers.<name>` - Request header value
+- `params.<name>` - Query parameter value
+- `body.<path>` - Request body field (for JSON bodies)
+
+### Hashed Key Strategy
+
+For requests with long URLs or complex parameters, use hashed keys:
+
+```typescript
+import { CachingClient, createHashedKeyStrategy } from 'fetch_undici'
+
+// Default: SHA256 truncated to 16 chars
+const keyStrategy = createHashedKeyStrategy()
+
+// Custom hash function
+const customKeyStrategy = createHashedKeyStrategy((data) =>
+  crypto.createHash('md5').update(data).digest('hex')
+)
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: { ttl: 60000, keyStrategy }
+})
+```
+
+### Combined Strategies
+
+Combine multiple strategies:
+
+```typescript
+import {
+  CachingClient,
+  combineKeyStrategies,
+  defaultKeyStrategy,
+  createDotNotationKeyStrategy
+} from 'fetch_undici'
+
+const keyStrategy = combineKeyStrategies(
+  defaultKeyStrategy,
+  createDotNotationKeyStrategy(['headers.Authorization'])
+)
+
+// Key: "GET:https://api.example.com/users:headers.Authorization=Bearer ****"
+```
+
+---
+
+## Cache Configuration
+
+```typescript
+interface CacheConfig {
+  // Time-to-live in milliseconds (default: 60000)
+  ttl?: number
+
+  // Custom storage backend (default: MemoryStorage)
+  storage?: CacheStorage
+
+  // Cache key generation function
+  keyStrategy?: CacheKeyStrategy
+
+  // HTTP methods to cache (default: ['GET', 'HEAD'])
+  methods?: string[]
+
+  // Maximum cached entries (default: 1000)
+  maxEntries?: number
+
+  // Return stale data while refreshing (default: false)
+  staleWhileRevalidate?: boolean
+
+  // Grace period for stale data in ms (default: 30000)
+  staleGracePeriod?: number
+}
+```
+
+### Per-Request Options
+
+```typescript
+interface RequestCacheOptions {
+  // Override TTL for this request
+  ttl?: number
+
+  // Skip cache entirely
+  noCache?: boolean
+
+  // Force refresh (fetch new, update cache)
+  forceRefresh?: boolean
+
+  // Use custom cache key
+  cacheKey?: string
+}
+```
+
+---
+
+## Stale-While-Revalidate
+
+Return cached data immediately while refreshing in the background:
+
+```typescript
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    ttl: 60000,
+    staleWhileRevalidate: true,
+    staleGracePeriod: 30000 // Serve stale for 30s after expiry
+  }
+})
+
+// If cache is stale but within grace period:
+// 1. Returns stale data immediately
+// 2. Fetches fresh data in background
+// 3. Updates cache for next request
+const response = await client.get('/users')
+```
+
+---
+
+## Cache Storage
+
+### Built-in Memory Storage
+
+```typescript
+import { MemoryStorage } from 'fetch_undici'
+
+const storage = new MemoryStorage({
+  maxEntries: 500, // Max cached items
+  cleanupInterval: 60000 // Cleanup expired entries every minute
+})
+
+const client = new CachingClient({
+  cache: { storage, ttl: 60000 }
+})
+```
+
+### Custom Storage Backend
+
+Implement the `CacheStorage` interface for custom backends (Redis, IndexedDB, etc.):
+
+```typescript
+import { CacheStorage, CacheEntry, CacheStats } from 'fetch_undici'
+
+class RedisStorage implements CacheStorage<any> {
+  constructor(private redis: RedisClient) {}
+
+  async get(key: string): Promise<CacheEntry | undefined> {
+    const data = await this.redis.get(key)
+    return data ? JSON.parse(data) : undefined
+  }
+
+  async set(key: string, entry: CacheEntry): Promise<void> {
+    const ttl = Math.ceil((entry.expiresAt - Date.now()) / 1000)
+    await this.redis.setex(key, ttl, JSON.stringify(entry))
+  }
+
+  async has(key: string): Promise<boolean> {
+    return (await this.redis.exists(key)) === 1
+  }
+
+  async delete(key: string): Promise<boolean> {
+    return (await this.redis.del(key)) > 0
+  }
+
+  async deletePattern(pattern: string): Promise<number> {
+    const keys = await this.redis.keys(pattern.replace('*', '*'))
+    return keys.length > 0 ? await this.redis.del(...keys) : 0
+  }
+
+  async clear(): Promise<void> {
+    await this.redis.flushdb()
+  }
+
+  async keys(pattern?: string): Promise<string[]> {
+    return this.redis.keys(pattern || '*')
+  }
+
+  async stats(): Promise<CacheStats> {
+    const info = await this.redis.info('keyspace')
+    // Parse and return stats
+    return { size: 0, hits: 0, misses: 0, evictions: 0 }
+  }
+
+  async close(): Promise<void> {
+    await this.redis.quit()
+  }
+}
+```
+
+---
+
+## Cache Operations
+
+### Manual Invalidation
+
+```typescript
+const client = new CachingClient({ cache: { ttl: 60000 } })
+
+// Invalidate single key
+await client.cache.invalidate('GET:https://api.example.com/users')
+
+// Invalidate by pattern (glob)
+await client.cache.invalidatePattern('GET:https://api.example.com/users/*')
+
+// Clear all cache
+await client.cache.clear()
+```
+
+### Cache Statistics
+
+```typescript
+const stats = await client.cache.stats()
+
+console.log({
+  size: stats.size, // Current entries
+  hits: stats.hits, // Cache hits
+  misses: stats.misses, // Cache misses
+  evictions: stats.evictions, // Evicted entries
+  hitRate: stats.hits / (stats.hits + stats.misses)
+})
+```
+
+### List Cache Keys
+
+```typescript
+// All keys
+const allKeys = await client.cache.keys()
+
+// Keys matching pattern
+const userKeys = await client.cache.keys('GET:*/users*')
+```
+
+---
+
+## Complete Example
+
+```typescript
+import { CachingClient, createDotNotationKeyStrategy, MemoryStorage } from 'fetch_undici'
+
+// Custom key strategy for user-specific caching
+const keyStrategy = createDotNotationKeyStrategy([
+  'headers.Authorization',
+  'params.page',
+  'params.limit'
+])
+
+// Custom storage with higher capacity
+const storage = new MemoryStorage({
+  maxEntries: 2000,
+  cleanupInterval: 30000
+})
+
+// Create client
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  headers: { 'Content-Type': 'application/json' },
+  cache: {
+    ttl: 300000, // 5 minutes
+    storage,
+    keyStrategy,
+    methods: ['GET', 'HEAD'],
+    staleWhileRevalidate: true,
+    staleGracePeriod: 60000
+  }
+})
+
+async function main() {
+  // Fetch users (cached per auth token and pagination)
+  const users = await client.get('/users', {
+    headers: { Authorization: 'Bearer user-token-123' },
+    params: { page: 1, limit: 20 }
+  })
+  console.log('Users:', users.json())
+
+  // Check cache stats
+  const stats = await client.cache.stats()
+  console.log(`Cache: ${stats.hits} hits, ${stats.misses} misses`)
+
+  // Invalidate user cache after mutation
+  await client.post('/users', { json: { name: 'New User' } })
+  await client.cache.invalidatePattern('*:/users*')
+
+  // Close client
+  await client.close()
+}
+
+main()
+```
+
+---
+
+## TypeScript Types
+
+```typescript
+// Key generation function signature
+type CacheKeyStrategy = (
+  method: string,
+  url: string,
+  headers?: Record<string, string>,
+  body?: any,
+  params?: Record<string, any>
+) => string
+
+// Cache entry structure
+interface CacheEntry<T = any> {
+  key: string
+  data: T
+  createdAt: number
+  expiresAt: number
+  metadata: {
+    statusCode: number
+    headers: Record<string, string>
+    url: string
+    method: string
+    contentType?: string
+    size?: number
+  }
+}
+
+// Storage interface for custom backends
+interface CacheStorage<T = any> {
+  get(key: string): Promise<CacheEntry<T> | undefined>
+  set(key: string, entry: CacheEntry<T>): Promise<void>
+  has(key: string): Promise<boolean>
+  delete(key: string): Promise<boolean>
+  deletePattern(pattern: string | RegExp): Promise<number>
+  clear(): Promise<void>
+  keys(pattern?: string | RegExp): Promise<string[]>
+  stats(): Promise<CacheStats>
+  close(): Promise<void>
+}
+```
+
+---
+
+## Using Cache with Existing Client
+
+If you have an existing `AsyncClient` instance, you can add caching using the `withCache` higher-order function or event hooks.
+
+### Higher-Order Function (Recommended)
+
+```typescript
+import { AsyncClient, withCache } from 'fetch_undici'
+
+// Create your existing client
+const client = new AsyncClient({ baseUrl: 'https://api.example.com' })
+
+// Wrap with caching
+const cachedRequest = withCache((method, url, options) => client.request(method, url, options), {
+  ttl: 60000
+})
+
+// Use the cached version
+const response = await cachedRequest('GET', '/users')
+
+// Access cache operations
+await cachedRequest.cache.invalidate('GET:https://api.example.com/users')
+await cachedRequest.cache.clear()
+
+// Cleanup
+await client.close()
+```
+
+### Event Hooks
+
+For integrating with the client's event system (note: hooks cannot short-circuit requests):
+
+```typescript
+import { AsyncClient, createCacheHooks } from 'fetch_undici'
+
+const { requestHook, responseHook, cacheManager } = createCacheHooks({
+  ttl: 60000
+})
+
+const client = new AsyncClient({
+  baseUrl: 'https://api.example.com',
+  eventHooks: {
+    request: [requestHook],
+    response: [responseHook]
+  }
+})
+
+// Use client normally
+const response = await client.get('/users')
+
+await client.close()
+```
+
+### Cache-Aware Client
+
+For full cache-first behavior with an existing configuration:
+
+```typescript
+import { createCacheAwareClient } from 'fetch_undici'
+
+const { client, cacheManager, cachedRequest } = createCacheAwareClient(
+  { ttl: 60000 },
+  { baseUrl: 'https://api.example.com' }
+)
+
+// Use cachedRequest for cache-first behavior
+const response = await cachedRequest('GET', '/users')
+
+await client.close()
+```

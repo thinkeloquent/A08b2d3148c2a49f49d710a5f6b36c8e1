@@ -1,0 +1,52 @@
+{
+  "name": "@internal/test-id-generator-sdk",
+  "version": "1.0.0",
+  "description": "AST-based test ID attribute injector for JSX/TSX and HTML files",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "node --test src/**/*.test.mjs",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "test-id",
+    "ast",
+    "babel",
+    "cheerio",
+    "jsx",
+    "html"
+  ],
+  "author": "MTA",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@babel/generator": "^7.26.0",
+    "@babel/parser": "^7.26.0",
+    "@babel/traverse": "^7.26.0",
+    "@babel/types": "^7.26.0",
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/babel__generator": "^7.6.0",
+    "@types/babel__traverse": "^7.20.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

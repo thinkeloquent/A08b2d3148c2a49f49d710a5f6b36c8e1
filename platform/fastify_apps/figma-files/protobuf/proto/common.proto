@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package figma_files.common;
+
+// Figma file type classification
+enum FigmaFileType {
+  FIGMA_FILE_TYPE_UNSPECIFIED = 0;
+  FIGMA_FILE_TYPE_DESIGN_SYSTEM = 1;
+  FIGMA_FILE_TYPE_COMPONENT_LIBRARY = 2;
+  FIGMA_FILE_TYPE_PROTOTYPE = 3;
+  FIGMA_FILE_TYPE_ILLUSTRATION = 4;
+  FIGMA_FILE_TYPE_ICON_SET = 5;
+}
+
+// Figma file status
+enum FigmaFileStatus {
+  FIGMA_FILE_STATUS_UNSPECIFIED = 0;
+  FIGMA_FILE_STATUS_STABLE = 1;
+  FIGMA_FILE_STATUS_BETA = 2;
+  FIGMA_FILE_STATUS_DEPRECATED = 3;
+  FIGMA_FILE_STATUS_EXPERIMENTAL = 4;
+}
+
+// Figma file source origin
+enum FigmaFileSource {
+  FIGMA_FILE_SOURCE_UNSPECIFIED = 0;
+  FIGMA_FILE_SOURCE_FIGMA = 1;
+  FIGMA_FILE_SOURCE_FIGMA_COMMUNITY = 2;
+  FIGMA_FILE_SOURCE_MANUAL = 3;
+}
+
+// External identifier (registry, id pair)
+message ExternalId {
+  string registry = 1;
+  string id = 2;
+}
+
+// Pagination request parameters
+message PaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+// Pagination response metadata
+message PaginationResponse {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 total_pages = 4;
+}
+
+// Standard error response
+message ErrorResponse {
+  int32 code = 1;
+  string message = 2;
+  string details = 3;
+}
+
+// Timestamp wrapper for consistency
+message Timestamp {
+  string iso8601 = 1;
+}

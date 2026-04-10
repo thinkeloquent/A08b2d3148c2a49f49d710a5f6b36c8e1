@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.platform/schemas/app-manifest.schema.json",
+  "title": "App Manifest",
+  "description": "Defines how a platform app is discovered, validated, and loaded at runtime.",
+  "type": "object",
+  "required": ["id", "runtime", "version"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Canonical app ID — drives all naming (kebab-case)."
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["fastify", "fastapi"],
+      "description": "Which server runtime this app targets."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver version string."
+    },
+    "backend": {
+      "type": "object",
+      "properties": {
+        "entrypoint": {
+          "type": "string",
+          "description": "Relative path to the backend entry module."
+        },
+        "apiPrefix": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "URL prefix for all backend routes."
+        },
+        "package": {
+          "type": "string",
+          "description": "Publishable package name (e.g. @internal/app-ai-ask)."
+        }
+      },
+      "required": ["entrypoint", "apiPrefix"]
+    },
+    "frontend": {
+      "type": "object",
+      "properties": {
+        "bundlePath": {
+          "type": "string",
+          "description": "Relative path to the built frontend dist directory."
+        },
+        "mountPath": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "URL path where the frontend SPA is served."
+        }
+      },
+      "required": ["bundlePath", "mountPath"]
+    },
+    "admin": {
+      "type": "object",
+      "properties": {
+        "bundlePath": {
+          "type": "string",
+          "description": "Relative path to the admin frontend dist directory."
+        },
+        "mountPath": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "URL path where the admin SPA is served."
+        }
+      },
+      "required": ["bundlePath", "mountPath"]
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "models": {
+          "type": "string",
+          "description": "Relative path to model definitions directory."
+        },
+        "migrations": {
+          "type": "string",
+          "description": "Relative path to migration files directory."
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["database", "llm", "rag", "redis", "elasticsearch", "s3", "vault"]
+      },
+      "uniqueItems": true,
+      "description": "Runtime capabilities this app requires."
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "Package dependencies required by this app."
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["dev", "admin", "rag", "minimal"]
+      },
+      "uniqueItems": true,
+      "description": "Runtime profiles that include this app."
+    },
+    "enabledByDefault": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the app loads when no specific profile is active."
+    },
+    "healthCheck": {
+      "type": "string",
+      "pattern": "^/",
+      "description": "URL path for the app-specific health check endpoint."
+    }
+  },
+  "additionalProperties": false
+}

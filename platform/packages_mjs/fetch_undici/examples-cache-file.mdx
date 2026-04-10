@@ -1,0 +1,657 @@
+# File-Based Cache Storage
+
+This guide shows how to implement file-based caching for `fetch_undici` to persist HTTP responses to the local filesystem with configurable TTL (time-to-live) in seconds.
+
+## FileStorage Implementation
+
+First, create the `FileStorage` class that implements the `CacheStorage` interface:
+
+```typescript
+import { CacheStorage, CacheEntry, CacheStats } from 'fetch_undici'
+import { promises as fs } from 'fs'
+import { createHash } from 'crypto'
+import { join } from 'path'
+
+interface FileStorageOptions {
+  cacheDir: string
+  ttl?: number              // TTL in seconds
+  maxSizeMB?: number
+  cleanupInterval?: number  // Cleanup interval in seconds
+  fileExtension?: string
+  createDir?: boolean
+}
+
+class FileStorage implements CacheStorage {
+  private cacheDir: string
+  private ttl: number
+  private maxSizeBytes: number
+  private cleanupInterval: number
+  private fileExtension: string
+  private stats: CacheStats = { size: 0, hits: 0, misses: 0, evictions: 0 }
+  private cleanupTimer?: NodeJS.Timeout
+
+  constructor(options: FileStorageOptions) {
+    this.cacheDir = options.cacheDir
+    this.ttl = options.ttl ?? 60
+    this.maxSizeBytes = (options.maxSizeMB ?? 100) * 1024 * 1024
+    this.cleanupInterval = (options.cleanupInterval ?? 300) * 1000
+    this.fileExtension = options.fileExtension ?? '.cache'
+
+    if (options.createDir !== false) {
+      fs.mkdir(this.cacheDir, { recursive: true }).catch(() => {})
+    }
+  }
+
+  private keyToFilename(key: string): string {
+    const hashed = createHash('sha256').update(key).digest('hex').slice(0, 16)
+    return join(this.cacheDir, `${hashed}${this.fileExtension}`)
+  }
+
+  async get(key: string): Promise<CacheEntry | undefined> {
+    const filepath = this.keyToFilename(key)
+
+    try {
+      const content = await fs.readFile(filepath, 'utf-8')
+      const entry: CacheEntry = JSON.parse(content)
+
+      // Check if expired
+      if (entry.expiresAt < Date.now()) {
+        await this.delete(key)
+        this.stats.misses++
+        return undefined
+      }
+
+      this.stats.hits++
+      return entry
+    } catch {
+      this.stats.misses++
+      return undefined
+    }
+  }
+
+  async set(key: string, entry: CacheEntry): Promise<void> {
+    const filepath = this.keyToFilename(key)
+
+    const data = {
+      key: entry.key,
+      data: entry.data,
+      createdAt: entry.createdAt,
+      expiresAt: entry.expiresAt,
+      metadata: entry.metadata
+    }
+
+    await fs.writeFile(filepath, JSON.stringify(data), 'utf-8')
+    this.stats.size++
+  }
+
+  async has(key: string): Promise<boolean> {
+    const entry = await this.get(key)
+    return entry !== undefined
+  }
+
+  async delete(key: string): Promise<boolean> {
+    const filepath = this.keyToFilename(key)
+    try {
+      await fs.unlink(filepath)
+      this.stats.size = Math.max(0, this.stats.size - 1)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  async deletePattern(pattern: string | RegExp): Promise<number> {
+    const files = await fs.readdir(this.cacheDir)
+    let deleted = 0
+
+    for (const file of files) {
+      if (!file.endsWith(this.fileExtension)) continue
+
+      const filepath = join(this.cacheDir, file)
+      try {
+        const content = await fs.readFile(filepath, 'utf-8')
+        const entry: CacheEntry = JSON.parse(content)
+
+        const matches = typeof pattern === 'string'
+          ? this.matchGlob(entry.key, pattern)
+          : pattern.test(entry.key)
+
+        if (matches) {
+          await fs.unlink(filepath)
+          deleted++
+        }
+      } catch {
+        continue
+      }
+    }
+
+    this.stats.size = Math.max(0, this.stats.size - deleted)
+    return deleted
+  }
+
+  private matchGlob(str: string, pattern: string): boolean {
+    const regex = new RegExp(
+      '^' + pattern.replace(/\*/g, '.*').replace(/\?/g, '.') + '$'
+    )
+    return regex.test(str)
+  }
+
+  async clear(): Promise<void> {
+    const files = await fs.readdir(this.cacheDir)
+
+    await Promise.all(
+      files
+        .filter(f => f.endsWith(this.fileExtension))
+        .map(f => fs.unlink(join(this.cacheDir, f)).catch(() => {}))
+    )
+
+    this.stats = { size: 0, hits: 0, misses: 0, evictions: 0 }
+  }
+
+  async keys(pattern?: string | RegExp): Promise<string[]> {
+    const files = await fs.readdir(this.cacheDir)
+    const result: string[] = []
+
+    for (const file of files) {
+      if (!file.endsWith(this.fileExtension)) continue
+
+      const filepath = join(this.cacheDir, file)
+      try {
+        const content = await fs.readFile(filepath, 'utf-8')
+        const entry: CacheEntry = JSON.parse(content)
+
+        if (!pattern) {
+          result.push(entry.key)
+        } else if (typeof pattern === 'string') {
+          if (this.matchGlob(entry.key, pattern)) {
+            result.push(entry.key)
+          }
+        } else if (pattern.test(entry.key)) {
+          result.push(entry.key)
+        }
+      } catch {
+        continue
+      }
+    }
+
+    return result
+  }
+
+  async stats(): Promise<CacheStats> {
+    // Count actual files for accurate size
+    const files = await fs.readdir(this.cacheDir)
+    const count = files.filter(f => f.endsWith(this.fileExtension)).length
+    this.stats.size = count
+    return { ...this.stats }
+  }
+
+  async cleanupExpired(): Promise<number> {
+    const files = await fs.readdir(this.cacheDir)
+    const now = Date.now()
+    let removed = 0
+
+    for (const file of files) {
+      if (!file.endsWith(this.fileExtension)) continue
+
+      const filepath = join(this.cacheDir, file)
+      try {
+        const content = await fs.readFile(filepath, 'utf-8')
+        const entry: CacheEntry = JSON.parse(content)
+
+        if (entry.expiresAt < now) {
+          await fs.unlink(filepath)
+          removed++
+        }
+      } catch {
+        continue
+      }
+    }
+
+    this.stats.evictions += removed
+    return removed
+  }
+
+  startCleanupTask(): void {
+    this.cleanupTimer = setInterval(() => {
+      this.cleanupExpired()
+    }, this.cleanupInterval)
+  }
+
+  async close(): Promise<void> {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer)
+    }
+  }
+}
+
+export { FileStorage, FileStorageOptions }
+```
+
+---
+
+## Quick Start
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+// Using the FileStorage implementation above
+const storage = new FileStorage({
+  cacheDir: '.cache/http',
+  ttl: 300  // 5 minutes in seconds
+})
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    ttl: 300000,  // 5 minutes in ms
+    storage
+  }
+})
+
+// First request fetches from network and saves to file
+const response1 = await client.get('/users')
+
+// Second request loads from cached file
+const response2 = await client.get('/users')
+
+// Cache persists across application restarts
+await client.close()
+await storage.close()
+```
+
+---
+
+## File Storage Configuration
+
+### Basic Setup
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '.cache/http',  // Directory to store cache files
+  ttl: 60                   // Default TTL in seconds
+})
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: { storage, ttl: 60000 }
+})
+```
+
+### Advanced Configuration
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '/var/cache/myapp/http',  // Absolute path
+  ttl: 300,                           // 5 minutes default TTL in seconds
+  maxSizeMB: 100,                     // Max cache size in MB
+  cleanupInterval: 600,               // Cleanup expired files every 10 minutes (seconds)
+  fileExtension: '.cache',            // Custom file extension
+  createDir: true                     // Create directory if not exists
+})
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    storage,
+    ttl: 300000,
+    methods: ['GET', 'HEAD']
+  }
+})
+```
+
+---
+
+## TTL (Time-To-Live) Configuration
+
+TTL for FileStorage is specified in **seconds** for consistency with file system operations. Note that CacheConfig TTL is in **milliseconds**.
+
+### Global TTL
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '.cache',
+  ttl: 120  // 2 minutes in seconds
+})
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: {
+    storage,
+    ttl: 120000  // 2 minutes in ms (must match)
+  }
+})
+```
+
+### Per-Request TTL Override
+
+```typescript
+import { CachingClient } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '.cache',
+  ttl: 60  // 1 minute default
+})
+
+const client = new CachingClient({
+  baseUrl: 'https://api.example.com',
+  cache: { storage, ttl: 60000 }
+})
+
+// Use default TTL (60 seconds)
+const users = await client.get('/users')
+
+// Short-lived cache (10 seconds)
+const volatile = await client.get('/live-data', {
+  cacheOptions: { ttl: 10000 }  // ms
+})
+
+// Long-lived cache (1 hour)
+const staticData = await client.get('/static-config', {
+  cacheOptions: { ttl: 3600000 }  // ms
+})
+
+await client.close()
+await storage.close()
+```
+
+---
+
+## Cache File Structure
+
+Cache files are organized by hashed keys in the specified directory:
+
+```
+.cache/http/
+├── a1b2c3d4e5f6.cache      # GET:https://api.example.com/users
+├── f6e5d4c3b2a1.cache      # GET:https://api.example.com/posts
+├── 1234567890ab.cache      # GET:https://api.example.com/data?page=1
+└── _metadata.json          # Cache index and statistics
+```
+
+### Cache Entry Format
+
+Each cache file contains JSON with response data and metadata:
+
+```json
+{
+  "key": "GET:https://api.example.com/users",
+  "data": "<response body>",
+  "createdAt": 1705600000000,
+  "expiresAt": 1705600300000,
+  "metadata": {
+    "statusCode": 200,
+    "headers": { "content-type": "application/json" },
+    "url": "https://api.example.com/users",
+    "method": "GET",
+    "contentType": "application/json",
+    "size": 1024
+  }
+}
+```
+
+---
+
+## Complete Example
+
+```typescript
+import {
+  CachingClient,
+  createDotNotationKeyStrategy
+} from 'fetch_undici'
+
+async function main() {
+  // Configure file storage with TTL in seconds
+  const storage = new FileStorage({
+    cacheDir: '.cache/api',
+    ttl: 300,              // 5 minutes in seconds
+    maxSizeMB: 50,
+    cleanupInterval: 60    // Cleanup every minute
+  })
+
+  // Start background cleanup
+  storage.startCleanupTask()
+
+  // Custom key strategy including auth header
+  const keyStrategy = createDotNotationKeyStrategy([
+    'headers.Authorization',
+    'params.page'
+  ])
+
+  const client = new CachingClient({
+    baseUrl: 'https://api.example.com',
+    cache: {
+      storage,
+      ttl: 300000,  // 5 minutes in ms
+      keyStrategy
+    }
+  })
+
+  // First request: fetches from network, saves to file
+  console.log('Fetching users...')
+  const users = await client.get('/users', {
+    headers: { Authorization: 'Bearer token123' },
+    params: { page: 1 }
+  })
+  console.log(`Status: ${users.status}`)
+
+  // Second request: loads from cached file
+  console.log('Fetching users again (from cache)...')
+  const usersCached = await client.get('/users', {
+    headers: { Authorization: 'Bearer token123' },
+    params: { page: 1 }
+  })
+  console.log(`Status: ${usersCached.status}`)
+
+  // Force refresh
+  console.log('Force refreshing...')
+  const usersFresh = await client.get('/users', {
+    headers: { Authorization: 'Bearer token123' },
+    params: { page: 1 },
+    cacheOptions: { forceRefresh: true }
+  })
+
+  // Short TTL for volatile data (30 seconds)
+  const liveData = await client.get('/live-stats', {
+    cacheOptions: { ttl: 30000 }  // ms
+  })
+
+  // Long TTL for static data (1 hour)
+  const config = await client.get('/app-config', {
+    cacheOptions: { ttl: 3600000 }  // ms
+  })
+
+  // Check cache stats
+  const stats = await client.cache.stats()
+  console.log(`Cache stats: ${stats.hits} hits, ${stats.misses} misses`)
+
+  // List cached keys
+  const keys = await client.cache.keys()
+  console.log(`Cached keys: ${keys}`)
+
+  // Invalidate specific endpoint
+  await client.cache.invalidatePattern('*:/users*')
+
+  // Cleanup
+  await client.close()
+  await storage.close()
+}
+
+main()
+```
+
+---
+
+## TypeScript Types
+
+```typescript
+interface FileStorageOptions {
+  // Directory to store cache files
+  cacheDir: string
+
+  // Default TTL in seconds (default: 60)
+  ttl?: number
+
+  // Maximum cache size in MB (default: 100)
+  maxSizeMB?: number
+
+  // Cleanup interval in seconds (default: 300)
+  cleanupInterval?: number
+
+  // File extension for cache files (default: '.cache')
+  fileExtension?: string
+
+  // Create directory if not exists (default: true)
+  createDir?: boolean
+}
+
+// Cache entry stored in each file
+interface FileCacheEntry {
+  key: string
+  data: any
+  createdAt: number  // Unix timestamp in ms
+  expiresAt: number  // Unix timestamp in ms
+  metadata: {
+    statusCode: number
+    headers: Record<string, string>
+    url: string
+    method: string
+    contentType?: string
+    size?: number
+  }
+}
+```
+
+---
+
+## Comparison with Memory Storage
+
+| Feature | FileStorage | MemoryStorage |
+|---------|-------------|---------------|
+| Persistence | Survives restarts | Lost on restart |
+| Speed | Slower (disk I/O) | Faster (in-memory) |
+| Capacity | Limited by disk | Limited by RAM |
+| Sharing | Can share between processes | Single process only |
+| TTL (storage) | Seconds | N/A (uses CacheConfig) |
+| TTL (CacheConfig) | Milliseconds | Milliseconds |
+
+---
+
+## Best Practices
+
+1. **Choose appropriate TTL values** based on data volatility
+2. **Set max size limits** to prevent disk space exhaustion
+3. **Enable cleanup tasks** for automatic expiration handling
+4. **Use SSD storage** for better performance
+5. **Consider cache warming** for frequently accessed endpoints
+6. **Monitor cache statistics** to tune TTL and size settings
+
+```typescript
+// Example: Cache warming on startup
+async function warmCache(client: CachingClient): Promise<void> {
+  const endpoints = ['/config', '/users', '/categories']
+  await Promise.all(endpoints.map(ep => client.get(ep)))
+}
+```
+
+---
+
+## Using Cache with Existing Client
+
+If you have an existing `AsyncClient` instance, you can add file-based caching using the `withCache` higher-order function or event hooks.
+
+### Higher-Order Function (Recommended)
+
+```typescript
+import { AsyncClient, withCache } from 'fetch_undici'
+
+// Create your existing client
+const client = new AsyncClient({ baseUrl: 'https://api.example.com' })
+
+// Configure file storage
+const storage = new FileStorage({
+  cacheDir: '.cache/http',
+  ttl: 300,  // seconds
+})
+
+// Wrap with caching
+const cachedRequest = withCache(
+  (method, url, options) => client.request(method, url, options),
+  {
+    ttl: 300000,  // ms
+    storage,
+  }
+)
+
+// Use the cached version
+const response = await cachedRequest('GET', '/users')
+
+// Access cache operations
+await cachedRequest.cache.invalidate('GET:https://api.example.com/users')
+await cachedRequest.cache.clear()
+
+// Cleanup
+await client.close()
+await storage.close()
+```
+
+### Event Hooks
+
+For integrating with the client's event system (note: hooks cannot short-circuit requests):
+
+```typescript
+import { AsyncClient, createCacheHooks } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '.cache/http',
+  ttl: 300,
+})
+
+const { requestHook, responseHook, cacheManager } = createCacheHooks({
+  ttl: 300000,
+  storage,
+})
+
+const client = new AsyncClient({
+  baseUrl: 'https://api.example.com',
+  eventHooks: {
+    request: [requestHook],
+    response: [responseHook],
+  }
+})
+
+// Use client normally
+const response = await client.get('/users')
+
+await client.close()
+await storage.close()
+```
+
+### Cache-Aware Client
+
+For full cache-first behavior with an existing configuration:
+
+```typescript
+import { createCacheAwareClient } from 'fetch_undici'
+
+const storage = new FileStorage({
+  cacheDir: '.cache/http',
+  ttl: 300,
+})
+
+const { client, cacheManager, cachedRequest } = createCacheAwareClient(
+  { ttl: 300000, storage },
+  { baseUrl: 'https://api.example.com' }
+)
+
+// Use cachedRequest for cache-first behavior
+const response = await cachedRequest('GET', '/users')
+
+await client.close()
+await storage.close()
+```

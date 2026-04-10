@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package ai_ask;
+
+message Persona {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string role = 4;
+  string tone = 5;
+  string llm_provider = 6;
+  float llm_temperature = 7;
+  string llm_parameters_json = 8;
+  repeated string goals = 9;
+  repeated string tools = 10;
+  repeated string permitted_to = 11;
+  repeated string prompt_system_template = 12;
+  repeated string prompt_user_template = 13;
+  repeated string prompt_context_template = 14;
+  repeated string prompt_instruction = 15;
+  repeated string agent_delegate = 16;
+  repeated string agent_call = 17;
+  repeated string context_files = 18;
+  string memory_json = 19;
+  string version = 20;
+  string created_at = 21;
+  string updated_at = 22;
+}
+
+message PersonaList {
+  repeated Persona personas = 1;
+}
+
+message LLMDefault {
+  string id = 1;
+  string category = 2;
+  string name = 3;
+  string description = 4;
+  string value_json = 5;
+  bool is_default = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message LLMDefaultList {
+  repeated LLMDefault defaults = 1;
+}

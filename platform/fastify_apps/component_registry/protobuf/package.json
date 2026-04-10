@@ -1,0 +1,17 @@
+{
+  "name": "@internal/component-registry-protobuf",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "generate": "pbjs -t static-module -w es6 -o generated/proto.js proto/*.proto && pbts -o generated/proto.d.ts generated/proto.js",
+    "clean": "rm -rf generated/*",
+    "build": "pnpm run clean && pnpm run generate"
+  },
+  "dependencies": {
+    "protobufjs": "^7.2.6"
+  },
+  "devDependencies": {
+    "protobufjs-cli": "^1.1.2"
+  }
+}

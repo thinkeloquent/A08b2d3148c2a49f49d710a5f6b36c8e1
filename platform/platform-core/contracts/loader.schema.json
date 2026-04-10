@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.platform/schemas/loader.schema.json",
+  "title": "Loader Interface",
+  "description": "Defines the 5-step contract for platform loaders: discover -> validate -> load -> register -> report.",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Loader name (e.g. environment-loader, lifecycle-loader)."
+    },
+    "discover": {
+      "type": "object",
+      "description": "Scans paths and returns a list of candidates.",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "const": "DiscoveredItem[]" }
+          }
+        }
+      }
+    },
+    "validate": {
+      "type": "object",
+      "description": "Validates each discovered item (schema check, dependency resolution).",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "const": "ValidationResult[]" }
+          }
+        }
+      }
+    },
+    "load": {
+      "type": "object",
+      "description": "Imports or instantiates the validated items.",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "const": "LoadedModule[]" }
+          }
+        }
+      }
+    },
+    "register": {
+      "type": "object",
+      "description": "Registers loaded modules into the runtime (Fastify plugin / FastAPI router).",
+      "properties": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "const": "RegisterResult[]" }
+          }
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "description": "Emits structured status report for the loading process.",
+      "properties": {
+        "returns": {
+          "type": "object",
+          "required": ["loader", "discovered", "validated", "registered", "skipped", "errors"],
+          "properties": {
+            "loader": { "type": "string" },
+            "discovered": { "type": "integer" },
+            "validated": { "type": "integer" },
+            "registered": { "type": "integer" },
+            "skipped": { "type": "integer" },
+            "errors": { "type": "array", "items": { "type": "object" } }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,7 @@
+{
+  "name": "github",
+  "test_type": "direct_package_import",
+  "python": "auth_config:build_sdk_auth_options",
+  "mjs": "@internal/auth-config",
+  "app_yaml_section": ["providers", "github"]
+}

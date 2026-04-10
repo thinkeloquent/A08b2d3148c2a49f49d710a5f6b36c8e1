@@ -1,0 +1,428 @@
+[
+  {
+    "name": "Material UI (MUI)",
+    "description": "Material UI: Comprehensive React component library that implements Google's Material Design. Free forever.",
+    "type": "npm",
+    "githubUrl": "https://github.com/mui/material-ui",
+    "packageUrl": "https://www.npmjs.com/package/@mui/material",
+    "stars": 98068,
+    "forks": 32704,
+    "version": "6.4.0",
+    "maintainer": "mui",
+    "lastUpdated": "1 day ago",
+    "trending": true,
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "698.4 MB",
+    "dependencies": 18,
+    "healthScore": 97,
+    "status": "stable",
+    "tags": [
+      "design-system",
+      "material-design",
+      "material-ui",
+      "react",
+      "react-components"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Component API"
+      },
+      {
+        "name": "Theming"
+      },
+      {
+        "name": "Customization"
+      }
+    ]
+  },
+  {
+    "name": "Ant Design",
+    "description": "An enterprise-class UI design language and React UI library",
+    "type": "npm",
+    "githubUrl": "https://github.com/ant-design/ant-design",
+    "packageUrl": "https://www.npmjs.com/package/antd",
+    "stars": 97747,
+    "forks": 54542,
+    "version": "5.23.0",
+    "maintainer": "ant-design",
+    "lastUpdated": "1 day ago",
+    "trending": true,
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "250.9 MB",
+    "dependencies": 25,
+    "healthScore": 96,
+    "status": "stable",
+    "tags": [
+      "ant-design",
+      "antd",
+      "design-systems",
+      "react",
+      "typescript",
+      "ui-kit",
+      "ui-library"
+    ],
+    "documentation": [
+      {
+        "name": "Quick Start"
+      },
+      {
+        "name": "Components"
+      },
+      {
+        "name": "Design Tokens"
+      },
+      {
+        "name": "Internationalization"
+      }
+    ]
+  },
+  {
+    "name": "shadcn/ui",
+    "description": "A set of beautifully-designed, accessible components and a code distribution platform. Works with your favorite frameworks. Open Source. Open Code.",
+    "type": "npm",
+    "githubUrl": "https://github.com/shadcn-ui/ui",
+    "packageUrl": "https://www.npmjs.com/package/shadcn-ui",
+    "stars": 109115,
+    "forks": 8109,
+    "version": "2.2.0",
+    "maintainer": "shadcn-ui",
+    "lastUpdated": "1 day ago",
+    "trending": true,
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "53.7 MB",
+    "dependencies": 5,
+    "healthScore": 95,
+    "status": "stable",
+    "tags": [
+      "base-ui",
+      "components",
+      "nextjs",
+      "radix-ui",
+      "react",
+      "shadcn",
+      "tailwindcss",
+      "ui"
+    ],
+    "documentation": [
+      {
+        "name": "Installation"
+      },
+      {
+        "name": "Components"
+      },
+      {
+        "name": "Theming"
+      }
+    ]
+  },
+  {
+    "name": "Chakra UI",
+    "description": "Chakra UI is a component system for building SaaS products with speed ⚡️",
+    "type": "npm",
+    "githubUrl": "https://github.com/chakra-ui/chakra-ui",
+    "packageUrl": "https://www.npmjs.com/package/@chakra-ui/react",
+    "stars": 40404,
+    "forks": 3571,
+    "version": "3.6.0",
+    "maintainer": "chakra-ui",
+    "lastUpdated": "1 day ago",
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "274.9 MB",
+    "dependencies": 22,
+    "healthScore": 92,
+    "status": "stable",
+    "tags": [
+      "a11y",
+      "accessible",
+      "ark-ui",
+      "chakra-ui",
+      "component",
+      "css-in-js",
+      "dark-mode",
+      "design-system",
+      "react",
+      "react-components",
+      "reactjs",
+      "styled",
+      "ui-components",
+      "ui-library",
+      "uikit",
+      "wai-aria"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Style Props"
+      },
+      {
+        "name": "Component API"
+      }
+    ]
+  },
+  {
+    "name": "Mantine",
+    "description": "A fully featured React components library",
+    "type": "npm",
+    "githubUrl": "https://github.com/mantinedev/mantine",
+    "packageUrl": "https://www.npmjs.com/package/@mantine/core",
+    "stars": 30764,
+    "forks": 2256,
+    "version": "7.16.0",
+    "maintainer": "mantinedev",
+    "lastUpdated": "1 day ago",
+    "trending": true,
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "226.8 MB",
+    "dependencies": 14,
+    "healthScore": 94,
+    "status": "stable",
+    "tags": [
+      "dark-mode",
+      "dark-theme",
+      "hooks",
+      "react",
+      "typescript",
+      "uikit"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Core Components"
+      },
+      {
+        "name": "Hooks"
+      },
+      {
+        "name": "Form Management"
+      }
+    ]
+  },
+  {
+    "name": "React-Bootstrap",
+    "description": "Bootstrap components built with React",
+    "type": "npm",
+    "githubUrl": "https://github.com/react-bootstrap/react-bootstrap",
+    "packageUrl": "https://www.npmjs.com/package/react-bootstrap",
+    "stars": 22649,
+    "forks": 3603,
+    "version": "2.10.7",
+    "maintainer": "react-bootstrap",
+    "lastUpdated": "1 day ago",
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "32.5 MB",
+    "dependencies": 8,
+    "healthScore": 88,
+    "status": "stable",
+    "tags": [
+      "bootstrap",
+      "hacktoberfest",
+      "javascript",
+      "react",
+      "react-components",
+      "typescript"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Layout"
+      },
+      {
+        "name": "Components"
+      }
+    ]
+  },
+  {
+    "name": "Blueprint",
+    "description": "A React-based UI toolkit for the web",
+    "type": "npm",
+    "githubUrl": "https://github.com/palantir/blueprint",
+    "packageUrl": "https://www.npmjs.com/package/@blueprintjs/core",
+    "stars": 21527,
+    "forks": 2258,
+    "version": "5.14.0",
+    "maintainer": "palantir",
+    "lastUpdated": "1 day ago",
+    "verified": true,
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "size": "381.5 MB",
+    "dependencies": 15,
+    "healthScore": 90,
+    "status": "stable",
+    "tags": [
+      "blueprint",
+      "components",
+      "design",
+      "lerna",
+      "octo-correct-managed",
+      "react",
+      "sass",
+      "system",
+      "table",
+      "toolkit",
+      "typescript",
+      "ui"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Core Components"
+      },
+      {
+        "name": "Table"
+      },
+      {
+        "name": "Date Picker"
+      }
+    ]
+  },
+  {
+    "name": "Fluent UI",
+    "description": "Fluent UI web represents a collection of utilities, React components, and web components for building web applications.",
+    "type": "npm",
+    "githubUrl": "https://github.com/microsoft/fluentui",
+    "packageUrl": "https://www.npmjs.com/package/@fluentui/react-components",
+    "stars": 19871,
+    "forks": 2868,
+    "version": "9.56.0",
+    "maintainer": "microsoft",
+    "lastUpdated": "1 day ago",
+    "verified": true,
+    "language": "TypeScript",
+    "license": "Other",
+    "size": "806.2 MB",
+    "dependencies": 20,
+    "healthScore": 93,
+    "status": "stable",
+    "tags": [
+      "components",
+      "fluent",
+      "microsoft",
+      "office-ui-fabric",
+      "react",
+      "react-components"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Component Catalog"
+      },
+      {
+        "name": "Theming"
+      },
+      {
+        "name": "Migration Guide"
+      }
+    ]
+  },
+  {
+    "name": "Radix UI Primitives",
+    "description": "Radix Primitives is an open-source UI component library for building high-quality, accessible design systems and web apps. Maintained by @workos.",
+    "type": "npm",
+    "githubUrl": "https://github.com/radix-ui/primitives",
+    "packageUrl": "https://www.npmjs.com/package/@radix-ui/react-primitive",
+    "stars": 18743,
+    "forks": 1123,
+    "version": "3.1.0",
+    "maintainer": "radix-ui",
+    "lastUpdated": "3 weeks ago",
+    "trending": true,
+    "verified": true,
+    "language": "TypeScript",
+    "license": "MIT",
+    "size": "21.1 MB",
+    "dependencies": 3,
+    "healthScore": 96,
+    "status": "stable",
+    "tags": [
+      "accessibility",
+      "colors",
+      "component-library",
+      "design-systems",
+      "radix-ui",
+      "react",
+      "ui",
+      "ui-components",
+      "ui-kit"
+    ],
+    "documentation": [
+      {
+        "name": "Overview"
+      },
+      {
+        "name": "Primitives"
+      },
+      {
+        "name": "Styling"
+      }
+    ]
+  },
+  {
+    "name": "Semantic UI React",
+    "description": "The official Semantic-UI-React integration",
+    "type": "npm",
+    "githubUrl": "https://github.com/Semantic-Org/Semantic-UI-React",
+    "packageUrl": "https://www.npmjs.com/package/semantic-ui-react",
+    "stars": 13253,
+    "forks": 4043,
+    "version": "2.1.5",
+    "maintainer": "Semantic-Org",
+    "lastUpdated": "1 year ago",
+    "verified": true,
+    "language": "JavaScript",
+    "license": "MIT",
+    "size": "201.2 MB",
+    "dependencies": 10,
+    "healthScore": 72,
+    "status": "stable",
+    "tags": [
+      "component-library",
+      "components",
+      "frontend-components",
+      "frontend-framework",
+      "javascript-libraries",
+      "javascript-library",
+      "js-library",
+      "react",
+      "react-components",
+      "react-library",
+      "semantic-ui"
+    ],
+    "documentation": [
+      {
+        "name": "Getting Started"
+      },
+      {
+        "name": "Components"
+      },
+      {
+        "name": "Theming"
+      }
+    ]
+  }
+]

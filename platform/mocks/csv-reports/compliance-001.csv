@@ -1,0 +1,16 @@
+control_id,framework,category,title,status,severity,owner,evidence_url,last_assessed,next_review
+CC-1.1,SOC2,Access Control,Multi-factor authentication enforced for all users,pass,high,identity-team,/evidence/mfa-audit-2026-q1.pdf,2026-03-01T10:00:00Z,2026-06-01
+CC-1.2,SOC2,Access Control,Role-based access control implemented,pass,high,identity-team,/evidence/rbac-matrix-2026-q1.xlsx,2026-03-01T10:00:00Z,2026-06-01
+CC-1.3,SOC2,Access Control,Privileged account review completed quarterly,fail,critical,identity-team,,2026-03-01T10:00:00Z,2026-04-01
+CC-2.1,SOC2,Change Management,All production changes require peer review,pass,high,platform-team,/evidence/pr-merge-policy.png,2026-03-05T14:00:00Z,2026-06-05
+CC-2.2,SOC2,Change Management,Rollback procedure documented and tested,pass,medium,platform-team,/evidence/rollback-runbook.md,2026-03-05T14:00:00Z,2026-06-05
+CC-2.3,SOC2,Change Management,Change advisory board approval for critical systems,exception,high,platform-team,,2026-03-05T14:00:00Z,2026-04-15
+CC-3.1,SOC2,Data Protection,Encryption at rest for all PII datastores,pass,critical,data-team,/evidence/encryption-scan-q1.json,2026-03-10T09:00:00Z,2026-06-10
+CC-3.2,SOC2,Data Protection,TLS 1.2+ enforced on all endpoints,pass,critical,infra-team,/evidence/tls-scan-2026-03.csv,2026-03-10T09:00:00Z,2026-06-10
+CC-3.3,SOC2,Data Protection,Data retention policy enforced automatically,fail,high,data-team,,2026-03-10T09:00:00Z,2026-04-10
+CC-4.1,SOC2,Monitoring,Centralized logging for all production services,pass,high,observability-team,/evidence/log-coverage-report.html,2026-03-12T11:00:00Z,2026-06-12
+CC-4.2,SOC2,Monitoring,Alerting configured for anomalous access patterns,pass,medium,observability-team,/evidence/alert-rules-export.yaml,2026-03-12T11:00:00Z,2026-06-12
+CC-4.3,SOC2,Monitoring,Incident response drill conducted quarterly,fail,high,security-team,,2026-03-12T11:00:00Z,2026-04-12
+CC-5.1,SOC2,Availability,Disaster recovery plan documented,pass,critical,infra-team,/evidence/dr-plan-v3.pdf,2026-03-15T08:00:00Z,2026-06-15
+CC-5.2,SOC2,Availability,RTO/RPO targets validated via failover test,exception,critical,infra-team,,2026-03-15T08:00:00Z,2026-04-30
+CC-5.3,SOC2,Availability,Uptime SLA met for prior quarter (99.9%),pass,high,infra-team,/evidence/uptime-report-q4-2025.pdf,2026-03-15T08:00:00Z,2026-06-15

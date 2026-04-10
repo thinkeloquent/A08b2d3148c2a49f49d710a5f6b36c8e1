@@ -1,0 +1,38 @@
+{
+  "name": "@internal/persona-editor-admin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "fastify_apps/persona_editor/frontend-admin/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:admin"],
+  "implicitDependencies": [],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev",
+        "cwd": "fastify_apps/persona_editor/frontend-admin"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build",
+        "cwd": "fastify_apps/persona_editor/frontend-admin"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run preview",
+        "cwd": "fastify_apps/persona_editor/frontend-admin"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run lint",
+        "cwd": "fastify_apps/persona_editor/frontend-admin"
+      }
+    }
+  }
+}

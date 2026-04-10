@@ -1,0 +1,713 @@
+# Response Caching
+
+`fetch_httpx` provides a flexible caching middleware for HTTP responses with multiple API patterns, pluggable storage backends, and customizable cache key strategies.
+
+## Quick Start
+
+```python
+from fetch_httpx import CachingClient, CacheConfig
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(ttl=60.0)  # 1 minute TTL
+) as client:
+    # First request fetches from network
+    response1 = await client.get("/users")
+
+    # Second request returns from cache
+    response2 = await client.get("/users")
+
+    # Manual cache operations
+    await client.cache.invalidate("GET:https://api.example.com/users")
+    await client.cache.clear()
+```
+
+---
+
+## API Patterns
+
+### 1. Wrapper Class (Recommended)
+
+The `CachingClient` wraps `AsyncClient` and adds transparent caching for GET/HEAD requests.
+
+```python
+from fetch_httpx import CachingClient, CacheConfig, RequestCacheOptions
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        ttl=60.0,            # Cache TTL in seconds
+        max_entries=500,     # Max cached responses
+        methods=["GET"],     # Methods to cache
+    )
+) as client:
+    # Automatic caching
+    users = await client.get("/users")
+
+    # Per-request cache control
+    fresh = await client.get(
+        "/users",
+        cache_options=RequestCacheOptions(no_cache=True)  # Skip cache
+    )
+
+    forced = await client.get(
+        "/users",
+        cache_options=RequestCacheOptions(force_refresh=True)  # Refresh cache
+    )
+
+    # Custom TTL for specific request
+    short_lived = await client.get(
+        "/volatile-data",
+        cache_options=RequestCacheOptions(ttl=5.0)  # 5 second TTL
+    )
+
+    # Access cache manager
+    stats = await client.cache.stats()
+    print(f"Cache hits: {stats.hits}, misses: {stats.misses}")
+```
+
+### 2. Higher-Order Function
+
+Wrap any async fetch function with caching using `with_cache`.
+
+```python
+from fetch_httpx import AsyncClient, with_cache, CacheConfig
+
+async def main():
+    async with AsyncClient(base_url="https://api.example.com") as client:
+        # Create a fetch function
+        async def fetch(method: str, url: str, **kwargs):
+            return await client.request(method, url, **kwargs)
+
+        # Wrap with caching
+        cached_fetch = with_cache(fetch, CacheConfig(ttl=60.0))
+
+        # Use the cached version
+        response = await cached_fetch("GET", "/users")
+
+        # Access cache for manual operations
+        await cached_fetch.cache.invalidate("GET:https://api.example.com/users")
+```
+
+### 3. Decorator Pattern
+
+Use the `@cached` decorator on async functions.
+
+```python
+from fetch_httpx import AsyncClient, cached
+
+class UserService:
+    def __init__(self):
+        self.client = AsyncClient(base_url="https://api.example.com")
+
+    @cached(ttl=60.0)
+    async def get_users(self):
+        return await self.client.get("/users")
+
+    @cached(ttl=300.0)  # 5 minutes
+    async def get_user_by_id(self, user_id: str):
+        return await self.client.get(f"/users/{user_id}")
+
+    # Custom cache key
+    @cached(
+        ttl=60.0,
+        key_fn=lambda self, page, limit: f"users:page:{page}:limit:{limit}"
+    )
+    async def list_users(self, page: int, limit: int):
+        return await self.client.get("/users", params={"page": page, "limit": limit})
+
+    async def close(self):
+        await self.client.aclose()
+```
+
+### 4. Event Hooks Middleware
+
+Integrate caching with AsyncClient's event hooks system.
+
+```python
+from fetch_httpx import AsyncClient, create_cache_hooks, CacheConfig
+
+hooks = create_cache_hooks(CacheConfig(ttl=60.0))
+cache_manager = hooks["cache_manager"]
+
+async with AsyncClient(
+    base_url="https://api.example.com",
+    event_hooks={
+        "request": hooks["request"],
+        "response": hooks["response"]
+    }
+) as client:
+    # Note: Event hooks can't short-circuit requests
+    # Use create_cache_aware_client for manual cache-first pattern
+    pass
+```
+
+For cache-first behavior with hooks:
+
+```python
+from fetch_httpx import create_cache_aware_client, CacheConfig
+
+client, cache_manager = create_cache_aware_client(
+    CacheConfig(ttl=60.0),
+    base_url="https://api.example.com",
+)
+
+async def cached_get(url: str):
+    """Manual cache-first pattern."""
+    cache_key = cache_manager.generate_key("GET", url)
+    entry = await cache_manager.get(cache_key)
+    if entry:
+        return cache_manager.create_response_from_cache(entry)
+    return await client.get(url)
+
+async with client:
+    response = await cached_get("/users")
+```
+
+---
+
+## Cache Key Strategies
+
+### Default Strategy
+
+The default strategy generates keys as `METHOD:URL`:
+
+```python
+# Key: "GET:https://api.example.com/users"
+await client.get("/users")
+
+# Key: "GET:https://api.example.com/users?page=1&limit=10"
+await client.get("/users", params={"page": 1, "limit": 10})
+```
+
+### Dot Notation Strategy
+
+Include specific request properties in the cache key using dot notation paths:
+
+```python
+from fetch_httpx import CachingClient, CacheConfig, create_dot_notation_key_strategy
+
+key_strategy = create_dot_notation_key_strategy([
+    "headers.Authorization",     # Include auth header
+    "headers.Accept-Language",   # Include language preference
+    "params.page",               # Include pagination
+    "body.filters",              # Include request body fields
+])
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        ttl=60.0,
+        key_strategy=key_strategy
+    )
+) as client:
+    # Key includes Authorization header value
+    # "GET:https://api.example.com/users:headers.Authorization=Bearer ****:params.page=1"
+    await client.get(
+        "/users",
+        headers={"Authorization": "Bearer ****"},
+        params={"page": 1}
+    )
+```
+
+Available dot notation paths:
+
+- `method` - HTTP method
+- `url` - Full URL
+- `headers.<name>` - Request header value
+- `params.<name>` - Query parameter value
+- `body.<path>` - Request body field (for dict bodies)
+
+### Hashed Key Strategy
+
+For requests with long URLs or complex parameters, use hashed keys:
+
+```python
+from fetch_httpx import CachingClient, CacheConfig, create_hashed_key_strategy
+import hashlib
+
+# Default: SHA256 truncated to 16 chars
+key_strategy = create_hashed_key_strategy()
+
+# Custom hash function
+def md5_hash(data: str) -> str:
+    return hashlib.md5(data.encode()).hexdigest()
+
+custom_key_strategy = create_hashed_key_strategy(md5_hash)
+
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(ttl=60.0, key_strategy=key_strategy)
+) as client:
+    response = await client.get("/users")
+```
+
+### Combined Strategies
+
+Combine multiple strategies:
+
+```python
+from fetch_httpx import (
+    CachingClient,
+    CacheConfig,
+    combine_key_strategies,
+    default_key_strategy,
+    create_dot_notation_key_strategy,
+)
+
+key_strategy = combine_key_strategies(
+    default_key_strategy,
+    create_dot_notation_key_strategy(["headers.Authorization"])
+)
+
+# Key: "GET:https://api.example.com/users:headers.Authorization=Bearer ****"
+```
+
+---
+
+## Cache Configuration
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class CacheConfig:
+    # Time-to-live in seconds (default: 60.0)
+    ttl: float = 60.0
+
+    # Custom storage backend (default: MemoryStorage)
+    storage: CacheStorage | None = None
+
+    # Cache key generation function
+    key_strategy: CacheKeyStrategy | None = None
+
+    # HTTP methods to cache (default: ["GET", "HEAD"])
+    methods: list[str] = field(default_factory=lambda: ["GET", "HEAD"])
+
+    # Maximum cached entries (default: 1000)
+    max_entries: int = 1000
+
+    # Return stale data while refreshing (default: False)
+    stale_while_revalidate: bool = False
+
+    # Grace period for stale data in seconds (default: 30.0)
+    stale_grace_period: float = 30.0
+```
+
+### Per-Request Options
+
+```python
+@dataclass
+class RequestCacheOptions:
+    # Override TTL for this request
+    ttl: float | None = None
+
+    # Skip cache entirely
+    no_cache: bool = False
+
+    # Force refresh (fetch new, update cache)
+    force_refresh: bool = False
+
+    # Use custom cache key
+    cache_key: str | None = None
+```
+
+---
+
+## Stale-While-Revalidate
+
+Return cached data immediately while refreshing in the background:
+
+```python
+async with CachingClient(
+    base_url="https://api.example.com",
+    cache=CacheConfig(
+        ttl=60.0,
+        stale_while_revalidate=True,
+        stale_grace_period=30.0  # Serve stale for 30s after expiry
+    )
+) as client:
+    # If cache is stale but within grace period:
+    # 1. Returns stale data immediately
+    # 2. Fetches fresh data in background
+    # 3. Updates cache for next request
+    response = await client.get("/users")
+```
+
+---
+
+## Cache Storage
+
+### Built-in Memory Storage
+
+```python
+from fetch_httpx import MemoryStorage, CachingClient, CacheConfig
+
+storage = MemoryStorage(
+    max_entries=500,        # Max cached items
+    cleanup_interval=60.0   # Cleanup expired entries every minute
+)
+
+async with CachingClient(
+    cache=CacheConfig(storage=storage, ttl=60.0)
+) as client:
+    response = await client.get("/users")
+```
+
+### Custom Storage Backend
+
+Implement the `CacheStorage` abstract class for custom backends (Redis, SQLite, etc.):
+
+```python
+from fetch_httpx import CacheStorage, CacheEntry, CacheStats
+import json
+
+class RedisStorage(CacheStorage):
+    def __init__(self, redis_client):
+        self.redis = redis_client
+
+    async def get(self, key: str) -> CacheEntry | None:
+        data = await self.redis.get(key)
+        if data:
+            return CacheEntry(**json.loads(data))
+        return None
+
+    async def set(self, key: str, entry: CacheEntry) -> None:
+        ttl = int(entry.expires_at - time.time())
+        await self.redis.setex(
+            key,
+            ttl,
+            json.dumps({
+                "key": entry.key,
+                "data": entry.data,
+                "created_at": entry.created_at,
+                "expires_at": entry.expires_at,
+                "metadata": {
+                    "status_code": entry.metadata.status_code,
+                    "headers": entry.metadata.headers,
+                    "url": entry.metadata.url,
+                    "method": entry.metadata.method,
+                }
+            })
+        )
+
+    async def has(self, key: str) -> bool:
+        return await self.redis.exists(key) == 1
+
+    async def delete(self, key: str) -> bool:
+        return await self.redis.delete(key) > 0
+
+    async def delete_pattern(self, pattern: str) -> int:
+        keys = await self.redis.keys(pattern)
+        if keys:
+            return await self.redis.delete(*keys)
+        return 0
+
+    async def clear(self) -> None:
+        await self.redis.flushdb()
+
+    async def keys(self, pattern: str | None = None) -> list[str]:
+        return await self.redis.keys(pattern or "*")
+
+    async def stats(self) -> CacheStats:
+        info = await self.redis.info("stats")
+        return CacheStats(
+            size=await self.redis.dbsize(),
+            hits=info.get("keyspace_hits", 0),
+            misses=info.get("keyspace_misses", 0),
+            evictions=info.get("evicted_keys", 0),
+        )
+
+    async def close(self) -> None:
+        await self.redis.close()
+```
+
+---
+
+## Cache Operations
+
+### Manual Invalidation
+
+```python
+async with CachingClient(cache=CacheConfig(ttl=60.0)) as client:
+    # Invalidate single key
+    await client.cache.invalidate("GET:https://api.example.com/users")
+
+    # Invalidate by pattern (glob)
+    await client.cache.invalidate_pattern("GET:https://api.example.com/users/*")
+
+    # Clear all cache
+    await client.cache.clear()
+```
+
+### Cache Statistics
+
+```python
+stats = await client.cache.stats()
+
+print({
+    "size": stats.size,           # Current entries
+    "hits": stats.hits,           # Cache hits
+    "misses": stats.misses,       # Cache misses
+    "evictions": stats.evictions, # Evicted entries
+    "hit_rate": stats.hits / (stats.hits + stats.misses) if stats.hits + stats.misses > 0 else 0
+})
+```
+
+### List Cache Keys
+
+```python
+# All keys
+all_keys = await client.cache.keys()
+
+# Keys matching pattern
+user_keys = await client.cache.keys("GET:*/users*")
+```
+
+---
+
+## Complete Example
+
+```python
+import asyncio
+from fetch_httpx import (
+    CachingClient,
+    CacheConfig,
+    MemoryStorage,
+    create_dot_notation_key_strategy,
+)
+
+# Custom key strategy for user-specific caching
+key_strategy = create_dot_notation_key_strategy([
+    "headers.Authorization",
+    "params.page",
+    "params.limit",
+])
+
+# Custom storage with higher capacity
+storage = MemoryStorage(
+    max_entries=2000,
+    cleanup_interval=30.0
+)
+
+async def main():
+    async with CachingClient(
+        base_url="https://api.example.com",
+        headers={"Content-Type": "application/json"},
+        cache=CacheConfig(
+            ttl=300.0,  # 5 minutes
+            storage=storage,
+            key_strategy=key_strategy,
+            methods=["GET", "HEAD"],
+            stale_while_revalidate=True,
+            stale_grace_period=60.0,
+        )
+    ) as client:
+        # Fetch users (cached per auth token and pagination)
+        response = await client.get(
+            "/users",
+            headers={"Authorization": "Bearer user-token-123"},
+            params={"page": 1, "limit": 20}
+        )
+        print("Users:", response.json())
+
+        # Check cache stats
+        stats = await client.cache.stats()
+        print(f"Cache: {stats.hits} hits, {stats.misses} misses")
+
+        # Invalidate user cache after mutation
+        await client.post("/users", json={"name": "New User"})
+        await client.cache.invalidate_pattern("*:/users*")
+
+asyncio.run(main())
+```
+
+---
+
+## Type Definitions
+
+```python
+from typing import Any, Callable, Protocol
+from dataclasses import dataclass
+
+# Key generation function signature
+CacheKeyStrategy = Callable[
+    [str, str, dict[str, str] | None, Any, dict[str, Any] | None],
+    str
+]
+
+@dataclass
+class CacheEntryMetadata:
+    status_code: int
+    headers: dict[str, str]
+    url: str
+    method: str
+    content_type: str | None = None
+    size: int | None = None
+
+@dataclass
+class CacheEntry:
+    key: str
+    data: Any
+    created_at: float
+    expires_at: float
+    metadata: CacheEntryMetadata
+
+    @property
+    def is_expired(self) -> bool:
+        return time.time() > self.expires_at
+
+    @property
+    def ttl_remaining(self) -> float:
+        return max(0, self.expires_at - time.time())
+
+@dataclass
+class CacheStats:
+    size: int = 0
+    hits: int = 0
+    misses: int = 0
+    evictions: int = 0
+
+# Storage interface for custom backends
+class CacheStorage(ABC):
+    @abstractmethod
+    async def get(self, key: str) -> CacheEntry | None: ...
+
+    @abstractmethod
+    async def set(self, key: str, entry: CacheEntry) -> None: ...
+
+    @abstractmethod
+    async def has(self, key: str) -> bool: ...
+
+    @abstractmethod
+    async def delete(self, key: str) -> bool: ...
+
+    @abstractmethod
+    async def delete_pattern(self, pattern: str) -> int: ...
+
+    @abstractmethod
+    async def clear(self) -> None: ...
+
+    @abstractmethod
+    async def keys(self, pattern: str | None = None) -> list[str]: ...
+
+    @abstractmethod
+    async def stats(self) -> CacheStats: ...
+
+    @abstractmethod
+    async def close(self) -> None: ...
+```
+
+---
+
+## Comparison with TypeScript
+
+| Feature         | Python (`fetch_httpx`)               | TypeScript (`fetch_undici`)      |
+| --------------- | ------------------------------------ | -------------------------------- |
+| TTL units       | Seconds (`60.0`)                     | Milliseconds (`60000`)           |
+| Decorator       | `@cached(ttl=60.0)`                  | `@cached({ ttl: 60000 })`        |
+| Context manager | `async with CachingClient()`         | `await client.close()`           |
+| Key strategy    | `create_dot_notation_key_strategy()` | `createDotNotationKeyStrategy()` |
+| Event hooks     | `event_hooks={"request": [...]}`     | `eventHooks: { request: [...] }` |
+
+---
+
+## Using Cache with Existing Client
+
+If you have an existing `AsyncClient` instance, you can add caching using the `with_cache` higher-order function or event hooks.
+
+### Higher-Order Function (Recommended)
+
+```python
+from fetch_httpx import AsyncClient, with_cache, CacheConfig
+
+async def main():
+    # Create your existing client
+    client = AsyncClient(base_url="https://api.example.com")
+
+    # Define fetch function (must be async def, not lambda)
+    async def fetch(method: str, url: str, **kwargs):
+        return await client.request(method, url, **kwargs)
+
+    # Wrap with caching
+    cached_fetch = with_cache(fetch, CacheConfig(ttl=60.0))
+
+    # Use the cached version
+    response = await cached_fetch("GET", "/users")
+
+    # With headers
+    response = await cached_fetch(
+        "GET",
+        "/users",
+        headers={"Authorization": "Bearer token123"},
+    )
+
+    # With JSON body (typically for POST/PUT)
+    response = await cached_fetch(
+        "POST",
+        "/users",
+        json={"name": "John", "email": "john@example.com"},
+    )
+
+    # With headers, JSON, and query params
+    response = await cached_fetch(
+        "POST",
+        "/users",
+        headers={"Authorization": "Bearer token123"},
+        json={"name": "John"},
+        params={"notify": "true"},
+    )
+
+    # Access cache operations
+    await cached_fetch.cache.invalidate("GET:https://api.example.com/users")
+    await cached_fetch.cache.clear()
+
+    # Cleanup
+    await client.aclose()
+```
+
+### Event Hooks
+
+For integrating with the client's event system (note: hooks cannot short-circuit requests):
+
+```python
+from fetch_httpx import AsyncClient, create_cache_hooks, CacheConfig
+
+hooks = create_cache_hooks(CacheConfig(ttl=60.0))
+
+client = AsyncClient(
+    base_url="https://api.example.com",
+    event_hooks={
+        "request": hooks["request"],
+        "response": hooks["response"],
+    }
+)
+
+# Use client normally
+async with client:
+    response = await client.get("/users")
+```
+
+### Cache-Aware Client
+
+For full cache-first behavior with an existing configuration:
+
+```python
+from fetch_httpx import create_cache_aware_client, CacheConfig
+
+client, cache_manager = create_cache_aware_client(
+    CacheConfig(ttl=60.0),
+    base_url="https://api.example.com",
+)
+
+async def cached_get(url: str):
+    """Manual cache-first pattern."""
+    cache_key = cache_manager.generate_key("GET", url)
+    entry = await cache_manager.get(cache_key)
+    if entry:
+        return cache_manager.create_response_from_cache(entry)
+    return await client.get(url)
+
+async with client:
+    response = await cached_get("/users")
+```

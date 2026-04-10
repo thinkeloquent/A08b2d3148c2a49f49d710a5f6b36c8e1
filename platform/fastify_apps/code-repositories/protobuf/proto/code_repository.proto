@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package code_repositories.repository;
+
+import "common.proto";
+import "tag.proto";
+import "metadata.proto";
+
+// Code repository entity
+message Repository {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  code_repositories.common.RepositoryType type = 4;
+  string github_url = 5;
+  string package_url = 6;
+  int32 stars = 7;
+  int32 forks = 8;
+  string version = 9;
+  string maintainer = 10;
+  string last_updated = 11;
+  bool trending = 12;
+  bool verified = 13;
+  string language = 14;
+  string license = 15;
+  string size = 16;
+  int32 dependencies = 17;
+  int32 health_score = 18;
+  code_repositories.common.RepositoryStatus status = 19;
+  code_repositories.common.RepositorySource source = 20;
+  repeated code_repositories.common.ExternalId external_ids = 21;
+  repeated code_repositories.tag.Tag tags = 22;
+  repeated code_repositories.metadata.Metadata metadata = 23;
+  code_repositories.common.Timestamp created_at = 24;
+  code_repositories.common.Timestamp updated_at = 25;
+}
+
+// List repositories request with filters and pagination
+message ListRepositoriesRequest {
+  code_repositories.common.PaginationRequest pagination = 1;
+  code_repositories.common.RepositoryType type = 2;
+  code_repositories.common.RepositoryStatus status = 3;
+  string search = 4;
+  repeated string tags = 5;
+  bool trending = 6;
+  bool verified = 7;
+  bool include_tags = 8;
+  bool include_metadata = 9;
+}
+
+// List repositories response
+message ListRepositoriesResponse {
+  repeated Repository repositories = 1;
+  code_repositories.common.PaginationResponse pagination = 2;
+}
+
+// Get repository request
+message GetRepositoryRequest {
+  string id = 1;
+  bool include_tags = 2;
+  bool include_metadata = 3;
+}
+
+// Get repository response
+message GetRepositoryResponse {
+  Repository repository = 1;
+}
+
+// Create repository request
+message CreateRepositoryRequest {
+  string name = 1;
+  string description = 2;
+  code_repositories.common.RepositoryType type = 3;
+  string github_url = 4;
+  string package_url = 5;
+  int32 stars = 6;
+  int32 forks = 7;
+  string version = 8;
+  string maintainer = 9;
+  string last_updated = 10;
+  bool trending = 11;
+  bool verified = 12;
+  string language = 13;
+  string license = 14;
+  string size = 15;
+  int32 dependencies = 16;
+  int32 health_score = 17;
+  code_repositories.common.RepositoryStatus status = 18;
+  code_repositories.common.RepositorySource source = 19;
+  repeated code_repositories.common.ExternalId external_ids = 20;
+  repeated string tag_names = 21;
+}
+
+// Create repository response
+message CreateRepositoryResponse {
+  Repository repository = 1;
+}
+
+// Update repository request
+message UpdateRepositoryRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  code_repositories.common.RepositoryType type = 4;
+  string github_url = 5;
+  string package_url = 6;
+  int32 stars = 7;
+  int32 forks = 8;
+  string version = 9;
+  string maintainer = 10;
+  string last_updated = 11;
+  bool trending = 12;
+  bool verified = 13;
+  string language = 14;
+  string license = 15;
+  string size = 16;
+  int32 dependencies = 17;
+  int32 health_score = 18;
+  code_repositories.common.RepositoryStatus status = 19;
+  code_repositories.common.RepositorySource source = 20;
+  repeated code_repositories.common.ExternalId external_ids = 21;
+  repeated string tag_names = 22;
+}
+
+// Update repository response
+message UpdateRepositoryResponse {
+  Repository repository = 1;
+}
+
+// Delete repository request
+message DeleteRepositoryRequest {
+  string id = 1;
+}
+
+// Delete repository response
+message DeleteRepositoryResponse {
+  bool success = 1;
+}

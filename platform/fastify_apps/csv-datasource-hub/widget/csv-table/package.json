@@ -1,0 +1,15 @@
+{
+  "name": "@internal/csv-table-widget",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "peerDependencies": {
+    "lucide-react": "^0.303.0",
+    "react": "^18.2.0"
+  },
+  "dependencies": {
+    "@internal/table-csv-datasource": "workspace:*"
+  }
+}

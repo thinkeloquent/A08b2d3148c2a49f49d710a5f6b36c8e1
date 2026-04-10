@@ -1,0 +1,7 @@
+{
+  "name": "health-check",
+  "test_type": "direct_package_import",
+  "python": "gemini_openai_sdk:GeminiClient.health_check",
+  "mjs": "gemini-openai-sdk:GeminiClient.healthCheck",
+  "app_yaml_section": ["providers", "gemini_openai"]
+}

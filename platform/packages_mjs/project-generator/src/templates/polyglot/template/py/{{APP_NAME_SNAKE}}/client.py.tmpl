@@ -1,0 +1,25 @@
+"""
+{{APP_NAME_TITLE}}.
+"""
+
+from __future__ import annotations
+
+import logging
+from typing import Any
+
+__all__ = ["{{APP_NAME_PASCAL}}"]
+
+logger = logging.getLogger("{{APP_NAME_SNAKE}}")
+
+
+class {{APP_NAME_PASCAL}}:
+    """{{APP_NAME_TITLE}} client."""
+
+    def __init__(self, *, base_url: str) -> None:
+        self._base_url = base_url
+        self._logger = logger
+
+    async def get(self, path: str, *, params: dict[str, Any] | None = None) -> dict[str, Any]:
+        self._logger.info("GET request %s", path)
+        # Implementation
+        return {}

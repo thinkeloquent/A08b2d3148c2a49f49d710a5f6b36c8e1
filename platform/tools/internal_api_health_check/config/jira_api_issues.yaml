@@ -1,0 +1,13 @@
+name: jira_api_issues
+description: Issue CRUD, assignment, and transition endpoints
+
+tests:
+  - id: get-issue
+    description: Get an issue by key
+    path: /v3/issues/:issue_key
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-issue-transitions
+    description: Get available transitions for an issue
+    path: /v3/issues/:issue_key/transitions
+    expected_status: [200, 401, 403, 404, 429]

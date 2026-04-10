@@ -1,0 +1,30 @@
+{
+  "name": "@mta/fmt-sdk",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./schemas": "./src/schemas.mjs",
+    "./config": "./src/config.mjs",
+    "./logger": "./src/logger.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "@iarna/toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0",
+    "vitest": "^2.1.0",
+    "@biomejs/biome": "^1.9.0"
+  }
+}

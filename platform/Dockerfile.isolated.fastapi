@@ -1,0 +1,66 @@
+# Dockerfile.isolated.fastapi — Correct monorepo build for FastAPI server
+# Fixes: copies ALL local packages BEFORE poetry install (resolves path deps)
+
+# =============================================================================
+# Single stage: Python runtime with all source + deps
+# =============================================================================
+FROM python:3.11.4-slim AS runtime
+
+WORKDIR /applications
+
+# 1. Install system deps needed by some Python packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc libpq-dev curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# 2. Install Poetry
+RUN pip install --no-cache-dir poetry
+
+# 3. Copy ALL source FIRST — poetry needs local path packages to exist
+#    Root pyproject.toml references: packages_py/*, polyglot/*/py/*
+COPY pyproject.toml poetry.lock ./
+COPY packages_py/ ./packages_py/
+COPY polyglot/ ./polyglot/
+COPY platform-core/ ./platform-core/
+COPY fastapi_server/ ./fastapi_server/
+COPY fastapi_apps/ ./fastapi_apps/
+COPY common/ ./common/
+
+# 4. Now poetry install works — all path dependencies are present
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root --only main || \
+    pip install --no-cache-dir \
+        fastapi==0.128.0 \
+        "uvicorn[standard]==0.40.0" \
+        "httpx[http2]>=0.28.1" \
+        python-dotenv==1.2.1 \
+        pyyaml==6.0.3 \
+        pydantic==2.12.5 \
+        pydantic-settings==2.12.0 \
+        aiohttp==3.13.3 \
+        deepmerge==2.0 \
+        aiofiles==25.1.0 \
+        redis==7.1.0
+
+# 5. Create logs directory
+RUN mkdir -p /applications/logs && chmod 755 /applications/logs
+
+# 6. Copy PYTHONPATH entrypoint script
+COPY .bin/setup-pythonpath-docker.sh /usr/local/bin/setup-pythonpath.sh
+RUN chmod +x /usr/local/bin/setup-pythonpath.sh
+
+# 7. Set PYTHONPATH — entrypoint script also builds this dynamically
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 52000
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:52000/health')"
+
+# 8. Set working directory to fastapi_server project dir.
+#    The Python package is fastapi_server/fastapi_server/ (nested).
+#    "cd fastapi_server && uvicorn fastapi_server.main:app" is how Makefile runs it.
+WORKDIR /applications/fastapi_server
+
+ENTRYPOINT ["/usr/local/bin/setup-pythonpath.sh"]
+CMD ["uvicorn", "fastapi_server.main:app", "--host", "0.0.0.0", "--port", "52000"]

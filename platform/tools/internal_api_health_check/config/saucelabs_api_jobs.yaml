@@ -1,0 +1,13 @@
+name: saucelabs_api_jobs
+description: Job listing and retrieval endpoints
+
+tests:
+  - id: list-jobs
+    description: List test jobs
+    path: /v1/jobs
+    expected_status: [200, 401, 403, 429]
+
+  - id: get-job
+    description: Get a specific job by ID
+    path: /v1/jobs/:job_id
+    expected_status: [200, 401, 403, 404, 429, 500]

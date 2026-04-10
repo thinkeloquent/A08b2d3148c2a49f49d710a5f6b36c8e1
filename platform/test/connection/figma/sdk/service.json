@@ -1,0 +1,7 @@
+{
+  "name": "figma-sdk",
+  "test_type": "direct_package_import",
+  "python": "figma_api:FigmaClient",
+  "mjs": "@internal/figma-api:FigmaClient",
+  "app_yaml_section": ["providers", "figma"]
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import/Export Test Harness</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      background: #f0f0f0;
+    }
+    .success { background: #d4edda !important; color: #155724; }
+    .error { background: #f8d7da !important; color: #721c24; }
+    .info { background: #d1ecf1 !important; color: #0c5460; }
+    pre {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      max-height: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 data-test-id="h1-9484e65c">Import/Export Stress Test Harness</h1>
+  <div id="status" data-test-id="div-cefbf2b4">Ready</div>
+
+  <h2 data-test-id="h2-f6f6d5bd">Controls</h2>
+  <button id="run-export-stress" data-test-id="button-87c05b6e">Run Export Stress Tests</button>
+  <button id="run-import-stress" data-test-id="button-73c4ca68">Run Import Stress Tests</button>
+  <button id="run-large-data" data-test-id="button-564418c8">Run Large Data Test</button>
+  <button id="run-performance" data-test-id="button-d242ee4c">Run Performance Test</button>
+  <button id="clear-results" data-test-id="button-6bc932fe">Clear Results</button>
+
+  <h2 data-test-id="h2-696fe9f2">Results</h2>
+  <pre id="results" data-test-id="pre-f27482b5"></pre>
+
+  <script type="module" data-test-id="script-f31e8fd9">
+    // This will be populated by the test script
+    window.testResults = [];
+    window.testHarness = {
+      log: (message) => {
+        window.testResults.push(message);
+        const resultsEl = document.getElementById('results');
+        resultsEl.textContent = window.testResults.join('\n');
+      },
+      setStatus: (message, type = 'info') => {
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = message;
+        statusEl.className = type;
+      },
+      clearResults: () => {
+        window.testResults = [];
+        document.getElementById('results').textContent = '';
+      }
+    };
+
+    // Expose functions for testing
+    window.generateLargeFormData = (numPages, elementsPerPage) => {
+      const pages = [];
+      for (let p = 0; p < numPages; p++) {
+        const elements = [];
+        const layout = [];
+
+        for (let e = 0; e < elementsPerPage; e++) {
+          const elementId = `el-p${p}-e${e}`;
+          const fieldTypes = ['text', 'number', 'select', 'textarea', 'checkbox'];
+          const fieldType = fieldTypes[e % fieldTypes.length];
+
+          elements.push({
+            id: elementId,
+            type: fieldType,
+            label: `Field ${e} on Page ${p}`,
+            placeholder: `Enter value ${e}`,
+            required: e % 3 === 0,
+            helpText: `Help text for field ${e}`,
+          });
+
+          layout.push({
+            i: elementId,
+            x: (e % 3) * 4,
+            y: Math.floor(e / 3) * 2,
+            w: 4,
+            h: 2,
+            minW: 2,
+            minH: 2,
+          });
+        }
+
+        pages.push({
+          id: `page-${p}`,
+          title: `Page ${p}`,
+          description: `Description for page ${p}`,
+          elements,
+          layout,
+        });
+      }
+
+      return pages;
+    };
+
+    window.measurePerformance = (fn, label) => {
+      const start = performance.now();
+      const result = fn();
+      const end = performance.now();
+      const duration = end - start;
+
+      return { result, duration, label };
+    };
+
+    window.measureMemory = async () => {
+      if (performance.memory) {
+        return {
+          usedJSHeapSize: performance.memory.usedJSHeapSize,
+          totalJSHeapSize: performance.memory.totalJSHeapSize,
+          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+        };
+      }
+      return null;
+    };
+
+    window.calculateSizeInMB = (content) => {
+      const blob = new Blob([content]);
+      return blob.size / (1024 * 1024);
+    };
+
+    // Button handlers
+    document.getElementById('clear-results').addEventListener('click', () => {
+      window.testHarness.clearResults();
+      window.testHarness.setStatus('Results cleared', 'info');
+    });
+
+    window.testHarness.setStatus('Test harness loaded - Ready for Playwright tests', 'success');
+  </script>
+
+
+</body></html>

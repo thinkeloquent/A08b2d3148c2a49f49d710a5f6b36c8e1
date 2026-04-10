@@ -1,0 +1,39 @@
+{
+  "name": "runtime-template-resolver",
+  "version": "0.1.0",
+  "description": "Polyglot Runtime Template Resolver",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./integrations/fastify": {
+      "types": "./dist/integrations/fastify.d.ts",
+      "import": "./dist/integrations/fastify.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "fastify": ">=4.0.0",
+    "fastify-plugin": ">=4.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.0",
+    "@types/node": "^20.0.0",
+    "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

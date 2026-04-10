@@ -1,0 +1,8 @@
+name: statsig_api_events
+description: Events endpoints
+
+tests:
+  - id: list-events
+    description: List all events
+    path: /v1/events
+    expected_status: [200, 401, 403, 429]

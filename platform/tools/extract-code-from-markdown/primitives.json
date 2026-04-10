@@ -1,0 +1,126 @@
+{
+  "scanned_files": 127,
+  "code_blocks_found": 15,
+  "blocks": [
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/README.md",
+      "start_line": 15,
+      "end_line": 17,
+      "code": "npm install -g pnpm",
+      "language": "bash",
+      "context": "First, install pnpm if you haven't already. Open your terminal and run:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/README.md",
+      "start_line": 21,
+      "end_line": 23,
+      "code": "pnpm install",
+      "language": "bash",
+      "context": "Then, install the dependencies:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/packages/react/one-time-password-field/README.md",
+      "start_line": 5,
+      "end_line": 9,
+      "code": "$ yarn add radix-ui\n# or\n$ npm install radix-ui",
+      "language": "sh",
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/packages/react/radix-ui/CHANGELOG.md",
+      "start_line": 54,
+      "end_line": 78,
+      "code": "import { unstable_PasswordToggleField as PasswordToggleField } from 'radix-ui';\n\nfunction FieldWithIconToggle() {\n  return (\n    <PasswordToggleField.Root>\n      <PasswordToggleField.Input />\n      <PasswordToggleField.Toggle>\n        <PasswordToggleField.Icon visible={<EyeOpenIcon />} hidden={<EyeClosedIcon />} />\n      </PasswordToggleField.Toggle>\n    </PasswordToggleField.Root>\n  );\n}\n\nfunction FieldWithTextToggle() {\n  return (\n    <PasswordToggleField.Root>\n      <PasswordToggleField.Input />\n      <PasswordToggleField.Toggle>\n        <PasswordToggleField.Slot visible=\"Hide password\" hidden=\"Show password\" />\n      </PasswordToggleField.Toggle>\n    </PasswordToggleField.Root>\n  );\n}",
+      "language": "tsx",
+      "context": "This API is currently unstable, and we hope you'll help us test it out! Import the primitive using the `unstable_` prefix."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/packages/react/radix-ui/CHANGELOG.md",
+      "start_line": 117,
+      "end_line": 133,
+      "code": "import { unstable_OneTimePasswordField as OneTimePasswordField } from 'radix-ui';\n\nexport function Verify() {\n  return (\n    <OneTimePasswordField.Root>\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.Input />\n      <OneTimePasswordField.HiddenInput />\n    </OneTimePasswordField.Root>\n  );\n}",
+      "language": "tsx",
+      "context": "This API is currently unstable, and we hope you'll help us test it out! Import the primitive using the `unstable_` prefix."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/packages/react/password-toggle-field/CHANGELOG.md",
+      "start_line": 28,
+      "end_line": 52,
+      "code": "import { unstable_PasswordToggleField as PasswordToggleField } from 'radix-ui';\n\nfunction FieldWithIconToggle() {\n  return (\n    <PasswordToggleField.Root>\n      <PasswordToggleField.Input />\n      <PasswordToggleField.Toggle>\n        <PasswordToggleField.Icon visible={<EyeOpenIcon />} hidden={<EyeClosedIcon />} />\n      </PasswordToggleField.Toggle>\n    </PasswordToggleField.Root>\n  );\n}\n\nfunction FieldWithTextToggle() {\n  return (\n    <PasswordToggleField.Root>\n      <PasswordToggleField.Input />\n      <PasswordToggleField.Toggle>\n        <PasswordToggleField.Slot visible=\"Hide password\" hidden=\"Show password\" />\n      </PasswordToggleField.Toggle>\n    </PasswordToggleField.Root>\n  );\n}",
+      "language": "tsx",
+      "context": "This API is currently unstable, and we hope you'll help us test it out! Import the primitive using the `unstable_` prefix."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/packages/react/password-toggle-field/README.md",
+      "start_line": 5,
+      "end_line": 9,
+      "code": "$ yarn add radix-ui\n# or\n$ npm install radix-ui",
+      "language": "sh",
+      "context": "## Installation"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 52,
+      "end_line": 56,
+      "code": "git clone https://github.com/<your username>/primitives.git\ncd primitives\ngit remote add upstream https://github.com/radix-ui/primitives.git",
+      "language": "sh",
+      "context": "2. Clone the fork to your local machine and add upstream remote:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 60,
+      "end_line": 63,
+      "code": "git checkout main\ngit pull upstream main",
+      "language": "sh",
+      "context": "3. Synchronize your local `main` branch with the upstream remote:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 67,
+      "end_line": 69,
+      "code": "node -v",
+      "language": null,
+      "context": "4. Make sure your Node version matches the [.nvmrc](../.nvmrc)."
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 73,
+      "end_line": 75,
+      "code": "pnpm install",
+      "language": "sh",
+      "context": "1. Install dependencies with [pnpm](https://pnpm.io):"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 79,
+      "end_line": 81,
+      "code": "git checkout -b my-bug-fix",
+      "language": "sh",
+      "context": "6. Create a new branch related to your PR:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 85,
+      "end_line": 87,
+      "code": "git push -u origin HEAD",
+      "language": "sh",
+      "context": "7. Make changes, then commit and push to your forked repository:"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/.github/CONTRIBUTING.md",
+      "start_line": 99,
+      "end_line": 105,
+      "code": "# install dependencies\npnpm install\n\n# start Storybook and see examples in the browser\npnpm dev",
+      "language": "bash",
+      "context": "### Development"
+    },
+    {
+      "file": "/Users/Shared/autoload/mta-v800/dataset/repos/primitives/apps/ssr-testing/README.md",
+      "start_line": 9,
+      "end_line": 11,
+      "code": "pnpm dev:ssr",
+      "language": "sh",
+      "context": "From the root of the repo, run the development server:"
+    }
+  ]
+}

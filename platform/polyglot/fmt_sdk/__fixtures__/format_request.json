@@ -1,0 +1,66 @@
+{
+  "format_request_tests": [
+    {
+      "id": "T-REQ-001",
+      "name": "Go format request with options",
+      "input": {
+        "source": "package main\n\nfunc main() { fmt.Println(\"hello\") }\n",
+        "language": "go",
+        "options": {"tab_width": 4},
+        "context": {"caller": "test", "workspace": "/repo"}
+      }
+    },
+    {
+      "id": "T-REQ-002",
+      "name": "Python format request minimal",
+      "input": {
+        "source": "x = 1\n",
+        "language": "python"
+      }
+    },
+    {
+      "id": "T-REQ-003",
+      "name": "Node format request with options",
+      "input": {
+        "source": "const x=1;\n",
+        "language": "node",
+        "options": {"semicolons": true, "single_quote": true}
+      }
+    },
+    {
+      "id": "T-REQ-004",
+      "name": "Rust format request minimal",
+      "input": {
+        "source": "fn main(){println!(\"hello\");}\n",
+        "language": "rust"
+      }
+    },
+    {
+      "id": "T-REQ-005",
+      "name": "Shell format request",
+      "input": {
+        "source": "#!/bin/bash\necho hello\n",
+        "language": "shell",
+        "context": {"file_path": "script.sh"}
+      }
+    },
+    {
+      "id": "T-REQ-006",
+      "name": "SQL format request",
+      "input": {
+        "source": "select * from users where id=1;\n",
+        "language": "sql"
+      }
+    },
+    {
+      "id": "T-REQ-007",
+      "name": "Markup format request with context",
+      "input": {
+        "source": "<div><p>hello</p></div>\n",
+        "language": "markup",
+        "options": {"indent_size": 2},
+        "context": {"file_path": "index.html", "caller": "ide-plugin"}
+      }
+    }
+  ]
+}

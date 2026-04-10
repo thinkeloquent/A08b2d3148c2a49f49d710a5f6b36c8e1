@@ -1,0 +1,17 @@
+{
+  "name": "@internal/rag-search-algorithms",
+  "version": "1.0.0",
+  "description": "RAG Search Algorithms — RRF fusion, code/text separation, component detection (Node.js)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}

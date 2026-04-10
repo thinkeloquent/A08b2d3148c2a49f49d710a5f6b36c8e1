@@ -1,0 +1,183 @@
+[
+  {
+    "id": "1",
+    "name": "Material Design 3 Kit",
+    "description": "Official Google Material Design 3 component library for Figma. Includes all MD3 components, tokens, and theming tools.",
+    "type": "design_system",
+    "figmaUrl": "https://www.figma.com/community/file/1035203798233327056",
+    "figmaFileKey": "1035203798233327056",
+    "thumbnailUrl": "",
+    "pageCount": 12,
+    "componentCount": 350,
+    "styleCount": 180,
+    "lastModifiedBy": "Google Design",
+    "editorType": "figma",
+    "trending": true,
+    "verified": true,
+    "status": "stable",
+    "tags": ["material", "google", "design-system", "mobile", "components"],
+    "documentation": [
+      { "name": "Getting Started" },
+      { "name": "Theming Guide" },
+      { "name": "Component Reference" },
+      { "name": "Migration from M2" }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Radix UI Component Library",
+    "description": "Unstyled, accessible component library for building high-quality design systems and web apps in Figma.",
+    "type": "component_library",
+    "figmaUrl": "https://www.figma.com/community/file/1146416273476789062",
+    "figmaFileKey": "1146416273476789062",
+    "thumbnailUrl": "",
+    "pageCount": 8,
+    "componentCount": 240,
+    "styleCount": 95,
+    "lastModifiedBy": "WorkOS",
+    "editorType": "figma",
+    "trending": true,
+    "verified": true,
+    "status": "stable",
+    "tags": ["radix", "accessible", "headless", "components", "react"],
+    "documentation": [
+      { "name": "Overview" },
+      { "name": "Component API" },
+      { "name": "Accessibility" }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "E-Commerce App Prototype",
+    "description": "Full-featured e-commerce mobile app prototype with cart, checkout, product detail, and onboarding flows.",
+    "type": "prototype",
+    "figmaUrl": "https://www.figma.com/community/file/1010019587059747123",
+    "figmaFileKey": "1010019587059747123",
+    "thumbnailUrl": "",
+    "pageCount": 6,
+    "componentCount": 80,
+    "styleCount": 42,
+    "lastModifiedBy": "DesignStudio",
+    "editorType": "figma",
+    "trending": false,
+    "verified": true,
+    "status": "stable",
+    "tags": ["ecommerce", "mobile", "prototype", "checkout", "ux"],
+    "documentation": [
+      { "name": "User Flows" },
+      { "name": "Interaction Notes" }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Ant Design System",
+    "description": "Enterprise-class design system by Alibaba Group. Comprehensive components for building professional web applications.",
+    "type": "design_system",
+    "figmaUrl": "https://www.figma.com/community/file/831698976089873405",
+    "figmaFileKey": "831698976089873405",
+    "thumbnailUrl": "",
+    "pageCount": 18,
+    "componentCount": 420,
+    "styleCount": 210,
+    "lastModifiedBy": "Ant Design Team",
+    "editorType": "figma",
+    "trending": false,
+    "verified": true,
+    "status": "stable",
+    "tags": ["ant-design", "enterprise", "react", "design-system", "alibaba"],
+    "documentation": [
+      { "name": "Design Principles" },
+      { "name": "Component Catalog" },
+      { "name": "Token Reference" }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Lucide Icons Pack",
+    "description": "Beautiful and consistent icon set with 1000+ SVG icons. Open source, MIT licensed, and pixel-perfect at all sizes.",
+    "type": "icon_set",
+    "figmaUrl": "https://www.figma.com/community/file/1292323954887010905",
+    "figmaFileKey": "1292323954887010905",
+    "thumbnailUrl": "",
+    "pageCount": 4,
+    "componentCount": 1024,
+    "styleCount": 8,
+    "lastModifiedBy": "Lucide Contributors",
+    "editorType": "figma",
+    "trending": true,
+    "verified": true,
+    "status": "stable",
+    "tags": ["icons", "svg", "open-source", "lucide", "outline"],
+    "documentation": [
+      { "name": "Icon Guidelines" },
+      { "name": "Usage in Code" }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Abstract Scene Illustrations",
+    "description": "Hand-crafted abstract illustration pack for landing pages, empty states, and marketing materials. 60+ unique scenes.",
+    "type": "illustration",
+    "figmaUrl": "https://www.figma.com/community/file/980585706402774673",
+    "figmaFileKey": "980585706402774673",
+    "thumbnailUrl": "",
+    "pageCount": 3,
+    "componentCount": 62,
+    "styleCount": 30,
+    "lastModifiedBy": "Craftwork",
+    "editorType": "figma",
+    "trending": false,
+    "verified": true,
+    "status": "stable",
+    "tags": ["illustration", "abstract", "landing-page", "empty-state", "marketing"],
+    "documentation": [
+      { "name": "License" },
+      { "name": "Customization Guide" }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Tailwind UI Kit",
+    "description": "Figma component library aligned with Tailwind CSS utility classes. Covers forms, buttons, navigation, cards, and more.",
+    "type": "component_library",
+    "figmaUrl": "https://www.figma.com/community/file/768809027799962739",
+    "figmaFileKey": "768809027799962739",
+    "thumbnailUrl": "",
+    "pageCount": 10,
+    "componentCount": 190,
+    "styleCount": 120,
+    "lastModifiedBy": "Tailwind Labs",
+    "editorType": "figma",
+    "trending": true,
+    "verified": true,
+    "status": "stable",
+    "tags": ["tailwind", "css", "utility", "components", "responsive"],
+    "documentation": [
+      { "name": "Setup" },
+      { "name": "Component List" },
+      { "name": "Tailwind Mapping" }
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Onboarding Flow Prototype",
+    "description": "Interactive onboarding flow prototype for SaaS applications. Covers sign-up, account setup, feature discovery, and first-run experience.",
+    "type": "prototype",
+    "figmaUrl": "https://www.figma.com/community/file/901047527688397928",
+    "figmaFileKey": "901047527688397928",
+    "thumbnailUrl": "",
+    "pageCount": 5,
+    "componentCount": 55,
+    "styleCount": 28,
+    "lastModifiedBy": "ProductDesignHub",
+    "editorType": "figma",
+    "trending": false,
+    "verified": false,
+    "status": "beta",
+    "tags": ["onboarding", "saas", "prototype", "ux", "walkthrough"],
+    "documentation": [
+      { "name": "Flow Diagram" },
+      { "name": "Prototype Settings" }
+    ]
+  }
+]

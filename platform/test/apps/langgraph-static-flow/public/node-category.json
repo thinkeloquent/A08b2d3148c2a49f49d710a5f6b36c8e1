@@ -1,0 +1,40 @@
+[
+  {
+    "id": "Control",
+    "label": "Control",
+    "description": "Flow control nodes (start, end, routing)",
+    "style": {
+      "bgColor": "#f8fafc",
+      "textColor": "#475569",
+      "borderColor": "#e2e8f0",
+      "accentColor": "#6366f1",
+      "handleColor": "#6366f1"
+    }
+  },
+  {
+    "id": "Processing",
+    "label": "Processing",
+    "description": "Data transformation and generation nodes",
+    "style": {
+      "bgColor": "#eff6ff",
+      "textColor": "#1d4ed8",
+      "borderColor": "#bfdbfe",
+      "accentColor": "#3b82f6",
+      "handleColor": "#3b82f6",
+      "stageBadge": "bg-blue-100 text-blue-700"
+    }
+  },
+  {
+    "id": "Interaction",
+    "label": "Interaction",
+    "description": "Human-in-the-loop and feedback nodes",
+    "style": {
+      "bgColor": "#f8fafc",
+      "textColor": "#475569",
+      "borderColor": "#e2e8f0",
+      "accentColor": "#f59e0b",
+      "handleColor": "#f59e0b",
+      "stageBadge": "bg-amber-100 text-amber-700"
+    }
+  }
+]

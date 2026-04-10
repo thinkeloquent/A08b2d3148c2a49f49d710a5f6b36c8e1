@@ -1,0 +1,119 @@
+{
+  "title": "Recording 2/5/2026 at 1:25:07 PM",
+  "steps": [
+    {
+      "type": "setViewport",
+      "width": 1713,
+      "height": 507,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "isLandscape": false
+    },
+    {
+      "type": "navigate",
+      "url": "https://www.skechers.com/",
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://www.skechers.com/",
+          "title": "SKECHERS Official Site | The Comfort Technology Company"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "target": "main",
+      "selectors": [
+        ["aria/Enter Keyword or Item No."],
+        ["#search-input-desktop"],
+        ["xpath///*[@id=\"search-input-desktop\"]"],
+        ["pierce/#search-input-desktop"]
+      ],
+      "offsetY": 15.015625,
+      "offsetX": 202
+    },
+    {
+      "type": "change",
+      "value": "man boots",
+      "selectors": [
+        ["aria/Enter Keyword or Item No."],
+        ["#search-input-desktop"],
+        ["xpath///*[@id=\"search-input-desktop\"]"],
+        ["pierce/#search-input-desktop"]
+      ],
+      "target": "main"
+    },
+    {
+      "type": "keyDown",
+      "target": "main",
+      "key": "Enter"
+    },
+    {
+      "type": "keyUp",
+      "key": "Enter",
+      "target": "main",
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://www.skechers.com/search/?q=man+boots&search-button=&show-view-more=&lang=en_US&x-kpsdk-ct=0ebBWpozBglZ8obQF8dR2p866UGwdbV8g4X7Trn1Nb6AtOyHt0W2ik95isVmpJisykFlPcBm7UBtAZzecYoT0sxpp0u9fb6W5oW9FDAhKeuF4ijRgjqrsNLQNSaamiPERLLrkWI5rXNoCC235O1uyoijuT3s7zjE24zLx84smSqCErM&x-kpsdk-v=j-1.2.139",
+          "title": ""
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "target": "main",
+      "selectors": [
+        ["aria/Work Waterproof Relaxed Fit: Wascana - Millit[role=\"image\"]"],
+        ["div.product-grid > div:nth-of-type(1) div.image-container img"],
+        [
+          "xpath///*[@id=\"product-search-results\"]/div/div[2]/div[3]/div[1]/div[2]/div/div[1]/a/picture/img"
+        ],
+        ["pierce/div.product-grid > div:nth-of-type(1) div.image-container img"]
+      ],
+      "offsetY": 144.421875,
+      "offsetX": 125.3046875,
+      "assertedEvents": [
+        {
+          "type": "navigation",
+          "url": "https://www.skechers.com/work-waterproof-relaxed-fit-wascana---millit/200056_CML.html",
+          "title": ""
+        }
+      ]
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [".cls"],
+      "visible": true
+    },
+    {
+      "type": "click",
+      "target": "main",
+      "selectors": [
+        ["aria/Work Waterproof Relaxed Fit: Wascana - Millit"],
+        ["div.c-product-details > div:nth-of-type(2) h1"],
+        ["xpath///*[@id=\"maincontent\"]/div[2]/div[2]/div/div/div[1]/h1"],
+        ["pierce/div.c-product-details > div:nth-of-type(2) h1"]
+      ],
+      "offsetY": 58.015625,
+      "offsetX": 290.8359375,
+      "duration": 998.9000000953674
+    },
+    {
+      "type": "keyDown",
+      "target": "main",
+      "key": "Meta"
+    },
+    {
+      "type": "keyDown",
+      "target": "main",
+      "key": "c"
+    },
+    {
+      "type": "keyUp",
+      "key": "Meta",
+      "target": "main"
+    }
+  ]
+}

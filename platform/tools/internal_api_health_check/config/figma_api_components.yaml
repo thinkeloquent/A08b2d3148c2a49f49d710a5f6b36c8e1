@@ -1,0 +1,38 @@
+name: figma_api_components
+description: Component, component set, and style endpoints
+
+tests:
+  - id: get-component
+    description: Get a component by key
+    path: /v1/components/:key
+    expected_status: [200, 403, 404, 429]
+
+  - id: list-file-components
+    description: List components in a file
+    path: /v1/files/:file_key/components
+    expected_status: [200, 403, 404, 429]
+
+  - id: list-team-components
+    description: List published team components
+    path: /v1/teams/:team_id/components
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-component-set
+    description: Get a component set by key
+    path: /v1/component_sets/:key
+    expected_status: [200, 403, 404, 429]
+
+  - id: list-team-component-sets
+    description: List published team component sets
+    path: /v1/teams/:team_id/component_sets
+    expected_status: [200, 403, 404, 429]
+
+  - id: list-team-styles
+    description: List published team styles
+    path: /v1/teams/:team_id/styles
+    expected_status: [200, 403, 404, 429]
+
+  - id: get-style
+    description: Get a style by key
+    path: /v1/styles/:key
+    expected_status: [200, 403, 404, 429]

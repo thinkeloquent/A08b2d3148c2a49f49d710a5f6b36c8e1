@@ -1,0 +1,18 @@
+name: statsig_api_experiments
+description: Experiments CRUD and lifecycle endpoints
+
+tests:
+  - id: list-experiments
+    description: List all experiments
+    path: /v1/experiments
+    expected_status: [200, 401, 403, 429]
+
+  - id: get-experiment
+    description: Get a single experiment by ID
+    path: /v1/experiments/:experiment_id
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-pulse-results
+    description: Get pulse results for an experiment
+    path: /v1/experiments/:experiment_id/pulse_results
+    expected_status: [200, 401, 403, 404, 429]

@@ -1,0 +1,162 @@
+[submodule "__STAGE__/mta-v500"]
+	path = __STAGE__/mta-v500
+	url = git@github.com:thinkeloquent/mta-v500.git
+[submodule "__STAGE__/mta-v600"]
+	path = __STAGE__/mta-v600
+	url = git@github.com:thinkeloquent/mta-v600.git
+[submodule "__STAGE__/mta-v700"]
+	path = __STAGE__/mta-v700
+	url = git@github.com:thinkeloquent/mta-v700.git
+[submodule "__STAGE__/discovery-ai-gemini-openai-compatibility"]
+	path = __STAGE__/discovery-ai-gemini-openai-compatibility
+	url = https://github.com/thinkeloquent/discovery-ai-gemini-openai-compatibility
+[submodule "__STAGE__/discovery-python-material-ui-rag"]
+	path = __STAGE__/discovery-python-material-ui-rag
+	url = https://github.com/thinkeloquent/discovery-python-material-ui-rag
+[submodule "__SPECS__/mta-SPECS"]
+	path = __SPECS__/mta-SPECS
+	url = git@github.com:thinkeloquent/mta-SPECS.git
+[submodule "__STAGE__/mta-v400"]
+	path = __STAGE__/mta-v400
+	url = https://github.com/thinkeloquent/mta-v400.git
+[submodule ".claude"]
+	path = .claude
+	url = https://github.com/carlosmarte-dev/personal-agent-persona-cldy
+[submodule "playwright-runs"]
+	path = playwright-runs
+	url = git@github.com:thinkeloquent/playwright-runs.git
+[submodule "__STAGE__/examples-data-visualization"]
+	path = __STAGE__/examples-data-visualization
+	url = https://github.com/carlosmarte/examples-data-visualization
+[submodule "__STAGE__/09-23-2025_langgraph"]
+	path = __STAGE__/09-23-2025_langgraph
+	url = https://github.com/carlosmarte-ai/09-23-2025_langgraph
+[submodule "__STAGE__/vibe-coding"]
+	path = __STAGE__/vibe-coding
+	url = https://github.com/carlosmarte-apps/vibe-coding
+[submodule "__STAGE__/github-report-efficiency-summary"]
+	path = __STAGE__/github-report-efficiency-summary
+	url = https://github.com/carlosmarte-apps/github-report-efficiency-summary
+[submodule "__STAGE__/JAM-casbin"]
+	path = __STAGE__/JAM-casbin
+	url = https://github.com/carlosmarte-apps/JAM-casbin
+[submodule "__STAGE__/self-service-react"]
+	path = __STAGE__/self-service-react
+	url = https://github.com/carlosmarte-apps/self-service-react
+[submodule "__STAGE__/app-url-management"]
+	path = __STAGE__/app-url-management
+	url = https://github.com/carlosmarte-apps/app-url-management
+[submodule "__STAGE__/dom-component-configurator"]
+	path = __STAGE__/dom-component-configurator
+	url = https://github.com/carlosmarte-apps/dom-component-configurator
+[submodule "__STAGE__/babel-extract-imports-text-based-notation"]
+	path = __STAGE__/babel-extract-imports-text-based-notation
+	url = https://github.com/thinkeloquent/babel-extract-imports-text-based-notation
+[submodule "__STAGE__/mta-multi-tenant-application"]
+	path = __STAGE__/mta-multi-tenant-application
+	url = https://github.com/thinkeloquent/mta-multi-tenant-application
+[submodule "__STAGE__/Project-ui-apps"]
+	path = __STAGE__/Project-ui-apps
+	url = https://github.com/thinkeloquent/Project-ui-apps
+[submodule "__STAGE__/dev-tools-ast-to-metadata"]
+	path = __STAGE__/dev-tools-ast-to-metadata
+	url = https://github.com/thinkeloquent/dev-tools-ast-to-metadata
+[submodule "__STAGE__/dashboard-components"]
+	path = __STAGE__/dashboard-components
+	url = https://github.com/thinkeloquent/dashboard-components
+[submodule "__STAGE__/json_key_canonicalizer"]
+	path = __STAGE__/json_key_canonicalizer
+	url = https://github.com/thinkeloquent/json_key_canonicalizer
+[submodule "__STAGE__/rendercom_multitenant_nodejs"]
+	path = __STAGE__/rendercom_multitenant_nodejs
+	url = https://github.com/thinkeloquent/rendercom_multitenant_nodejs
+[submodule "__STAGE__/rendercom_multitenant_react_ssr"]
+	path = __STAGE__/rendercom_multitenant_react_ssr
+	url = https://github.com/thinkeloquent/rendercom_multitenant_react_ssr
+[submodule "__STAGE__/thinkeloquent-github-action-ui-automations"]
+	path = __STAGE__/thinkeloquent-github-action-ui-automations
+	url = https://github.com/thinkeloquent/thinkeloquent-github-action-ui-automations
+[submodule "__STAGE__/ThinkEloquent_UI_Apps"]
+	path = __STAGE__/ThinkEloquent_UI_Apps
+	url = https://github.com/thinkeloquent/ThinkEloquent_UI_Apps
+[submodule "__STAGE__/ThinkEloquent_UI_ReactJS_Component"]
+	path = __STAGE__/ThinkEloquent_UI_ReactJS_Component
+	url = https://github.com/thinkeloquent/ThinkEloquent_UI_ReactJS_Component
+[submodule "__STAGE__/figma-to-x"]
+	path = __STAGE__/figma-to-x
+	url = https://github.com/thinkeloquent/figma-to-x
+[submodule "__STAGE__/tools-conditional-logic-mapping"]
+	path = __STAGE__/tools-conditional-logic-mapping
+	url = https://github.com/thinkeloquent/tools-conditional-logic-mapping
+[submodule "__STAGE__/esm-loader-fallback"]
+	path = __STAGE__/esm-loader-fallback
+	url = https://github.com/luna-ui-com/esm-loader-fallback
+[submodule "__STAGE__/standalone-react-component-editor"]
+	path = __STAGE__/standalone-react-component-editor
+	url = https://github.com/luna-ui-com/standalone-react-component-editor
+[submodule "__STAGE__/self-service-editors"]
+	path = __STAGE__/self-service-editors
+	url = https://github.com/luna-ui-com/self-service-editors
+[submodule "__STAGE__/npm-esm-utils"]
+	path = __STAGE__/npm-esm-utils
+	url = https://github.com/luna-ui-com/npm-esm-utils
+[submodule "__STAGE__/self-service-browser-extension"]
+	path = __STAGE__/self-service-browser-extension
+	url = https://github.com/luna-ui-com/self-service-browser-extension
+[submodule "__STAGE__/app-data-transformation"]
+	path = __STAGE__/app-data-transformation
+	url = https://github.com/luna-ui-com/app-data-transformation
+[submodule "__STAGE__/modular"]
+	path = __STAGE__/modular
+	url = https://github.com/carlosmarte-modules/modular
+[submodule "__STAGE__/npm-dependency-tree"]
+	path = __STAGE__/npm-dependency-tree
+	url = https://github.com/carlosmarte-learning/npm-dependency-tree
+[submodule "__STAGE__/langchain-discovery"]
+	path = __STAGE__/langchain-discovery
+	url = https://github.com/carlosmarte-discovery/langchain-discovery
+[submodule "__STAGE__/github-repo-to-print"]
+	path = __STAGE__/github-repo-to-print
+	url = https://github.com/carlosmarte-dev-toolkits/github-repo-to-print
+[submodule "__STAGE__/google-blockly"]
+	path = __STAGE__/google-blockly
+	url = https://github.com/carlosmarte-blog/google-blockly
+[submodule "__STAGE__/example-react-table"]
+	path = __STAGE__/example-react-table
+	url = https://github.com/carlosmarte-blog/example-react-table
+[submodule "__STAGE__/absolute-css-path-selector"]
+	path = __STAGE__/absolute-css-path-selector
+	url = https://github.com/carlosmarte-automation/absolute-css-path-selector
+[submodule "__STAGE__/html-component-type"]
+	path = __STAGE__/html-component-type
+	url = https://github.com/carlosmarte-automation/html-component-type
+[submodule "__STAGE__/npm-webdriver-io-website-locators"]
+	path = __STAGE__/npm-webdriver-io-website-locators
+	url = https://github.com/carlosmarte-automation/npm-webdriver-io-website-locators
+[submodule "__STAGE__/fastify-multi-tenant-admin-portal"]
+	path = __STAGE__/fastify-multi-tenant-admin-portal
+	url = https://github.com/carlosmarte-archive/fastify-multi-tenant-admin-portal
+[submodule "__STAGE__/fastify-multi-tenant-10-26-2025"]
+	path = __STAGE__/fastify-multi-tenant-10-26-2025
+	url = https://github.com/carlosmarte-archive/fastify-multi-tenant-10-26-2025
+[submodule "__STAGE__/archive-react-flow-examples"]
+	path = __STAGE__/archive-react-flow-examples
+	url = https://github.com/carlosmarte-archive/archive-react-flow-examples
+[submodule "__STAGE__/npm-fastify-multi-tenant"]
+	path = __STAGE__/npm-fastify-multi-tenant
+	url = https://github.com/carlosmarte-archive/npm-fastify-multi-tenant
+[submodule "__STAGE__/archive_npm-github-api-client"]
+	path = __STAGE__/archive_npm-github-api-client
+	url = https://github.com/carlosmarte-archive/archive_npm-github-api-client
+[submodule "__STAGE__/template-fastify-multitenant-app"]
+	path = __STAGE__/template-fastify-multitenant-app
+	url = https://github.com/carlosmarte-archive/template-fastify-multitenant-app
+[submodule "__STAGE__/npm-fastify-multitenant-07-20-2025"]
+	path = __STAGE__/npm-fastify-multitenant-07-20-2025
+	url = https://github.com/carlosmarte-archive/npm-fastify-multitenant-07-20-2025
+[submodule "__STAGE__/examples-npm-chrome-headless"]
+	path = __STAGE__/examples-npm-chrome-headless
+	url = https://github.com/carlosmarte-archive/examples-npm-chrome-headless
+[submodule "__STAGE__/mta-v900_restructure_03222026"]
+	path = __STAGE__/mta-v900_restructure_03222026
+	url = https://github.com/thinkeloquent/mta-v900_restructure_03222026.git

@@ -1,0 +1,16 @@
+[project]
+name = "pyproject-poetry-dep-copy"
+version = "0.1.0"
+description = "CLI tool to copy [tool.poetry.dependencies] from one pyproject.toml to another"
+requires-python = ">=3.11,<3.12"
+dependencies = []
+
+[project.scripts]
+pyproject-poetry-dep-copy = "pyproject_poetry_dep_copy.cli:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.setuptools.packages.find]
+where = ["src"]

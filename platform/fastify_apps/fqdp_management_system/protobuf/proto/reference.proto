@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package fqdp;
+
+import "common.proto";
+
+message Reference {
+  string id = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+  string name = 4;
+  string link = 5;
+  string type = 6;
+  string external_uid = 7;
+  string description = 8;
+  string metadata_json = 9;
+  string status = 10;
+  string created_by = 11;
+  string updated_by = 12;
+  string created_at = 13;
+  string updated_at = 14;
+}
+
+message ReferenceList {
+  repeated Reference data = 1;
+  PaginationMeta meta = 2;
+}
+
+message CreateReferenceRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string name = 3;
+  string link = 4;
+  string type = 5;
+  string external_uid = 6;
+  string description = 7;
+  string metadata_json = 8;
+}
+
+message UpdateReferenceRequest {
+  string name = 1;
+  string link = 2;
+  string type = 3;
+  string external_uid = 4;
+  string description = 5;
+  string metadata_json = 6;
+  string status = 7;
+}

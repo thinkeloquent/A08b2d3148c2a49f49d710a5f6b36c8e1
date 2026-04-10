@@ -1,0 +1,8 @@
+name: github_api_security
+description: Vulnerability alerts endpoint
+
+tests:
+  - id: get-vulnerability-alerts
+    description: Get vulnerability alerts status
+    path: /repos/:owner/:repo/vulnerability-alerts
+    expected_status: [200, 204, 403, 404]

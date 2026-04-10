@@ -1,0 +1,27 @@
+{
+  "name": "@internal/github-sdk-api-component-usage-audit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "github_sdk_api_component_usage_audit": "./bin/github_sdk_api_component_usage_audit.mjs",
+    "github_sdk_api_component_usage_audit_cli": "./cli.mjs"
+  },
+  "scripts": {
+    "start": "node bin/github_sdk_api_component_usage_audit.mjs",
+    "cli": "node cli.mjs"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "@internal/env-resolver": "workspace:*",
+    "@internal/github-api-sdk-cli": "file:../../../packages_mjs/github-api-sdk-cli",
+    "commander": "^12.1.0",
+    "chalk": "^5.4.1",
+    "dotenv": "^16.6.1",
+    "octokit": "^4.1.2",
+    "zod": "^3.24.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

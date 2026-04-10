@@ -1,0 +1,276 @@
+{
+  "name": "LangGraph Reflection Studio",
+  "description": "Iterative report generation with reflection and user feedback",
+  "config": {
+    "maxIterations": 3,
+    "entryPoint": "generate",
+    "interruptBefore": ["user_feedback"]
+  },
+  "state": {
+    "messages": { "reducer": "append", "default": [] },
+    "iterations": { "reducer": "replace", "default": 0 }
+  },
+  "conditions": {
+    "shouldContinue": {
+      "field": "iterations",
+      "operator": "gte",
+      "value": "config.maxIterations",
+      "trueResult": "__end__",
+      "falseResult": "reflect"
+    }
+  },
+  "g11n": {
+    "templates": {
+      "reportTitle": "# Report: {topic} (Draft {iteration})",
+      "executiveSummary": "## Executive Summary\nThis report examines {topic} through multiple analytical lenses. This is iteration {iteration} of the reflective writing process, incorporating feedback to improve depth and accuracy.",
+      "backgroundContext": "## Background & Context\n{topic} has become increasingly significant in recent years. Understanding its implications requires examining historical trends, current developments, and future projections. Stakeholders across multiple domains are affected by evolving dynamics in this area.",
+      "keyFindings": "## Key Findings\n1. **Trend Analysis**: Current data suggests significant shifts in how {topic} impacts various sectors.\n2. **Stakeholder Impact**: Multiple groups are affected differently by developments in {topic}.\n3. **Future Outlook**: Projections indicate continued evolution with both opportunities and challenges.",
+      "revisionsHeader": "## Revisions Based on Feedback",
+      "feedbackItem": "- **Feedback {index}**: Addressed \u2014 \"{feedback}\"",
+      "revisionsFooter": "The report has been revised {count} time(s) based on reviewer and user feedback to improve clarity, depth, and accuracy.",
+      "methodology": "## Methodology\nThis analysis uses a multi-iteration reflective approach where each draft is reviewed for content accuracy, structural coherence, analytical depth, and stylistic clarity before revision.",
+      "conclusions": "## Conclusions\nBased on the analysis, {topic} presents a complex landscape requiring nuanced understanding. Continued monitoring and adaptive strategies are recommended for all stakeholders.",
+      "draftFooter": "---\n*Draft {iteration} \u2014 Generated via LangGraph Reflection Studio (client-side)*",
+      "reflectionTitle": "## Review of Draft {iteration}: {topic}",
+      "contentAccuracy": "### Content Accuracy\nThe report covers key aspects of the topic. However, some claims could benefit from more specific data points or examples. Consider adding quantitative evidence where available.",
+      "structureEarly": "### Structure & Organization\nThe current structure follows a logical flow from context through findings to conclusions. The executive summary could be more concise.",
+      "structureLater": "### Structure & Organization\nThe current structure follows a logical flow from context through findings to conclusions. Structure has improved since the previous draft.",
+      "depthEarly": "### Analytical Depth\nThe analysis remains somewhat surface-level. Deeper exploration of causal relationships and second-order effects would strengthen the report.",
+      "depthLater": "### Analytical Depth\nThe analytical depth has improved with each iteration. Consider exploring contrarian viewpoints for a more balanced perspective.",
+      "suggestionsHeader": "### Suggestions for Improvement",
+      "suggestion1": "1. Add specific examples or case studies related to {topic}",
+      "suggestion2": "2. Include data-driven evidence to support key claims",
+      "suggestion3": "3. Expand the conclusions with actionable recommendations",
+      "suggestion4Early": "4. Consider adding a risks/limitations section",
+      "suggestion4Later": "4. Refine the executive summary to reflect accumulated improvements",
+      "reflectionFooter": "*Reviewed draft {iteration} \u2014 awaiting user feedback before next revision.*"
+    },
+    "langgraph_placeholders": {
+      "controlsDefaultTopic": "The Impact of Artificial Intelligence on Modern Healthcare",
+      "controlsTopicPlaceholder": "Enter report topic..."
+    }
+  },
+  "nodes": [
+    {
+      "id": "__start__",
+      "type": "customNode",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "nodeType": "start",
+        "category": "Control",
+        "label": "Start",
+        "icon": "\u25b6",
+        "inputs": {},
+        "handles": {
+          "sources": ["output"]
+        },
+        "style": {
+          "bgColor": "#f8fafc",
+          "textColor": "#475569",
+          "borderColor": "#e2e8f0",
+          "accentColor": "#6366f1",
+          "handleColor": "#6366f1"
+        }
+      }
+    },
+    {
+      "id": "generate",
+      "type": "customNode",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "nodeType": "generate",
+        "category": "Processing",
+        "label": "Generate Report",
+        "icon": "\ud83d\udcdd",
+        "handler": "generationNode",
+        "inputs": {},
+        "handles": {
+          "targets": ["input"],
+          "sources": ["output"]
+        },
+        "style": {
+          "bgColor": "#eff6ff",
+          "textColor": "#1d4ed8",
+          "borderColor": "#bfdbfe",
+          "accentColor": "#3b82f6",
+          "handleColor": "#3b82f6",
+          "stageBadge": "bg-blue-100 text-blue-700"
+        },
+        "g11n": {
+          "timeline": {
+            "itemTitle": "Generated Report: {stage.id}"
+          }
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "type": "customNode",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "nodeType": "reflect",
+        "category": "Processing",
+        "label": "Reflect & Critique",
+        "icon": "\ud83d\udd0d",
+        "handler": "reflectionNode",
+        "inputs": {},
+        "handles": {
+          "targets": ["input"],
+          "sources": ["output"]
+        },
+        "style": {
+          "bgColor": "#f5f3ff",
+          "textColor": "#6d28d9",
+          "borderColor": "#ddd6fe",
+          "accentColor": "#8b5cf6",
+          "handleColor": "#8b5cf6",
+          "stageBadge": "bg-violet-100 text-violet-700"
+        },
+        "g11n": {
+          "timeline": {
+            "itemTitle": "Reflection: {stage.id}"
+          },
+          "feedback": {
+            "title": "Paused for Feedback: {stage.label}"
+          }
+        }
+      }
+    },
+    {
+      "id": "user_feedback",
+      "type": "customNode",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "nodeType": "user_feedback",
+        "category": "Interaction",
+        "label": "User Feedback",
+        "icon": "\ud83d\udcac",
+        "handler": "userFeedbackNode",
+        "inputs": {},
+        "handles": {
+          "targets": ["input"],
+          "sources": ["output"]
+        },
+        "style": {
+          "bgColor": "#f8fafc",
+          "textColor": "#475569",
+          "borderColor": "#e2e8f0",
+          "accentColor": "#f59e0b",
+          "handleColor": "#f59e0b",
+          "activeBgColor": "#fffbeb",
+          "activeTextColor": "#b45309",
+          "activeBorderColor": "#fcd34d",
+          "stageBadge": "bg-amber-100 text-amber-700"
+        },
+        "g11n": {
+          "timeline": {
+            "itemTitle": "User Feedback: {stage.id}"
+          },
+          "feedback": {
+            "description": "The graph is paused \u2014 provide input to continue"
+          }
+        }
+      }
+    },
+    {
+      "id": "__end__",
+      "type": "customNode",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "nodeType": "end",
+        "category": "Control",
+        "label": "Final Report",
+        "icon": "\u2705",
+        "inputs": {},
+        "handles": {
+          "targets": ["input"]
+        },
+        "style": {
+          "bgColor": "#f8fafc",
+          "textColor": "#475569",
+          "borderColor": "#e2e8f0",
+          "accentColor": "#22c55e",
+          "handleColor": "#22c55e",
+          "activeBgColor": "#f0fdf4",
+          "activeTextColor": "#15803d",
+          "activeBorderColor": "#86efac",
+          "stageBadge": "bg-green-100 text-green-700"
+        },
+        "g11n": {
+          "timeline": {
+            "completeLabel": "Report Finalized"
+          }
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start-gen",
+      "source": "__start__",
+      "sourceHandle": "__start__-output",
+      "target": "generate",
+      "targetHandle": "generate-input",
+      "type": "smoothstep",
+      "data": {
+        "color": "#6366f1",
+        "animated": true
+      }
+    },
+    {
+      "id": "e-gen-reflect",
+      "source": "generate",
+      "sourceHandle": "generate-output",
+      "target": "reflect",
+      "targetHandle": "reflect-input",
+      "type": "smoothstep",
+      "data": {
+        "color": "#3b82f6",
+        "animated": true,
+        "label": "iterations < max",
+        "condition": "shouldContinue",
+        "conditionResult": "reflect"
+      }
+    },
+    {
+      "id": "e-reflect-fb",
+      "source": "reflect",
+      "sourceHandle": "reflect-output",
+      "target": "user_feedback",
+      "targetHandle": "user_feedback-input",
+      "type": "smoothstep",
+      "data": {
+        "color": "#8b5cf6",
+        "animated": true
+      }
+    },
+    {
+      "id": "e-fb-gen",
+      "source": "user_feedback",
+      "sourceHandle": "user_feedback-output",
+      "target": "generate",
+      "targetHandle": "generate-input",
+      "type": "smoothstep",
+      "data": {
+        "color": "#d97706",
+        "animated": true
+      }
+    },
+    {
+      "id": "e-gen-end",
+      "source": "generate",
+      "sourceHandle": "generate-output",
+      "target": "__end__",
+      "targetHandle": "__end__-input",
+      "type": "smoothstep",
+      "data": {
+        "color": "#16a34a",
+        "animated": false,
+        "dashArray": "6 3",
+        "label": "iterations >= max",
+        "condition": "shouldContinue",
+        "conditionResult": "__end__"
+      }
+    }
+  ]
+}

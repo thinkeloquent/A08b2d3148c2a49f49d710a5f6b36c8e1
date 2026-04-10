@@ -1,0 +1,24 @@
+providers:
+  - name: "OpenAI(gpt-4)"
+    description: "The industry's reliable standard for structured reasoning and complex instruction following. Best used as a 'control model' for tasks requiring high predictability and broad general knowledge."
+    context: "You are using GPT-4 as a general-purpose reasoning engine. Leverage its strengths in structured reasoning, complex instruction following, and broad general knowledge for tasks requiring high predictability and reliability."
+    values:
+      model: "gpt-4"
+      strengths: ["predictability", "broad-knowledge", "structured-reasoning"]
+      best_for: "complex-instructions"
+
+  - name: "anthropic(claude-3-sonnet)"
+    description: "The benchmark for technical nuance and human-like writing quality. Exceptional at code refactoring, adhering to complex brand voices, and maintaining deep contextual awareness."
+    context: "You are using Claude 3 Sonnet for tasks requiring technical nuance and high-quality prose. Leverage its strengths in code refactoring, brand voice adherence, and deep contextual awareness across long conversations."
+    values:
+      model: "claude-3-sonnet"
+      strengths: ["coding-nuance", "prose-quality", "contextual-accuracy"]
+      best_for: "migration-tasks"
+
+  - name: "gemini_openai(gemini-2.0-flash)"
+    description: "The high-velocity engine for the 'agentic era.' Optimized for near-zero latency, massive 1M+ token context windows, and real-time multimodal processing across audio, video, and text."
+    context: "You are using Gemini 2.0 Flash for high-throughput, latency-sensitive pipelines. Leverage its massive context window of over one million tokens, near-zero latency, and native multimodal processing across audio, video, and text."
+    values:
+      model: "gemini-2.0-flash"
+      strengths: ["extreme-speed", "massive-context", "multimodal-native"]
+      best_for: "high-throughput-pipelines"

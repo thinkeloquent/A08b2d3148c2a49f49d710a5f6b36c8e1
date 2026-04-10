@@ -1,0 +1,36 @@
+{
+  "name": "@internal/fastify-app-persona-editor",
+  "version": "1.0.0",
+  "description": "Persona Editor - Fastify application for managing LLM personas",
+  "type": "module",
+  "private": true,
+  "main": "backend/src/index.mjs",
+  "scripts": {
+    "dev": "cd backend && npm run app:dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:admin": "cd frontend-admin && npm run dev",
+    "build": "npm run build:frontend && npm run build:admin",
+    "build:frontend": "cd frontend && npm run build",
+    "build:admin": "cd frontend-admin && npm run build",
+    "db:setup": "cd sequelize && npm run setup",
+    "db:teardown": "cd sequelize && npm run teardown",
+    "db:seed": "cd sequelize && npm run seed",
+    "db:reset": "cd sequelize && npm run reset",
+    "db:test": "cd sequelize && npm run connection-test"
+  },
+  "workspaces": [
+    "backend",
+    "frontend",
+    "frontend-admin",
+    "sequelize"
+  ],
+  "keywords": [
+    "fastify",
+    "persona-editor",
+    "llm",
+    "ai",
+    "admin"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}

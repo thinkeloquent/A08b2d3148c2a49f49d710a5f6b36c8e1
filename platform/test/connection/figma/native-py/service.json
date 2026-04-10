@@ -1,0 +1,6 @@
+{
+  "name": "figma-native-py",
+  "test_type": "native_package",
+  "python": "httpx:AsyncClient",
+  "app_yaml_section": null
+}

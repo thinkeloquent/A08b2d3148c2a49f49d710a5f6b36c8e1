@@ -1,0 +1,231 @@
+[project]
+name = "fastapi-server"
+version = "0.1.0"
+description = "FastAPI Server with Polyglot Integration"
+authors = [{name = "Admin", email = "admin@example.com"}]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "chromadb1.5.0",
+  "langchain_classic1.0.1",
+  "fastapi==0.128.0",
+  "uvicorn[standard]==0.40.0",
+  "httpx[http2]>=0.28.1",
+  "aiobotocore[boto3]==3.1.1",
+  "typing-extensions>=4.0.0",
+  "click>=8.1.0",
+  "rich>=13.0.0",
+  "typer>=0.9.0",
+  "jinja2>=3.1.0",
+  "python-liquid>=1.0.0",
+  "chromadb1.5.0",
+  "langchain_classic1.0.1",
+  # Local packages (use exact names from pyproject.toml)
+  "fetch_httpx",
+  "vault-file",
+  "app_yaml_static_config",
+  "runtime_template_resolver",
+  "app_yaml_overwrites",
+  "platform-core-fastapi",
+  "polyglot-server",
+  "hello",
+  "common-exceptions",
+  "computed-url-builder",
+  "auth_config",
+  "auth_encoding",
+  "fetch_httpx_gemini_openai_constant",
+  "fetch_httpx_gemini_openai_protocols",
+  "healthz_diagnostics",
+  "json_file_storage",
+  "json_redis_storage",
+  "server_provider_cache",
+  "cache_json_awss3_storage",
+  "aws-s3-client",
+  "gemini_openai_sdk",
+  "static-app-loader",
+  "app-yaml-endpoints",
+  "db_connection_elasticsearch",
+  "db_connection_postgres",
+  "db_connection_redis",
+  "env_resolve",
+  "env_resolver",
+  "extract_imports_text_based_notation",
+  "github-api",
+  "figma-api",
+  "statsig-api-client",
+  "saucelabs-api-client",
+  "jira-api",
+  "confluence-api",
+  "unstructured>=0.16.0",
+  "rag-ui-component-ingest-config",
+  "fmt-sdk",
+  "can_use_http2",
+  "fetch_httpx_clients",
+  "proxy-url-builder",
+  "rag-embedding-config",
+  "rag-embedding-client",
+  "rag-llm-synthesis",
+  "rag-search-algorithms",
+  "github-sdk-api-component-usage-audit",
+  "app_yaml_load",
+  "fetch_http_cache_response",
+  "langgraph-flow-serializer",
+]
+
+[tool.uv.sources]
+fetch_httpx = {workspace = true}
+vault-file = {workspace = true}
+app_yaml_static_config = {workspace = true}
+runtime_template_resolver = {workspace = true}
+app_yaml_overwrites = {workspace = true}
+polyglot-server = {workspace = true}
+hello = {workspace = true}
+common-exceptions = {workspace = true}
+computed-url-builder = {workspace = true}
+auth_config = {workspace = true}
+auth_encoding = {workspace = true}
+fetch_httpx_gemini_openai_constant = {workspace = true}
+fetch_httpx_gemini_openai_protocols = {workspace = true}
+healthz_diagnostics = {workspace = true}
+json_file_storage = {workspace = true}
+json_redis_storage = {workspace = true}
+server_provider_cache = {workspace = true}
+cache_json_awss3_storage = {workspace = true}
+
+aws-s3-client = {workspace = true}
+gemini_openai_sdk = {workspace = true}
+static-app-loader = {workspace = true}
+app-yaml-endpoints = {workspace = true}
+db_connection_elasticsearch = {workspace = true}
+db_connection_postgres = {workspace = true}
+db_connection_redis = {workspace = true}
+env_resolve = {workspace = true}
+env_resolver = {workspace = true}
+extract_imports_text_based_notation = {workspace = true}
+github-api = {workspace = true}
+figma-api = {workspace = true}
+statsig-api-client = {workspace = true}
+saucelabs-api-client = {workspace = true}
+jira-api = {workspace = true}
+confluence-api = {workspace = true}
+rag-ui-component-ingest-config = {workspace = true}
+fmt-sdk = {workspace = true}
+can_use_http2 = {workspace = true}
+fetch_httpx_clients = {workspace = true}
+proxy-url-builder = {workspace = true}
+rag-embedding-config = {workspace = true}
+rag-embedding-client = {workspace = true}
+rag-llm-synthesis = {workspace = true}
+rag-search-algorithms = {workspace = true}
+github-sdk-api-component-usage-audit = {workspace = true}
+app_yaml_load = {workspace = true}
+fetch_http_cache_response = {workspace = true}
+langgraph-flow-serializer = {workspace = true}
+platform-core-fastapi = {workspace = true}
+[tool.poetry]
+name = "fastapi-server"
+version = "0.1.0"
+description = "FastAPI Server with Polyglot Integration"
+authors = ["Admin <admin@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+fastapi = "==0.128.0"
+uvicorn = {extras = ["standard"], version = "==0.40.0"}
+pydantic = "==2.12.5"
+pydantic-settings = "==2.12.0"
+python-dotenv = "==1.2.1"
+python-multipart = "==0.0.21"
+pyyaml = "==6.0.3"
+aiohttp = "==3.13.3"
+deepmerge = "==2.0"
+sqlalchemy = {extras = ["asyncio"], version = "==2.0.22"}
+greenlet = "==3.3.1"
+asyncpg = "==0.31.0"
+psycopg2-binary = "==2.9.11"
+alembic = "==1.18.1"
+redis = "==7.1.0"
+elasticsearch = ">=8.0.0,<9.0.0"
+aiofiles = "==25.1.0"
+urllib3 = "==2.6.3"
+httpx = {extras = ["http2"], version = ">=0.28.1"}
+aiobotocore = {extras = ["boto3"], version = "==3.1.1"}
+unstructured = ">=0.16.0"
+langchain = ">=1.0.2,<=1.2.10"
+langchain-community = "==0.4.1"
+langgraph = ">=1.0.1,<=1.0.8"
+langchain-text-splitters = "1.1.0"
+langchain-chroma = ">=1.0.0"
+langchain-openai = ">=1.0.0"
+nltk = ">=3.8.0"
+rank-bm25 = ">=0.2.0"
+numpy = ">=1.24.0"
+numba = "==0.63.1"
+markdown = ">=3.5.0"
+openai = ">=1.0.0"
+pypdfium2 = "==5.4.0"
+fsspec = "==2026.2.0"
+typing-extensions = ">=4.0.0"
+click = ">=8.1.0"
+rich = ">=13.0.0"
+typer = ">=0.9.0"
+jinja2 = ">=3.1.0"
+python-liquid = ">=1.0.0"
+chromadb = "1.5.0"
+langchain_classic = "1.0.1"
+# Local packages
+fetch_httpx = {path = "../packages_py/fetch_httpx", develop = true}
+vault-file = {path = "../polyglot/vault_file/py", develop = true}
+app_yaml_static_config = {path = "../polyglot/app_yaml_static_config/py", develop = true}
+runtime_template_resolver = {path = "../polyglot/overwrite_from_context/py", develop = true}
+app_yaml_overwrites = {path = "../polyglot/app_yaml_overwrites/py", develop = true}
+platform-core-fastapi = {path = "../platform-core/fastapi", develop = true}
+polyglot-server = {path = "../polyglot/server/py", develop = true}
+hello = {path = "../packages_py/hello", develop = true}
+common-exceptions = {path = "../polyglot/raise_exceptions/py", develop = true}
+computed-url-builder = {path = "../polyglot/computed_url_builder/py", develop = true}
+auth_config = {path = "../packages_py/auth_config", develop = true}
+auth_encoding = {path = "../packages_py/auth_encoding", develop = true}
+fetch_httpx_gemini_openai_constant = {path = "../packages_py/fetch_httpx_gemini_openai_constant", develop = true}
+fetch_httpx_gemini_openai_protocols = {path = "../packages_py/fetch_httpx_gemini_openai_protocols", develop = true}
+healthz_diagnostics = {path = "../polyglot/healthz_diagnostics/py", develop = true}
+json_file_storage = {path = "../packages_py/json_file_storage", develop = true}
+json_redis_storage = {path = "../packages_py/json_redis_storage", develop = true}
+server_provider_cache = {path = "../polyglot/server_provider_cache/py", develop = true}
+cache_json_awss3_storage = {path = "../polyglot/cache_json_awss3_storage/py", develop = true}
+
+aws-s3-client = {path = "../polyglot/aws_s3_client/py", develop = true}
+gemini_openai_sdk = {path = "../polyglot/gemini_openai_sdk/py", develop = true}
+static-app-loader = {path = "../polyglot/static_app_loader/py", develop = true}
+app-yaml-endpoints = {path = "../polyglot/app_yaml_endpoints/py", develop = true}
+db_connection_elasticsearch = {path = "../packages_py/db_connection_elasticsearch", develop = true}
+db_connection_postgres = {path = "../packages_py/db_connection_postgres", develop = true}
+db_connection_redis = {path = "../packages_py/db_connection_redis", develop = true}
+env_resolve = {path = "../packages_py/env_resolve", develop = true}
+env_resolver = {path = "../packages_py/env_resolver", develop = true}
+extract_imports_text_based_notation = {path = "../polyglot/extract-imports-text-based-notation/py", develop = true}
+github-api = {path = "../polyglot/github_api/py", develop = true}
+figma-api = {path = "../polyglot/figma_api/py", develop = true}
+statsig-api-client = {path = "../polyglot/statsig_api/py", develop = true}
+saucelabs-api-client = {path = "../polyglot/saucelabs_api/py", develop = true}
+jira-api = {path = "../polyglot/jira_api/py", develop = true}
+confluence-api = {path = "../polyglot/confluence_api/py", develop = true}
+
+rag-ui-component-ingest-config = {path = "../polyglot/rag_ui_component_ingest_config/py", develop = true}
+fmt-sdk = {path = "../polyglot/fmt_sdk/py", develop = true}
+can_use_http2 = {path = "../packages_py/can_use_http2", develop = true}
+fetch_httpx_clients = {path = "../packages_py/fetch_httpx_clients", develop = true}
+proxy-url-builder = {path = "../polyglot/proxy_url_builder/py", develop = true}
+rag-embedding-config = {path = "../polyglot/rag_embedding_config/py", develop = true}
+rag-embedding-client = {path = "../polyglot/rag_embedding_client/py", develop = true}
+rag-llm-synthesis = {path = "../polyglot/rag_llm_synthesis/py", develop = true}
+rag-search-algorithms = {path = "../polyglot/rag_search_algorithms/py", develop = true}
+github-sdk-api-component-usage-audit = {path = "../polyglot/github_sdk_api_component_usage_audit/py", develop = true}
+app_yaml_load = {path = "../polyglot/app_yaml_load/py", develop = true}
+fetch_http_cache_response = {path = "../polyglot/fetch_http_cache_response/py", develop = true}
+langgraph-flow-serializer = {path = "../polyglot/langgraph-flow-serializer/py", develop = true}
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fastapi_server"]

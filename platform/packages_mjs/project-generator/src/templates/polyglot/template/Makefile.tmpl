@@ -1,0 +1,26 @@
+.PHONY: install install-all install-mjs install-py test test-all test-mjs test-py lint clean
+
+install: install-all
+install-all: install-mjs install-py
+
+install-mjs:
+	cd mjs && npm install
+
+install-py:
+	cd py && pip install -e ".[dev]"
+
+test: test-all
+test-all: test-mjs test-py
+
+test-mjs:
+	cd mjs && npm test
+
+test-py:
+	cd py && pytest __tests__/ -v
+
+lint:
+	cd mjs && npx biome check .
+	cd py && ruff check .
+
+clean:
+	rm -rf mjs/node_modules mjs/dist py/.venv py/__pycache__

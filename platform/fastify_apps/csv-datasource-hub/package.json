@@ -1,0 +1,19 @@
+{
+  "name": "@internal/fastify-app-csv-datasource-hub-root",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "sequelize",
+    "widget/upload-csv"
+  ],
+  "scripts": {
+    "db:setup": "cd sequelize && node setup.mjs",
+    "db:teardown": "cd sequelize && node teardown.mjs",
+    "db:seed": "cd sequelize && node seed.mjs",
+    "db:test": "cd sequelize && node connection-test.mjs",
+    "db:reset": "cd sequelize && CAN_DELETE=true node teardown.mjs && node setup.mjs && node seed.mjs"
+  }
+}

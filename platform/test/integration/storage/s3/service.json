@@ -1,0 +1,7 @@
+{
+  "name": "s3",
+  "test_type": "direct_package_import",
+  "python": "aws_s3_client.config:config_from_env",
+  "mjs": "aws-s3-client:configFromEnv",
+  "app_yaml_section": ["storage", "s3"]
+}

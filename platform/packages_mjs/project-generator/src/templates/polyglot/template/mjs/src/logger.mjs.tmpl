@@ -1,0 +1,31 @@
+/**
+ * Logger factory for {{APP_NAME_SNAKE}}.
+ */
+
+/**
+ * Create a scoped logger.
+ * @param {string} scope
+ * @returns {{ info: Function, warn: Function, error: Function, debug: Function }}
+ */
+export function createLogger(scope) {
+  const prefix = `[${scope}]`;
+
+  return {
+    info(msg, meta = {}) {
+      const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+      process.stdout.write(`${prefix} INFO: ${msg}${metaStr}\n`);
+    },
+    warn(msg, meta = {}) {
+      const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+      process.stderr.write(`${prefix} WARN: ${msg}${metaStr}\n`);
+    },
+    error(msg, meta = {}) {
+      const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+      process.stderr.write(`${prefix} ERROR: ${msg}${metaStr}\n`);
+    },
+    debug(msg, meta = {}) {
+      const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+      process.stdout.write(`${prefix} DEBUG: ${msg}${metaStr}\n`);
+    },
+  };
+}

@@ -1,0 +1,80 @@
+syntax = "proto3";
+package figma_component_inspector;
+
+import "common.proto";
+
+message RGBAColor {
+  double r = 1;
+  double g = 2;
+  double b = 3;
+  double a = 4;
+}
+
+message BoundingBox {
+  double x = 1;
+  double y = 2;
+  double width = 3;
+  double height = 4;
+}
+
+message FigmaNode {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  optional bool visible = 4;
+  optional BoundingBox absolute_bounding_box = 5;
+  repeated FigmaNode children = 6;
+  map<string, string> styles = 7;
+  optional RGBAColor background_color = 8;
+}
+
+message FigmaComponent {
+  string key = 1;
+  string name = 2;
+  optional string description = 3;
+}
+
+message FigmaFileResponse {
+  string name = 1;
+  string last_modified = 2;
+  optional string thumbnail_url = 3;
+  string version = 4;
+  FigmaNode document = 5;
+  map<string, FigmaComponent> components = 6;
+}
+
+message FigmaImagesResponse {
+  optional string err = 1;
+  map<string, string> images = 2;
+  optional int32 status = 3;
+}
+
+message DesignVariable {
+  string name = 1;
+  string value = 2;
+  string type = 3;
+  optional string collection = 4;
+}
+
+message ComponentProperty {
+  string value = 1;
+  string type = 2;
+  optional string token = 3;
+}
+
+message NodeDetailsResponse {
+  FigmaNode node = 1;
+  map<string, ComponentProperty> properties = 2;
+}
+
+message ApiResponse {
+  bool success = 1;
+  oneof payload {
+    FigmaFileResponse file_response = 2;
+    FigmaImagesResponse images_response = 3;
+    NodeDetailsResponse node_response = 4;
+  }
+  optional string error = 10;
+  optional string message = 11;
+  optional int32 status_code = 12;
+}

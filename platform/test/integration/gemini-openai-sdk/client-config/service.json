@@ -1,0 +1,7 @@
+{
+  "name": "client-config",
+  "test_type": "direct_package_import",
+  "python": "gemini_openai_sdk:GeminiClient",
+  "mjs": "gemini-openai-sdk:GeminiClient",
+  "app_yaml_section": ["providers", "gemini_openai"]
+}

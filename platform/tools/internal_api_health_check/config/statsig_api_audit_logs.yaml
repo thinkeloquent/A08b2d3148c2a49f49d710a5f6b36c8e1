@@ -1,0 +1,8 @@
+name: statsig_api_audit_logs
+description: Audit logs endpoints
+
+tests:
+  - id: list-audit-logs
+    description: List all audit logs
+    path: /v1/audit_logs
+    expected_status: [200, 401, 403, 429]

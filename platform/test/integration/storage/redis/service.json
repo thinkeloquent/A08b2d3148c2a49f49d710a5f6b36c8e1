@@ -1,0 +1,7 @@
+{
+  "name": "redis",
+  "test_type": "direct_package_import",
+  "python": "db_connection_redis:RedisConfig",
+  "mjs": "@internal/db_connection_redis",
+  "app_yaml_section": ["storage", "redis"]
+}

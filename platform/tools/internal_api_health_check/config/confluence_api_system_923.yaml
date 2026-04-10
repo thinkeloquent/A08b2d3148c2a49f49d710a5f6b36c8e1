@@ -1,0 +1,8 @@
+name: confluence_api_system_923
+description: System information endpoint (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: server-information
+    description: Get Confluence server information
+    path: /v9/server-information
+    expected_status: [200, 401, 403, 404, 429]

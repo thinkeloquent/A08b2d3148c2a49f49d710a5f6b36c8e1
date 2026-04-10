@@ -1,0 +1,28 @@
+name: github_api_releases
+description: Tags and releases endpoints
+
+tests:
+  - id: list-tags
+    description: List repository tags
+    path: /repos/:owner/:repo/tags
+    expected_status: 200
+
+  - id: list-releases
+    description: List repository releases
+    path: /repos/:owner/:repo/releases
+    expected_status: 200
+
+  - id: latest-release
+    description: Get latest release
+    path: /repos/:owner/:repo/releases/latest
+    expected_status: [200, 404]
+
+  - id: release-by-tag
+    description: Get release by tag name
+    path: /repos/:owner/:repo/releases/tags/:tag
+    expected_status: [200, 404]
+
+  - id: list-rulesets
+    description: List repository rulesets
+    path: /repos/:owner/:repo/rulesets
+    expected_status: [200, 404]

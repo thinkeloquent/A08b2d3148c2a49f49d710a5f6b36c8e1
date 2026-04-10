@@ -1,0 +1,19 @@
+{
+  "name": "@internal/rag-embedding-config",
+  "version": "1.0.0",
+  "description": "RAG Embedding Config — constants and kwargs builders (Node.js)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}

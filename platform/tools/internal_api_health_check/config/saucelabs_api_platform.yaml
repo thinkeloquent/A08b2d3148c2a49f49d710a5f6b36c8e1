@@ -1,0 +1,13 @@
+name: saucelabs_api_platform
+description: Platform status and supported configurations
+
+tests:
+  - id: get-platform-status
+    description: Get Sauce Labs service status (public, no auth)
+    path: /v1/platform/status
+    expected_status: [200, 429, 502]
+
+  - id: get-platforms
+    description: Get supported platforms by automation API
+    path: /v1/platform/:automation_api
+    expected_status: [200, 401, 403, 429]

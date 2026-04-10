@@ -1,0 +1,32 @@
+{
+  "name": "@internal/fastify-app-figma-files",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "fastify_apps/figma-files/backend/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:fastify"],
+  "implicitDependencies": [],
+  "targets": {
+    "lint": {},
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run app:dev",
+        "cwd": "fastify_apps/figma-files"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run app:start",
+        "cwd": "fastify_apps/figma-files"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run test",
+        "cwd": "fastify_apps/figma-files"
+      }
+    }
+  }
+}

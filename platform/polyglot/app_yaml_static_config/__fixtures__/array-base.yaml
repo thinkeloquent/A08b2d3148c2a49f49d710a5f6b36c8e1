@@ -1,0 +1,10 @@
+# Base config with arrays for merge testing
+app:
+  name: test-app
+  tags:
+    - alpha
+    - beta
+  settings:
+    features:
+      - feature-a
+      - feature-b

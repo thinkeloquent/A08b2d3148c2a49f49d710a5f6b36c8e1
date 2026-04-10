@@ -1,0 +1,234 @@
+# Makefile.uv
+# uv-based Python package management for development
+# Modern, fast alternative to Poetry with workspace support
+
+# Get the directory where Makefile is located (project root)
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# Use local .venv if it exists
+VENV_DIR := $(MAKEFILE_DIR).venv
+UV := uv
+
+# ============================================================================
+# SSL/TLS and Network Configuration
+# ============================================================================
+# SSL verification (set to "false" to disable SSL verification)
+SSL_VERIFY ?= true
+
+# Certificate authority bundle path (optional)
+CA_BUNDLE ?=
+
+# Proxy settings (optional)
+HTTP_PROXY ?=
+HTTPS_PROXY ?=
+NO_PROXY ?=
+
+# Configure SSL based on configuration (only export if set)
+ifeq ($(SSL_VERIFY),false)
+    export UV_NATIVE_TLS := 0
+    export PYTHONHTTPSVERIFY := 0
+endif
+ifdef CA_BUNDLE
+    export SSL_CERT_FILE := $(CA_BUNDLE)
+    export REQUESTS_CA_BUNDLE := $(CA_BUNDLE)
+endif
+
+# Set proxy variables if provided (only export if set)
+ifdef HTTP_PROXY
+    export HTTP_PROXY
+    export http_proxy := $(HTTP_PROXY)
+endif
+ifdef HTTPS_PROXY
+    export HTTPS_PROXY
+    export https_proxy := $(HTTPS_PROXY)
+endif
+ifdef NO_PROXY
+    export NO_PROXY
+    export no_proxy := $(NO_PROXY)
+endif
+
+.PHONY: help sync install lock update add remove \
+        run run-server run-pytest \
+        list outdated tree \
+        venv venv-remove clean \
+        workspace-info
+
+help:
+	@echo "uv Package Management Commands"
+	@echo ""
+	@echo "Installation:"
+	@echo "  make -f Makefile.uv sync        - Install all workspace packages"
+	@echo "  make -f Makefile.uv install     - Alias for sync"
+	@echo "  make -f Makefile.uv lock        - Update uv.lock without installing"
+	@echo "  make -f Makefile.uv update      - Update all dependencies"
+	@echo ""
+	@echo "Package Management:"
+	@echo "  make -f Makefile.uv add PKG=x   - Add a dependency"
+	@echo "  make -f Makefile.uv remove PKG=x - Remove a dependency"
+	@echo ""
+	@echo "Running Commands:"
+	@echo "  make -f Makefile.uv run CMD=x   - Run command in venv (uv run <cmd>)"
+	@echo "  make -f Makefile.uv run-server  - Run uvicorn server"
+	@echo "  make -f Makefile.uv run-pytest  - Run pytest"
+	@echo ""
+	@echo "Package Info:"
+	@echo "  make -f Makefile.uv list        - List installed packages"
+	@echo "  make -f Makefile.uv outdated    - Show outdated packages"
+	@echo "  make -f Makefile.uv tree        - Show dependency tree"
+	@echo ""
+	@echo "Environment:"
+	@echo "  make -f Makefile.uv venv        - Create virtualenv"
+	@echo "  make -f Makefile.uv venv-remove - Remove virtualenv"
+	@echo ""
+	@echo "Workspace:"
+	@echo "  make -f Makefile.uv workspace-info - Show workspace members"
+	@echo ""
+	@echo "Cleanup:"
+	@echo "  make -f Makefile.uv clean       - Remove build artifacts"
+	@echo ""
+	@echo "SSL/Network Variables:"
+	@echo "  SSL_VERIFY=false                - Disable SSL verification"
+	@echo "  CA_BUNDLE=/path/to/ca.crt       - Custom CA bundle"
+	@echo "  HTTP_PROXY=http://proxy:8080    - HTTP proxy"
+	@echo "  HTTPS_PROXY=http://proxy:8080   - HTTPS proxy"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make -f Makefile.uv sync"
+	@echo "  make -f Makefile.uv add PKG=requests"
+	@echo "  make -f Makefile.uv run CMD='python -m mymodule'"
+	@echo "  make -f Makefile.uv run-pytest"
+
+# ============================================================================
+# Installation
+# ============================================================================
+
+# Install all workspace packages
+sync:
+	@echo "Syncing workspace packages with uv..."
+	$(UV) sync
+	@echo "Installing workspace members in editable mode..."
+	@for dir in packages_py/*/pyproject.toml fastapi_apps/*/pyproject.toml fastapi_server/pyproject.toml polyglot/*/py/pyproject.toml; do \
+		[ -f "$$dir" ] && $(UV) pip install -e "$$(dirname $$dir)" 2>/dev/null || true; \
+	done
+	@echo "Done! All workspace packages installed."
+
+# Alias for sync
+install: sync
+
+# Update lock file without installing
+lock:
+	@echo "Updating uv.lock..."
+	$(UV) lock
+	@echo "Done!"
+
+# Update all dependencies to latest compatible versions
+update:
+	@echo "Updating all dependencies..."
+	$(UV) lock --upgrade
+	$(UV) sync
+	@echo "Done!"
+
+# ============================================================================
+# Package Management
+# ============================================================================
+
+# Add a dependency (usage: make -f Makefile.uv add PKG=requests)
+add:
+	@if [ -z "$(PKG)" ]; then \
+		echo "Usage: make -f Makefile.uv add PKG=<package_name>"; \
+		exit 1; \
+	fi
+	$(UV) add $(PKG)
+
+# Remove a dependency (usage: make -f Makefile.uv remove PKG=requests)
+remove:
+	@if [ -z "$(PKG)" ]; then \
+		echo "Usage: make -f Makefile.uv remove PKG=<package_name>"; \
+		exit 1; \
+	fi
+	$(UV) remove $(PKG)
+
+# ============================================================================
+# Running Commands
+# ============================================================================
+
+# Run a command in the virtualenv (usage: make -f Makefile.uv run CMD='python script.py')
+run:
+	@if [ -z "$(CMD)" ]; then \
+		echo "Usage: make -f Makefile.uv run CMD='<command>'"; \
+		echo "Example: make -f Makefile.uv run CMD='python -m pytest'"; \
+		exit 1; \
+	fi
+	$(UV) run $(CMD)
+
+# Run uvicorn server
+run-server:
+	@echo "Starting uvicorn server..."
+	$(UV) run python -m uvicorn fastapi_server.main:app --reload --host 0.0.0.0 --port 8000
+
+# Run pytest
+run-pytest:
+	@echo "Running pytest..."
+	$(UV) run pytest $(ARGS)
+
+# ============================================================================
+# Package Info
+# ============================================================================
+
+# List installed packages
+list:
+	$(UV) pip list
+
+# Show outdated packages
+outdated:
+	$(UV) pip list --outdated
+
+# Show dependency tree
+tree:
+	$(UV) tree
+
+# ============================================================================
+# Environment
+# ============================================================================
+
+# Create virtualenv
+venv:
+	@echo "Creating virtualenv..."
+	$(UV) venv
+	@echo "Virtualenv ready at $(VENV_DIR)"
+
+# Remove virtualenv
+venv-remove:
+	@echo "Removing virtualenv..."
+	rm -rf $(VENV_DIR)
+	@echo "Done!"
+
+# ============================================================================
+# Workspace
+# ============================================================================
+
+# Show workspace members
+workspace-info:
+	@echo "Workspace members:"
+	@echo ""
+	@echo "From pyproject.toml [tool.uv.workspace].members:"
+	@grep -A 10 '^\[tool.uv.workspace\]' pyproject.toml | grep -E '^\s+"' | sed 's/[",]//g' | sed 's/^/  /'
+	@echo ""
+	@echo "Discovered packages:"
+	@for dir in packages_py/*/pyproject.toml fastapi_apps/*/pyproject.toml fastapi_server/pyproject.toml polyglot/*/py/pyproject.toml; do \
+		[ -f "$$dir" ] && echo "  $$(dirname $$dir)"; \
+	done 2>/dev/null || true
+
+# ============================================================================
+# Cleanup
+# ============================================================================
+
+# Remove build artifacts
+clean:
+	@echo "Cleaning build artifacts..."
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@rm -rf dist/ build/ 2>/dev/null || true
+	@echo "Done!"

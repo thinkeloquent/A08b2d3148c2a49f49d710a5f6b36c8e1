@@ -1,0 +1,21 @@
+{
+  "name": "@internal/app-yaml-load",
+  "version": "0.1.0",
+  "description": "Shared AppYamlConfig initialization for servers, CLIs, and tests",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@internal/app-yaml-static-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

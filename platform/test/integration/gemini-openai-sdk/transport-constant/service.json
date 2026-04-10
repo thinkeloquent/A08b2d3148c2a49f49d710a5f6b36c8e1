@@ -1,0 +1,7 @@
+{
+  "name": "transport-constant",
+  "test_type": "direct_package_import",
+  "python": "fetch_httpx_gemini_openai_constant",
+  "mjs": "fetch-undici-gemini-openai-constant",
+  "app_yaml_section": ["providers", "gemini_openai"]
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rag-ui-component-ingest-config",
+  "title": "RAG UI Component Ingest Config Schema",
+  "description": "Canonical JSON Schema for RAG UI Component Ingest Configuration — cross-language contract.",
+  "$defs": {
+    "BaseIngestConfig": {
+      "type": "object",
+      "properties": {
+        "dataset_root": { "type": "string", "default": "dataset/repos" },
+        "persist_root": { "type": "string", "default": "data/chroma" },
+        "embeddings_model_name": { "type": "string", "default": "all-MiniLM-L6-v2" },
+        "chunk_size": { "type": "integer", "minimum": 1, "default": 1200 },
+        "chunk_overlap": { "type": "integer", "minimum": 0, "default": 150 },
+        "vector_backend": { "type": "string", "enum": ["chroma", "elasticsearch"], "default": "chroma" },
+        "es_host": { "type": "string", "default": "localhost" },
+        "es_port": { "type": "integer", "minimum": 1, "default": 53300 },
+        "es_scheme": { "type": "string", "default": "https" },
+        "redis_host": { "type": "string", "default": "localhost" },
+        "redis_port": { "type": "integer", "minimum": 1, "default": 53200 },
+        "llm_provider": { "type": "string", "default": "openai" },
+        "openai_model": { "type": "string", "default": "gpt-4o" },
+        "anthropic_model": { "type": "string", "default": "claude-sonnet-4-5-20250514" },
+        "gemini_model": { "type": "string", "default": "gemini-2.0-flash" },
+        "hybrid_alpha": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.5 },
+        "score_threshold": { "type": "number", "minimum": 0, "default": 0.0 },
+        "reranker_enabled": { "type": "boolean", "default": false },
+        "reranker_model": { "type": "string", "default": "gemini-2.0-flash" },
+        "retrieve_n": { "type": "integer", "minimum": 1, "default": 50 },
+        "top_k": { "type": "integer", "minimum": 1, "default": 6 },
+        "postgres_enabled": { "type": "boolean", "default": true }
+      },
+      "required": [
+        "dataset_root", "persist_root", "embeddings_model_name",
+        "chunk_size", "chunk_overlap", "vector_backend",
+        "es_host", "es_port", "es_scheme",
+        "redis_host", "redis_port",
+        "llm_provider", "openai_model", "anthropic_model", "gemini_model",
+        "hybrid_alpha", "score_threshold", "reranker_enabled", "reranker_model",
+        "retrieve_n", "top_k", "postgres_enabled"
+      ],
+      "additionalProperties": false
+    },
+    "LibraryConfig": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+        "version": { "type": "string" },
+        "source_directory": { "type": "string" },
+        "persist_directory": { "type": "string" },
+        "examples_directory": { "type": "string" },
+        "elasticsearch_index": { "type": "string" },
+        "component_path_segment": { "type": "string", "default": "components" },
+        "import_packages": { "type": "array", "items": { "type": "string" } },
+        "chunk_size": { "type": "integer", "minimum": 1 },
+        "chunk_overlap": { "type": "integer", "minimum": 0 },
+        "file_extensions": { "type": "array", "items": { "type": "string" } },
+        "ignored_directories": { "type": "array", "items": { "type": "string" } },
+        "enabled": { "type": "boolean", "default": true }
+      },
+      "required": ["name", "slug"],
+      "additionalProperties": false
+    },
+    "DocumentMetadata": {
+      "type": "object",
+      "properties": {
+        "library": { "type": "string" },
+        "library_version": { "type": "string" },
+        "component": { "type": "string" },
+        "file_name": { "type": "string" },
+        "file_path": { "type": "string" },
+        "source_type": {
+          "type": "string",
+          "enum": ["component", "story", "doc", "style", "type", "test", "config"]
+        },
+        "language": { "type": "string" },
+        "content_hash": { "type": "string" },
+        "chunk_index": { "type": "integer", "minimum": 0 },
+        "total_chunks": { "type": "integer", "minimum": 1 },
+        "ingested_at": { "type": "string", "format": "date-time" },
+        "heading": { "type": "string" },
+        "export_name": { "type": "string" }
+      },
+      "required": [
+        "library", "file_name", "file_path", "source_type",
+        "language", "content_hash", "chunk_index", "total_chunks", "ingested_at"
+      ],
+      "additionalProperties": false
+    },
+    "RagUIComponentIngestConfig": {
+      "type": "object",
+      "properties": {
+        "base": { "$ref": "#/$defs/BaseIngestConfig" },
+        "libraries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/LibraryConfig" }
+        }
+      },
+      "required": ["base", "libraries"],
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/RagUIComponentIngestConfig"
+}

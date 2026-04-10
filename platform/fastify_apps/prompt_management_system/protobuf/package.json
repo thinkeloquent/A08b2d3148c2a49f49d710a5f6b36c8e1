@@ -1,0 +1,17 @@
+{
+  "name": "@internal/prompt-management-system-protobuf",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "generate": "pbjs -t static-module -w es6 -o generated/proto.js proto/*.proto && node fix-proto.mjs generated/proto.js && pbts -o generated/proto.d.ts generated/proto.js",
+    "clean": "rm -rf generated/*.js generated/*.d.ts",
+    "build": "npm run clean && npm run generate"
+  },
+  "dependencies": {
+    "protobufjs": "^7.4.0"
+  },
+  "devDependencies": {
+    "protobufjs-cli": "^1.1.3"
+  }
+}

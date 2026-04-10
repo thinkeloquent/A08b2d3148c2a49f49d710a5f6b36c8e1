@@ -1,0 +1,14 @@
+[tool.poetry]
+package-mode = false
+name = "connection-test-figma-native-py"
+version = "0.0.0"
+description = "Connection test for Figma API via httpx directly — no local packages"
+authors = []
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+httpx = ">=0.28.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

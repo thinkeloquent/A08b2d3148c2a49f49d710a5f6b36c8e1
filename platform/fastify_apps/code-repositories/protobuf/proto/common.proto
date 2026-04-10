@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package code_repositories.common;
+
+// Repository type classification
+enum RepositoryType {
+  REPOSITORY_TYPE_UNSPECIFIED = 0;
+  REPOSITORY_TYPE_NPM = 1;
+  REPOSITORY_TYPE_DOCKER = 2;
+  REPOSITORY_TYPE_PYTHON = 3;
+}
+
+// Repository status
+enum RepositoryStatus {
+  REPOSITORY_STATUS_UNSPECIFIED = 0;
+  REPOSITORY_STATUS_STABLE = 1;
+  REPOSITORY_STATUS_BETA = 2;
+  REPOSITORY_STATUS_DEPRECATED = 3;
+  REPOSITORY_STATUS_EXPERIMENTAL = 4;
+}
+
+// Repository source origin
+enum RepositorySource {
+  REPOSITORY_SOURCE_UNSPECIFIED = 0;
+  REPOSITORY_SOURCE_GITHUB = 1;
+  REPOSITORY_SOURCE_NPM = 2;
+  REPOSITORY_SOURCE_DOCKERHUB = 3;
+  REPOSITORY_SOURCE_PYPI = 4;
+  REPOSITORY_SOURCE_MANUAL = 5;
+}
+
+// External identifier (registry, id pair)
+message ExternalId {
+  string registry = 1;
+  string id = 2;
+}
+
+// Pagination request parameters
+message PaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+// Pagination response metadata
+message PaginationResponse {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 total_pages = 4;
+}
+
+// Standard error response
+message ErrorResponse {
+  int32 code = 1;
+  string message = 2;
+  string details = 3;
+}
+
+// Timestamp wrapper for consistency
+message Timestamp {
+  string iso8601 = 1;
+}

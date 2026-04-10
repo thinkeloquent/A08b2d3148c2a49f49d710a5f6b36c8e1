@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fetch_httpx_gemini_openai_constant"
+version = "1.0.0"
+description = "Pre-configured httpx transport layer constants for Gemini API with optimized settings for LLM workloads"
+license = {text = "MIT"}
+requires-python = ">=3.11,<3.12"
+authors = [
+    {name = "fetch_httpx_gemini_openai_constant contributors"}
+]
+keywords = [
+    "gemini",
+    "httpx[http2]>=0.28.1",
+    "http2",
+    "llm",
+    "transport",
+    "configuration",
+    "constants",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: AsyncIO",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "httpx[http2]>=0.28.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/example/fetch_httpx_gemini_openai_constant"
+Documentation = "https://github.com/example/fetch_httpx_gemini_openai_constant#readme"
+Repository = "https://github.com/example/fetch_httpx_gemini_openai_constant"
+Issues = "https://github.com/example/fetch_httpx_gemini_openai_constant/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fetch_httpx_gemini_openai_constant"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]

@@ -1,0 +1,394 @@
+# Makefile.pnpm
+# pnpm-based Node.js package management for CI and development
+# Includes cache management, cleanup, and CI-optimized workflows
+
+# Get the directory where Makefile is located (project root)
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# ============================================================================
+# pnpm Configuration
+# ============================================================================
+PNPM := pnpm
+NODE := node
+NPX := pnpm dlx
+
+# Package directories
+PACKAGES_DIR := packages
+NODE_MODULES := node_modules
+
+# ============================================================================
+# Cache Configuration
+# ============================================================================
+# pnpm store location (can be overridden for CI)
+# Default: ~/.local/share/pnpm/store (or platform equivalent)
+PNPM_STORE_DIR ?=
+PNPM_CACHE_DIR ?= $(MAKEFILE_DIR).pnpm-cache
+
+# CI mode detection (set CI=true in CI environments)
+CI ?=
+
+# Configure pnpm store if specified
+ifdef PNPM_STORE_DIR
+    export PNPM_STORE_DIR
+endif
+
+# ============================================================================
+# SSL/TLS and Network Configuration
+# ============================================================================
+# Set these variables to configure SSL verification, proxy, and registry settings
+# Example: make -f Makefile.pnpm SSL_VERIFY=false install
+#          make -f Makefile.pnpm HTTPS_PROXY=http://proxy:8080 install
+
+# SSL verification (set to "false" to disable SSL verification)
+SSL_VERIFY ?= true
+
+# Certificate authority bundle path (optional)
+CA_BUNDLE ?=
+
+# Proxy settings (optional)
+HTTP_PROXY ?=
+HTTPS_PROXY ?=
+NO_PROXY ?=
+
+# npm registry URL (optional, defaults to registry.npmjs.org)
+NPM_REGISTRY ?=
+
+# Configure SSL based on settings
+ifeq ($(SSL_VERIFY),false)
+    NODE_TLS_REJECT_UNAUTHORIZED := 0
+    NPM_CONFIG_STRICT_SSL := false
+endif
+ifdef CA_BUNDLE
+    NODE_EXTRA_CA_CERTS := $(CA_BUNDLE)
+endif
+
+# Set proxy variables if provided
+ifdef HTTP_PROXY
+    http_proxy := $(HTTP_PROXY)
+endif
+ifdef HTTPS_PROXY
+    https_proxy := $(HTTPS_PROXY)
+endif
+ifdef NO_PROXY
+    no_proxy := $(NO_PROXY)
+endif
+ifdef NPM_REGISTRY
+    NPM_CONFIG_REGISTRY := $(NPM_REGISTRY)
+endif
+
+# Export all environment variables
+export NODE_TLS_REJECT_UNAUTHORIZED NODE_EXTRA_CA_CERTS NPM_CONFIG_STRICT_SSL
+export HTTP_PROXY http_proxy HTTPS_PROXY https_proxy NO_PROXY no_proxy
+export NPM_CONFIG_REGISTRY
+
+.PHONY: help install install-ci install-prod lock update \
+        list outdated add remove \
+        build build-all test lint typecheck \
+        cache-info cache-clean cache-prune store-path store-prune \
+        clean clean-all clean-modules clean-build clean-cache \
+        ci-setup ci-install ci-build ci-test
+
+help:
+	@echo "pnpm Package Management Commands"
+	@echo ""
+	@echo "Installation:"
+	@echo "  make -f Makefile.pnpm install       - Install all dependencies"
+	@echo "  make -f Makefile.pnpm install-ci    - Install with frozen lockfile (CI)"
+	@echo "  make -f Makefile.pnpm install-prod  - Install production deps only"
+	@echo "  make -f Makefile.pnpm lock          - Update pnpm-lock.yaml"
+	@echo "  make -f Makefile.pnpm update        - Update all dependencies"
+	@echo ""
+	@echo "Package Info:"
+	@echo "  make -f Makefile.pnpm list          - List installed packages"
+	@echo "  make -f Makefile.pnpm outdated      - Show outdated packages"
+	@echo ""
+	@echo "Package Management:"
+	@echo "  make -f Makefile.pnpm add PKG=x     - Add a dependency"
+	@echo "  make -f Makefile.pnpm remove PKG=x  - Remove a dependency"
+	@echo ""
+	@echo "Build & Test:"
+	@echo "  make -f Makefile.pnpm build         - Build the project"
+	@echo "  make -f Makefile.pnpm build-all     - Build all workspace packages"
+	@echo "  make -f Makefile.pnpm test          - Run tests"
+	@echo "  make -f Makefile.pnpm lint          - Run linter"
+	@echo "  make -f Makefile.pnpm typecheck     - Run type checking"
+	@echo ""
+	@echo "Cache Management:"
+	@echo "  make -f Makefile.pnpm cache-info    - Show cache/store information"
+	@echo "  make -f Makefile.pnpm cache-clean   - Clean pnpm cache"
+	@echo "  make -f Makefile.pnpm cache-prune   - Prune unused cache entries"
+	@echo "  make -f Makefile.pnpm store-path    - Show pnpm store path"
+	@echo "  make -f Makefile.pnpm store-prune   - Remove unreferenced packages from store"
+	@echo ""
+	@echo "Cleanup:"
+	@echo "  make -f Makefile.pnpm clean         - Remove build artifacts"
+	@echo "  make -f Makefile.pnpm clean-modules - Remove node_modules directories"
+	@echo "  make -f Makefile.pnpm clean-build   - Remove dist/build directories"
+	@echo "  make -f Makefile.pnpm clean-cache   - Remove local cache directories"
+	@echo "  make -f Makefile.pnpm clean-all     - Full cleanup (modules + build + cache)"
+	@echo ""
+	@echo "CI Workflows:"
+	@echo "  make -f Makefile.pnpm ci-setup      - Setup for CI (store path + install)"
+	@echo "  make -f Makefile.pnpm ci-install    - CI-optimized install"
+	@echo "  make -f Makefile.pnpm ci-build      - CI build workflow"
+	@echo "  make -f Makefile.pnpm ci-test       - CI test workflow"
+	@echo ""
+	@echo "SSL/Network Variables:"
+	@echo "  SSL_VERIFY=false                    - Disable SSL verification"
+	@echo "  CA_BUNDLE=/path/to/ca.crt           - Custom CA bundle"
+	@echo "  HTTP_PROXY=http://proxy:8080        - HTTP proxy"
+	@echo "  HTTPS_PROXY=http://proxy:8080       - HTTPS proxy"
+	@echo "  NO_PROXY=localhost,127.0.0.1        - Proxy bypass list"
+	@echo "  NPM_REGISTRY=https://registry.url   - Custom npm registry"
+	@echo ""
+	@echo "Cache Variables:"
+	@echo "  PNPM_STORE_DIR=/path/to/store       - Custom pnpm store location"
+	@echo "  CI=true                             - Enable CI mode optimizations"
+	@echo ""
+	@echo "Workspace Packages:"
+	@if [ -d "$(PACKAGES_DIR)" ]; then \
+		for pkg in $$(find $(PACKAGES_DIR) -maxdepth 1 -mindepth 1 -type d \
+			! -name "__pycache__" ! -name "node_modules" \
+			! -name "__STAGE__" ! -name "__SPECS__" ! -name "__REVIEW__" ! -name "__BACKUP__" \
+			-exec basename {} \; | sort); do \
+			echo "  - $$pkg"; \
+		done; \
+	else \
+		echo "  (no packages directory found)"; \
+	fi
+	@echo ""
+	@echo "Examples:"
+	@echo "  make -f Makefile.pnpm SSL_VERIFY=false install"
+	@echo "  make -f Makefile.pnpm HTTPS_PROXY=http://proxy:8080 install"
+	@echo "  make -f Makefile.pnpm CI=true ci-install"
+	@echo "  make -f Makefile.pnpm PNPM_STORE_DIR=/tmp/pnpm-store ci-setup"
+
+# ============================================================================
+# Installation
+# ============================================================================
+
+# Install all dependencies
+install:
+	@echo "Installing dependencies with pnpm..."
+	$(PNPM) install
+	@echo "Done!"
+
+# Install with frozen lockfile (for CI - fails if lockfile needs update)
+install-ci:
+	@echo "Installing dependencies (frozen lockfile)..."
+	$(PNPM) install --frozen-lockfile
+	@echo "Done!"
+
+# Install production dependencies only
+install-prod:
+	@echo "Installing production dependencies..."
+	$(PNPM) install --prod --frozen-lockfile
+	@echo "Done!"
+
+# Update lockfile without installing
+lock:
+	@echo "Updating pnpm-lock.yaml..."
+	$(PNPM) install --lockfile-only
+	@echo "Done!"
+
+# Update all dependencies to latest compatible versions
+update:
+	@echo "Updating all dependencies..."
+	$(PNPM) update
+	@echo "Done!"
+
+# ============================================================================
+# Package Info
+# ============================================================================
+
+# List installed packages
+list:
+	$(PNPM) list
+
+# Show outdated packages
+outdated:
+	$(PNPM) outdated
+
+# ============================================================================
+# Package Management
+# ============================================================================
+
+# Add a dependency (usage: make -f Makefile.pnpm add PKG=lodash)
+add:
+	@if [ -z "$(PKG)" ]; then \
+		echo "Usage: make -f Makefile.pnpm add PKG=<package_name>"; \
+		echo "       make -f Makefile.pnpm add PKG=<package_name> DEV=true"; \
+		exit 1; \
+	fi
+	@if [ "$(DEV)" = "true" ]; then \
+		$(PNPM) add -D $(PKG); \
+	else \
+		$(PNPM) add $(PKG); \
+	fi
+
+# Remove a dependency (usage: make -f Makefile.pnpm remove PKG=lodash)
+remove:
+	@if [ -z "$(PKG)" ]; then \
+		echo "Usage: make -f Makefile.pnpm remove PKG=<package_name>"; \
+		exit 1; \
+	fi
+	$(PNPM) remove $(PKG)
+
+# ============================================================================
+# Build & Test
+# ============================================================================
+
+# Build the project
+build:
+	@echo "Building project..."
+	$(PNPM) run build
+	@echo "Done!"
+
+# Build all workspace packages
+build-all:
+	@echo "Building all workspace packages..."
+	$(PNPM) -r run build
+	@echo "Done!"
+
+# Run tests
+test:
+	@echo "Running tests..."
+	$(PNPM) run test
+	@echo "Done!"
+
+# Run linter
+lint:
+	@echo "Running linter..."
+	$(PNPM) run lint
+	@echo "Done!"
+
+# Run type checking
+typecheck:
+	@echo "Running type check..."
+	$(PNPM) run typecheck
+	@echo "Done!"
+
+# ============================================================================
+# Cache Management
+# ============================================================================
+
+# Show cache and store information
+cache-info:
+	@echo "pnpm Store Information:"
+	@echo "======================="
+	@echo "Store path:"
+	@$(PNPM) store path
+	@echo ""
+	@echo "Store status:"
+	@$(PNPM) store status 2>/dev/null || echo "(no integrity issues found)"
+	@echo ""
+	@if [ -d "$(PNPM_CACHE_DIR)" ]; then \
+		echo "Local cache directory: $(PNPM_CACHE_DIR)"; \
+		echo "Local cache size: $$(du -sh "$(PNPM_CACHE_DIR)" 2>/dev/null | cut -f1 || echo 'N/A')"; \
+	fi
+
+# Clean pnpm cache
+cache-clean:
+	@echo "Cleaning pnpm cache..."
+	$(PNPM) store prune
+	@echo "Done!"
+
+# Prune unused cache entries
+cache-prune:
+	@echo "Pruning unused packages from store..."
+	$(PNPM) store prune
+	@echo "Done!"
+
+# Show pnpm store path (useful for CI caching)
+store-path:
+	@$(PNPM) store path
+
+# Remove unreferenced packages from store
+store-prune:
+	@echo "Pruning unreferenced packages from store..."
+	$(PNPM) store prune
+	@echo "Done!"
+
+# ============================================================================
+# Cleanup
+# ============================================================================
+
+# Remove build artifacts (dist, .turbo, etc.)
+clean: clean-build
+	@echo "Cleanup complete!"
+
+# Remove all node_modules directories
+clean-modules:
+	@echo "Removing node_modules directories..."
+	@rm -rf $(NODE_MODULES)
+	@find $(PACKAGES_DIR) -maxdepth 2 -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
+	@echo "Done!"
+
+# Remove build output directories
+clean-build:
+	@echo "Removing build artifacts..."
+	@rm -rf dist build .turbo .next .nuxt .output .cache
+	@find $(PACKAGES_DIR) -maxdepth 2 -type d \( -name "dist" -o -name "build" -o -name ".turbo" \) -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.tsbuildinfo" -delete 2>/dev/null || true
+	@echo "Done!"
+
+# Remove local cache directories
+clean-cache:
+	@echo "Removing local cache directories..."
+	@rm -rf .cache .turbo .eslintcache .prettiercache
+	@rm -rf $(PNPM_CACHE_DIR)
+	@echo "Done!"
+
+# Full cleanup: modules + build + cache
+clean-all: clean-modules clean-build clean-cache
+	@echo "Full cleanup complete!"
+
+# ============================================================================
+# CI Workflows
+# ============================================================================
+
+# CI setup: configure store and install
+# Usage in GitHub Actions:
+#   - name: Setup pnpm
+#     run: make -f Makefile.pnpm ci-setup PNPM_STORE_DIR=${{ runner.temp }}/pnpm-store
+ci-setup:
+	@echo "CI Setup"
+	@echo "========"
+	@echo "pnpm store path: $$($(PNPM) store path)"
+ifdef PNPM_STORE_DIR
+	@echo "Custom store dir: $(PNPM_STORE_DIR)"
+	@mkdir -p $(PNPM_STORE_DIR)
+endif
+	@echo ""
+	@$(MAKE) -f Makefile.pnpm install-ci
+
+# CI-optimized install (frozen lockfile + prefer offline)
+ci-install:
+	@echo "CI Install (frozen lockfile)..."
+	$(PNPM) install --frozen-lockfile --prefer-offline
+	@echo "Done!"
+
+# CI build workflow
+ci-build: ci-install
+	@echo "CI Build..."
+	$(PNPM) run build
+	@echo "Done!"
+
+# CI test workflow
+ci-test: ci-install
+	@echo "CI Test..."
+	$(PNPM) run test
+	@echo "Done!"
+
+# ============================================================================
+# GitHub Actions Cache Helper
+# ============================================================================
+# Outputs store path for use with actions/cache
+# Usage in workflow:
+#   - name: Get pnpm store directory
+#     id: pnpm-cache
+#     run: echo "STORE_PATH=$(make -f Makefile.pnpm store-path)" >> $GITHUB_OUTPUT
+#   - uses: actions/cache@v4
+#     with:
+#       path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+#       key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}

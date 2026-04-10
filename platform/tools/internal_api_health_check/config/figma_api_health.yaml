@@ -1,0 +1,8 @@
+name: figma_api_health
+description: Health check endpoint
+
+tests:
+  - id: health
+    description: Basic health check
+    path: /health
+    expected_status: 200

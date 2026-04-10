@@ -1,0 +1,33 @@
+# Auto-generated requirements.txt - DO NOT EDIT MANUALLY
+# Generated from pyproject.toml by .bin/pyproject-export-requirements.py
+# Generated at: 2026-01-14T02:30:36.775001Z
+#
+# Install with: pip install -r requirements.txt
+
+aiohttp>=3.13.2
+alembic>=1.13.1
+asyncpg>=0.30.0
+deepmerge>=2.0
+elasticsearch>=8.0.0
+fastapi>=0.115.0
+psycopg2-binary==2.9.9
+pydantic>=2.12.5
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+python-multipart>=0.0.6
+pyyaml>=6.0
+redis>=4.5.0
+sqlalchemy[asyncio]==2.0.22
+uvicorn[standard]>=0.32.0
+
+# Local packages (editable installs)
+-e polyglot/app_yaml_overwrites/py
+-e polyglot/app_yaml_static_config/py
+-e packages_py/auth_config
+-e packages_py/auth_encoding
+-e polyglot/healthz_diagnostics/py
+-e packages_py/hello
+-e polyglot/server/py
+-e polyglot/overwrite_from_context/py
+-e polyglot/server_provider_cache/py
+-e polyglot/vault_file/py

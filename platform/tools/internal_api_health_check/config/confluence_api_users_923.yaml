@@ -1,0 +1,18 @@
+name: confluence_api_users_923
+description: User retrieval endpoints (Confluence Data Center v9.2.3, cloud-only)
+
+tests:
+  - id: get-current-user
+    description: Get the currently authenticated user
+    path: /v9/user/current
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: get-anonymous-user
+    description: Get anonymous user information
+    path: /v9/user/anonymous
+    expected_status: [200, 401, 403, 404, 429]
+
+  - id: search-users
+    description: Search for users
+    path: /v9/user
+    expected_status: [200, 401, 403, 404, 429]

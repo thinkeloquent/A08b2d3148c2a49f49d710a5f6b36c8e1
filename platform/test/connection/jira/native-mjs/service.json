@@ -1,0 +1,6 @@
+{
+  "name": "jira-native-mjs",
+  "test_type": "native_stdlib",
+  "mjs": "node:https",
+  "app_yaml_section": ["providers", "jira"]
+}

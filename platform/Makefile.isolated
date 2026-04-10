@@ -1,0 +1,97 @@
+# Makefile.isolated — Test both servers in complete isolation (no .env, no secrets, no external services)
+#
+# Usage:
+#   make -f Makefile.isolated up          # Build & start both servers in Docker
+#   make -f Makefile.isolated up-fastify  # Fastify only
+#   make -f Makefile.isolated up-fastapi  # FastAPI only
+#   make -f Makefile.isolated test        # Start servers & run health checks
+#   make -f Makefile.isolated logs        # Tail container logs
+#   make -f Makefile.isolated down        # Stop & remove containers
+#   make -f Makefile.isolated clean       # Stop, remove containers, images, and volumes
+
+COMPOSE := docker compose -f docker-compose.isolated.yml -p mta-isolated
+
+FASTIFY_PORT ?= 51000
+FASTAPI_PORT ?= 52000
+
+.PHONY: help up up-fastify up-fastapi down clean logs test health wait-fastify wait-fastapi
+
+help: ## Show available targets
+	@echo "Makefile.isolated — Run servers with zero external dependencies"
+	@echo ""
+	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*## / { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+##@ Lifecycle
+
+up: ## Build & start both servers (detached)
+	$(COMPOSE) up --build -d
+	@echo ""
+	@echo "  Fastify:  http://localhost:$(FASTIFY_PORT)/health"
+	@echo "  FastAPI:  http://localhost:$(FASTAPI_PORT)/health"
+	@echo ""
+
+up-fastify: ## Build & start Fastify server only
+	$(COMPOSE) up --build -d fastify
+	@echo "  Fastify:  http://localhost:$(FASTIFY_PORT)/health"
+
+up-fastapi: ## Build & start FastAPI server only
+	$(COMPOSE) up --build -d fastapi
+	@echo "  FastAPI:  http://localhost:$(FASTAPI_PORT)/health"
+
+down: ## Stop & remove containers
+	$(COMPOSE) down
+
+clean: ## Stop, remove containers, images, and volumes
+	$(COMPOSE) down --rmi local -v --remove-orphans
+
+logs: ## Tail container logs (all services)
+	$(COMPOSE) logs -f
+
+logs-fastify: ## Tail Fastify logs
+	$(COMPOSE) logs -f fastify
+
+logs-fastapi: ## Tail FastAPI logs
+	$(COMPOSE) logs -f fastapi
+
+##@ Testing
+
+test: up wait-fastify wait-fastapi health ## Build, start, wait for ready, run health checks
+
+wait-fastify: ## Wait for Fastify to become healthy (up to 30s)
+	@echo "Waiting for Fastify..."
+	@for i in $$(seq 1 30); do \
+		if curl -sf http://localhost:$(FASTIFY_PORT)/health > /dev/null 2>&1; then \
+			echo "  Fastify ready ($$i s)"; \
+			break; \
+		fi; \
+		if [ $$i -eq 30 ]; then \
+			echo "  Fastify failed to start within 30s"; \
+			$(COMPOSE) logs fastify; \
+			exit 1; \
+		fi; \
+		sleep 1; \
+	done
+
+wait-fastapi: ## Wait for FastAPI to become healthy (up to 30s)
+	@echo "Waiting for FastAPI..."
+	@for i in $$(seq 1 30); do \
+		if curl -sf http://localhost:$(FASTAPI_PORT)/health > /dev/null 2>&1; then \
+			echo "  FastAPI ready ($$i s)"; \
+			break; \
+		fi; \
+		if [ $$i -eq 30 ]; then \
+			echo "  FastAPI failed to start within 30s"; \
+			$(COMPOSE) logs fastapi; \
+			exit 1; \
+		fi; \
+		sleep 1; \
+	done
+
+health: ## Run health checks against running containers
+	@echo ""
+	@echo "=== Fastify ==="
+	@curl -sf http://localhost:$(FASTIFY_PORT)/health | python3 -m json.tool 2>/dev/null || echo "  FAIL: Fastify not reachable"
+	@echo ""
+	@echo "=== FastAPI ==="
+	@curl -sf http://localhost:$(FASTAPI_PORT)/health | python3 -m json.tool 2>/dev/null || echo "  FAIL: FastAPI not reachable"
+	@echo ""

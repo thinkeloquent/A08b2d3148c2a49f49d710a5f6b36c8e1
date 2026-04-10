@@ -1,0 +1,36 @@
+{
+  "name": "@internal/figma-api",
+  "version": "1.0.0",
+  "description": "Figma API SDK — Polyglot Common Interface (Node.js)",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./sdk": "./src/sdk/index.mjs",
+    "./routes": "./src/routes/index.mjs",
+    "./middleware": "./src/middleware/index.mjs"
+  },
+  "scripts": {
+    "start": "node src/main.mjs",
+    "dev": "node --watch src/main.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check src/"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*",
+    "fastify": "^4.0.0",
+    "@fastify/cors": "^9.0.0",
+    "@fastify/sensible": "^5.0.0",
+    "close-with-grace": "^1.2.0",
+    "undici": "^6.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8",
+    "@vitest/coverage-v8": "^2.1.8"
+  }
+}

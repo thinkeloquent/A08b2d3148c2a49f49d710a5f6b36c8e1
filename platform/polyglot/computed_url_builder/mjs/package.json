@@ -1,0 +1,65 @@
+{
+  "name": "@thinkeloquent/computed-url-builder",
+  "version": "1.0.0",
+  "description": "A lightweight utility for building integration endpoint URLs with authentication helpers",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.mjs",
+      "types": "./src/index.d.ts"
+    },
+    "./logger": {
+      "import": "./src/logger.mjs",
+      "types": "./src/logger.d.ts"
+    },
+    "./fastify": {
+      "import": "./src/fastify-plugin.mjs"
+    }
+  },
+  "files": [
+    "src/",
+    "docs/"
+  ],
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "lint": "echo 'No linter configured'",
+    "format": "echo 'No formatter configured'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkeloquent/computed-url-builder.git"
+  },
+  "keywords": [
+    "url",
+    "url-builder",
+    "endpoint",
+    "integration",
+    "fastify",
+    "authentication"
+  ],
+  "author": "thinkeloquent",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thinkeloquent/computed-url-builder/issues"
+  },
+  "homepage": "https://github.com/thinkeloquent/computed-url-builder#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "fastify": "^4.0.0"
+  },
+  "peerDependencies": {
+    "fastify": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "fastify": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "elasticsearch",
+  "test_type": "direct_package_import",
+  "python": "db_connection_elasticsearch.config:ElasticsearchConfig",
+  "mjs": "@internal/db-connection-elasticsearch",
+  "app_yaml_section": ["storage", "elasticsearch"]
+}

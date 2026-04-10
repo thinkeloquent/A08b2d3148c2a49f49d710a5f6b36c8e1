@@ -1,0 +1,30 @@
+.PHONY: help setup teardown seed seed-from-json test-connection reset
+
+help: ## Show this help
+	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
+
+setup: ## Create database tables
+	pnpm run setup
+
+teardown: ## Drop database tables
+	pnpm run teardown
+
+seed: ## Seed database with sample data
+	pnpm run seed
+
+seed-from-json: ## Seed from JSON file (JSON_FILE=path [MODEL=Name])
+	@if [ -z "$(JSON_FILE)" ]; then \
+		echo "Usage: make seed-from-json JSON_FILE=path/to/data.json [MODEL=ModelName]"; \
+		echo ""; \
+		echo "  JSON formats supported:"; \
+		echo '    Flat array  — [ {...}, {...} ]                     (MODEL required)'; \
+		echo '    Object      — { "model": "Name", "data": [...] }  (MODEL optional)'; \
+		exit 1; \
+	fi
+	JSON_FILE=$(JSON_FILE) MODEL=$(MODEL) node ../../seed-from-json.mjs
+
+test-connection: ## Test database connection
+	pnpm run test:connection
+
+reset: ## Reset database (teardown + setup + seed)
+	CAN_DELETE=true pnpm run reset

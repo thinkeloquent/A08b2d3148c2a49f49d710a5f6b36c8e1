@@ -1,0 +1,6 @@
+{
+  "name": "github-fetch-httpx",
+  "test_type": "direct_package_import",
+  "python": "fetch_httpx:AsyncClient",
+  "app_yaml_section": ["providers", "github"]
+}

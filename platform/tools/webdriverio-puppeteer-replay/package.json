@@ -1,0 +1,19 @@
+{
+  "name": "webdriverio-puppeteer-replay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@puppeteer/replay": "^3.0.2",
+    "webdriverio": "^9.23.3",
+    "devtools": "^8.42.0",
+    "puppeteer-core": "^24.37.1"
+  }
+}

@@ -1,0 +1,13 @@
+name: github_api_health
+description: Health check and rate limit endpoints
+
+tests:
+  - id: health
+    description: Basic health check
+    path: /health
+    expected_status: 200
+
+  - id: rate-limit
+    description: Full rate limit status
+    path: /health/rate-limit
+    expected_status: 200

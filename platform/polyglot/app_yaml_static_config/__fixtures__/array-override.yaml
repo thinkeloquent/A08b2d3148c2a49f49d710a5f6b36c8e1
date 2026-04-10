@@ -1,0 +1,7 @@
+# Override config where arrays should fully replace base arrays
+app:
+  tags:
+    - gamma
+  settings:
+    features:
+      - feature-c

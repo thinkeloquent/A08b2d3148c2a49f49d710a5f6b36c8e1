@@ -1,0 +1,7 @@
+{
+  "name": "s3-cached-key",
+  "test_type": "direct_package_import",
+  "python": "cache_json_awss3_storage.config_bridge:get_client_factory_from_app_config",
+  "mjs": "cache_json_awss3_storage:getClientFactoryFromAppConfig",
+  "app_yaml_section": ["storage", "s3"]
+}

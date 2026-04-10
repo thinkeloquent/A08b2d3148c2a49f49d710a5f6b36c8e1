@@ -1,0 +1,6 @@
+{
+  "name": "github-native-py",
+  "test_type": "native_stdlib",
+  "python": "urllib.request",
+  "app_yaml_section": ["providers", "github"]
+}

@@ -1,0 +1,8 @@
+name: statsig_api_layers
+description: Layers endpoints
+
+tests:
+  - id: list-layers
+    description: List all layers
+    path: /v1/layers
+    expected_status: [200, 401, 403, 429]

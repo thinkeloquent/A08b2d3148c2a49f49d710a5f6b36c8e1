@@ -1,0 +1,188 @@
+name: healthz_admin
+description: Admin health check and configuration endpoints
+
+tests:
+  - id: admin
+    description: Admin health overview
+    path: /healthz/admin
+    expected_status: 200
+
+  - id: app-yaml-static-config-json
+    description: App YAML static config as JSON
+    path: /healthz/admin/app-yaml-static-config/json
+    expected_status: 200
+
+  - id: app-yaml-static-config-keys
+    description: App YAML static config keys
+    path: /healthz/admin/app-yaml-static-config/keys
+    expected_status: 200
+
+  - id: app-yaml-static-config-status
+    description: App YAML static config status
+    path: /healthz/admin/app-yaml-static-config/status
+    expected_status: 200
+
+  - id: compute-functions-details
+    description: Compute functions details
+    path: /healthz/admin/compute-functions/details
+    expected_status: 200
+
+  - id: compute-functions-list
+    description: Compute functions list
+    path: /healthz/admin/compute-functions/list
+    expected_status: 200
+
+  - id: integration-anthropic
+    description: Anthropic integration health
+    path: /healthz/admin/integration/anthropic
+    expected_status: 200
+
+  - id: integration-anthropic-config
+    description: Anthropic integration config
+    path: /healthz/admin/integration/anthropic/config
+    expected_status: 200
+
+  - id: integration-confluence
+    description: Confluence integration health
+    path: /healthz/admin/integration/confluence
+    expected_status: 200
+
+  - id: integration-confluence-config
+    description: Confluence integration config
+    path: /healthz/admin/integration/confluence/config
+    expected_status: 200
+
+  - id: integration-figma
+    description: Figma integration health
+    path: /healthz/admin/integration/figma
+    expected_status: 200
+
+  - id: integration-figma-config
+    description: Figma integration config
+    path: /healthz/admin/integration/figma/config
+    expected_status: 200
+
+  - id: integration-gemini-openai
+    description: Gemini OpenAI integration health
+    path: /healthz/admin/integration/gemini-openai
+    expected_status: 200
+
+  - id: integration-gemini-openai-config
+    description: Gemini OpenAI integration config
+    path: /healthz/admin/integration/gemini-openai/config
+    expected_status: 200
+
+  - id: integration-github
+    description: GitHub integration health
+    path: /healthz/admin/integration/github
+    expected_status: 200
+
+  - id: integration-github-config
+    description: GitHub integration config
+    path: /healthz/admin/integration/github/config
+    expected_status: 200
+
+  - id: integration-jira
+    description: Jira integration health
+    path: /healthz/admin/integration/jira
+    expected_status: 200
+
+  - id: integration-jira-config
+    description: Jira integration config
+    path: /healthz/admin/integration/jira/config
+    expected_status: 200
+
+  - id: integration-openai
+    description: OpenAI integration health
+    path: /healthz/admin/integration/openai
+    expected_status: 200
+
+  - id: integration-openai-config
+    description: OpenAI integration config
+    path: /healthz/admin/integration/openai/config
+    expected_status: 200
+
+  - id: integration-rally
+    description: Rally integration health
+    path: /healthz/admin/integration/rally
+    expected_status: 200
+
+  - id: integration-rally-config
+    description: Rally integration config
+    path: /healthz/admin/integration/rally/config
+    expected_status: 200
+
+  - id: integration-saucelabs
+    description: SauceLabs integration health
+    path: /healthz/admin/integration/saucelabs
+    expected_status: 200
+
+  - id: integration-saucelabs-config
+    description: SauceLabs integration config
+    path: /healthz/admin/integration/saucelabs/config
+    expected_status: 200
+
+  - id: integration-servicenow
+    description: ServiceNow integration health
+    path: /healthz/admin/integration/servicenow
+    expected_status: 200
+
+  - id: integration-servicenow-config
+    description: ServiceNow integration config
+    path: /healthz/admin/integration/servicenow/config
+    expected_status: 200
+
+  - id: integration-sonar
+    description: Sonar integration health
+    path: /healthz/admin/integration/sonar
+    expected_status: 200
+
+  - id: integration-sonar-config
+    description: Sonar integration config
+    path: /healthz/admin/integration/sonar/config
+    expected_status: 200
+
+  - id: integration-statsig
+    description: Statsig integration health
+    path: /healthz/admin/integration/statsig
+    expected_status: 200
+
+  - id: integration-statsig-config
+    description: Statsig integration config
+    path: /healthz/admin/integration/statsig/config
+    expected_status: 200
+
+  - id: overwrite-from-context-json
+    description: Overwrite from context as JSON
+    path: /healthz/admin/overwrite-from-context/json
+    expected_status: 200
+
+  - id: overwrite-from-context-keys
+    description: Overwrite from context keys
+    path: /healthz/admin/overwrite-from-context/keys
+    expected_status: 200
+
+  - id: overwrite-from-context-overwrite
+    description: Overwrite from context overwrite
+    path: /healthz/admin/overwrite-from-context/overwrite
+    expected_status: 200
+
+  - id: overwrite-from-context-status
+    description: Overwrite from context status
+    path: /healthz/admin/overwrite-from-context/status
+    expected_status: 200
+
+  - id: vault-file-json
+    description: Vault file as JSON
+    path: /healthz/admin/vault-file/json
+    expected_status: 200
+
+  - id: vault-file-keys
+    description: Vault file keys
+    path: /healthz/admin/vault-file/keys
+    expected_status: 200
+
+  - id: vault-file-status
+    description: Vault file status
+    path: /healthz/admin/vault-file/status
+    expected_status: 200

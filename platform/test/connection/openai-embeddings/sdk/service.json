@@ -1,0 +1,7 @@
+{
+  "name": "openai-embeddings-sdk",
+  "test_type": "direct_package_import",
+  "python": "openai:OpenAI",
+  "mjs": "@internal/rag-embedding-client:EmbeddingClient",
+  "app_yaml_section": ["providers", "openai_embeddings"]
+}

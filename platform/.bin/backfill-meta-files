@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# backfill-meta-files - Copy files from one directory to another preserving paths
+#  Usage:
+#   .bin/backfill-meta-files /path/to/source /path/to/destination
+# Usage: .bin/backfill-meta-files <From> <To>
+#
+# This will loop over all files in <From> and copy them to <To>,
+# preserving the relative path structure.
+
+set -euo pipefail
+
+if [[ $# -ne 2 ]]; then
+    echo "Usage: $0 <From> <To>"
+    echo ""
+    echo "Copy files from <From> to <To>, preserving relative paths."
+    echo "Both directories should share the same root structure."
+    exit 1
+fi
+
+FROM_DIR="$1"
+TO_DIR="$2"
+
+if [[ ! -d "$FROM_DIR" ]]; then
+    echo "Error: Source directory does not exist: $FROM_DIR"
+    exit 1
+fi
+
+# Create destination directory if it doesn't exist
+mkdir -p "$TO_DIR"
+
+# Loop over all files in FROM_DIR
+find "$FROM_DIR" -type f | while read -r src_file; do
+    # Get relative path from FROM_DIR
+    relative_path="${src_file#$FROM_DIR/}"
+
+    # Build destination path
+    dest_file="$TO_DIR/$relative_path"
+
+    # Create destination directory if needed
+    dest_dir="$(dirname "$dest_file")"
+    mkdir -p "$dest_dir"
+
+    # Copy the file
+    cp "$src_file" "$dest_file"
+    echo "Copied: $relative_path"
+done
+
+echo "Done."

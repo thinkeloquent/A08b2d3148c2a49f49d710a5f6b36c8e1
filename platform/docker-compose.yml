@@ -1,0 +1,77 @@
+# docker-compose.yml - Database services only
+# FastAPI and Fastify apps run separately (not in docker-compose)
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mta-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-mta_dev}
+    ports:
+      - "${POSTGRES_PORT:-53100}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mta-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: mta-redis
+    ports:
+      - "${REDIS_PORT:-53200}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - mta-network
+    restart: unless-stopped
+
+  elasticsearch:
+    image: elasticsearch:8.17.0
+    container_name: mta-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "${ELASTICSEARCH_PORT:-53300}:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mta-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: mta-postgres-data
+    driver: local
+
+  redis_data:
+    name: mta-redis-data
+    driver: local
+
+  elasticsearch_data:
+    name: mta-elasticsearch-data
+    driver: local
+
+networks:
+  mta-network:
+    name: mta-network
+    driver: bridge

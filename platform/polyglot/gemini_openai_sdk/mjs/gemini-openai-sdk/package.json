@@ -1,0 +1,50 @@
+{
+  "name": "gemini_openai_sdk",
+  "version": "0.1.0",
+  "description": "Polyglot SDK for Gemini OpenAI-compatible API",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./logger": "./logger.mjs",
+    "./constants": "./constants.mjs",
+    "./helpers": "./helpers.mjs",
+    "./client": "./client.mjs",
+    "./tools": "./tools.mjs",
+    "./types": "./types.mjs",
+    "./agent": "./agent.mjs",
+    "./devtools": "./devtools.mjs"
+  },
+  "bin": {
+    "gemini-openai": "./bin/gemini-openai.mjs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "echo 'No linter configured'",
+    "start": "node index.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@internal/env-resolver": "workspace:*",
+    "undici": "^6.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "fastify": "^4.0.0",
+    "@vitest/coverage-v8": "^1.0.0"
+  },
+  "keywords": [
+    "gemini",
+    "openai",
+    "llm",
+    "sdk",
+    "api",
+    "ai"
+  ],
+  "author": "MTA Team",
+  "license": "MIT"
+}

@@ -1,0 +1,106 @@
+# Makefile.sequelize - Sequelize schema management for code-repositories
+# Usage: make -f Makefile.sequelize [target]
+# Default: help
+#
+# Manages only the code-repositories tables (repositories, tags, documentation,
+# repository_tags). Does NOT touch other tables in the database.
+#
+# Connection config is resolved by @internal/db_connection_postgres from env vars:
+#   POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
+
+# === Configuration ===
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+PNPM := pnpm
+FILTER := --filter code-repositories-sequelize
+SEQUELIZE_DIR := fastify_apps/code-repositories/sequelize
+
+.DEFAULT_GOAL := help
+
+.PHONY: help connection-test setup teardown seed reseed reset ci-setup ci-teardown status
+
+# =============================================================================
+# CI Targets
+# =============================================================================
+
+connection-test: ## Test Postgres connectivity
+	@echo "[Sequelize] Testing database connection..."
+	@cd $(MAKEFILE_DIR) && $(PNPM) $(FILTER) run connection-test
+	@echo "[Sequelize] Connection test complete"
+
+setup: ## Create tables (code-repositories schema only)
+	@echo "[Sequelize] Creating tables..."
+	@cd $(MAKEFILE_DIR) && $(PNPM) $(FILTER) run setup
+	@echo "[Sequelize] Setup complete"
+
+teardown: ## Drop tables (code-repositories schema only)
+	@echo "[Sequelize] Dropping tables..."
+	@cd $(MAKEFILE_DIR) && $(PNPM) $(FILTER) run teardown
+	@echo "[Sequelize] Teardown complete"
+
+seed: ## Seed tables from mock JSON
+	@echo "[Sequelize] Seeding data..."
+	@cd $(MAKEFILE_DIR) && $(PNPM) $(FILTER) run seed
+	@echo "[Sequelize] Seed complete"
+
+reseed: ## Truncate all data and re-seed
+	@echo "[Sequelize] Truncating and re-seeding..."
+	@cd $(MAKEFILE_DIR) && $(PNPM) $(FILTER) run reseed
+	@echo "[Sequelize] Reseed complete"
+
+reset: teardown setup seed ## Full reset: teardown + setup + seed
+	@echo "[Sequelize] Reset complete"
+
+# =============================================================================
+# CI Pipeline Composites
+# =============================================================================
+
+ci-setup: connection-test setup seed ## CI: verify connection, create tables, seed data
+	@echo "[Sequelize] CI setup complete"
+
+ci-teardown: teardown ## CI: drop tables (code-repositories schema only)
+	@echo "[Sequelize] CI teardown complete"
+
+# =============================================================================
+# Info
+# =============================================================================
+
+status: ## Show schema tables via psql
+	@echo "[Sequelize] Querying owned tables..."
+	@cd $(MAKEFILE_DIR) && node -e " \
+		import('./$(SEQUELIZE_DIR)/models/index.mjs').then(async ({ sequelize, OWNED_TABLE_NAMES }) => { \
+			try { \
+				await sequelize.authenticate(); \
+				for (const t of OWNED_TABLE_NAMES) { \
+					const [[{ exists }]] = await sequelize.query( \
+						\"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '\" + t + \"')\"); \
+					console.log('  ' + t + ': ' + (exists ? 'exists' : 'missing')); \
+				} \
+			} catch (e) { console.error('  Error:', e.message); } \
+			finally { await sequelize.close(); } \
+		});"
+
+# =============================================================================
+# Help
+# =============================================================================
+
+help:
+	@echo "Makefile.sequelize - Sequelize Schema Management (code-repositories)"
+	@echo ""
+	@echo "CI Targets:"
+	@echo "  make -f Makefile.sequelize connection-test  - Test Postgres connectivity"
+	@echo "  make -f Makefile.sequelize setup            - Create tables"
+	@echo "  make -f Makefile.sequelize teardown         - Drop tables"
+	@echo "  make -f Makefile.sequelize seed             - Seed data from mock JSON"
+	@echo "  make -f Makefile.sequelize reseed           - Truncate all data + re-seed"
+	@echo "  make -f Makefile.sequelize reset            - Teardown + setup + seed"
+	@echo ""
+	@echo "CI Pipeline:"
+	@echo "  make -f Makefile.sequelize ci-setup         - Connection test + setup + seed"
+	@echo "  make -f Makefile.sequelize ci-teardown      - Drop tables only"
+	@echo ""
+	@echo "Info:"
+	@echo "  make -f Makefile.sequelize status           - Check which tables exist"
+	@echo ""
+	@echo "Environment (via @internal/db_connection_postgres):"
+	@echo "  POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB"
+	@echo "  POSTGRES_USER, POSTGRES_PASSWORD"

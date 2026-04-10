@@ -1,0 +1,15 @@
+# .dockerignore — Exclude large directories not needed in Docker builds
+__STAGE__
+__SPECS__
+dataset
+.git
+.venv
+node_modules
+logs
+*.log
+.env
+.env.*
+how-to-get-started
+tools_internal
+playwright
+test

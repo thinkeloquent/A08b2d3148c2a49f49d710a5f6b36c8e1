@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package figma_files.figma_file;
+
+import "common.proto";
+import "tag.proto";
+import "metadata.proto";
+
+// Figma file entity
+message FigmaFile {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  figma_files.common.FigmaFileType type = 4;
+  string figma_url = 5;
+  string figma_file_key = 6;
+  string thumbnail_url = 7;
+  int32 page_count = 8;
+  int32 component_count = 9;
+  int32 style_count = 10;
+  string last_modified_by = 11;
+  string editor_type = 12;
+  bool trending = 13;
+  bool verified = 14;
+  figma_files.common.FigmaFileStatus status = 15;
+  figma_files.common.FigmaFileSource source = 16;
+  repeated figma_files.common.ExternalId external_ids = 17;
+  repeated figma_files.tag.Tag tags = 18;
+  repeated figma_files.metadata.Metadata metadata = 19;
+  figma_files.common.Timestamp created_at = 20;
+  figma_files.common.Timestamp updated_at = 21;
+}
+
+// List figma files request with filters and pagination
+message ListFigmaFilesRequest {
+  figma_files.common.PaginationRequest pagination = 1;
+  figma_files.common.FigmaFileType type = 2;
+  figma_files.common.FigmaFileStatus status = 3;
+  string search = 4;
+  repeated string tags = 5;
+  bool trending = 6;
+  bool verified = 7;
+  bool include_tags = 8;
+  bool include_metadata = 9;
+}
+
+// List figma files response
+message ListFigmaFilesResponse {
+  repeated FigmaFile figma_files = 1;
+  figma_files.common.PaginationResponse pagination = 2;
+}
+
+// Get figma file request
+message GetFigmaFileRequest {
+  string id = 1;
+  bool include_tags = 2;
+  bool include_metadata = 3;
+}
+
+// Get figma file response
+message GetFigmaFileResponse {
+  FigmaFile figma_file = 1;
+}
+
+// Create figma file request
+message CreateFigmaFileRequest {
+  string name = 1;
+  string description = 2;
+  figma_files.common.FigmaFileType type = 3;
+  string figma_url = 4;
+  string figma_file_key = 5;
+  string thumbnail_url = 6;
+  int32 page_count = 7;
+  int32 component_count = 8;
+  int32 style_count = 9;
+  string last_modified_by = 10;
+  string editor_type = 11;
+  bool trending = 12;
+  bool verified = 13;
+  figma_files.common.FigmaFileStatus status = 14;
+  figma_files.common.FigmaFileSource source = 15;
+  repeated figma_files.common.ExternalId external_ids = 16;
+  repeated string tag_names = 17;
+}
+
+// Create figma file response
+message CreateFigmaFileResponse {
+  FigmaFile figma_file = 1;
+}
+
+// Update figma file request
+message UpdateFigmaFileRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  figma_files.common.FigmaFileType type = 4;
+  string figma_url = 5;
+  string figma_file_key = 6;
+  string thumbnail_url = 7;
+  int32 page_count = 8;
+  int32 component_count = 9;
+  int32 style_count = 10;
+  string last_modified_by = 11;
+  string editor_type = 12;
+  bool trending = 13;
+  bool verified = 14;
+  figma_files.common.FigmaFileStatus status = 15;
+  figma_files.common.FigmaFileSource source = 16;
+  repeated figma_files.common.ExternalId external_ids = 17;
+  repeated string tag_names = 18;
+}
+
+// Update figma file response
+message UpdateFigmaFileResponse {
+  FigmaFile figma_file = 1;
+}
+
+// Delete figma file request
+message DeleteFigmaFileRequest {
+  string id = 1;
+}
+
+// Delete figma file response
+message DeleteFigmaFileResponse {
+  bool success = 1;
+}

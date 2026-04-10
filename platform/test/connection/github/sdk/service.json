@@ -1,0 +1,7 @@
+{
+  "name": "github-sdk",
+  "test_type": "direct_package_import",
+  "python": "github_api:GitHubClient",
+  "mjs": "@internal/github-api:GitHubClient",
+  "app_yaml_section": ["providers", "github"]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@ci/github-component-extract",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Extract JSX component definitions from a GitHub repo and upload to ui-component-metadata API",
+  "bin": {
+    "github_component_extract": "./bin/extract.mjs",
+    "github_component_extract_cli": "./cli.mjs"
+  },
+  "scripts": {
+    "start": "node bin/extract.mjs",
+    "cli": "node cli.mjs"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "@internal/env-resolver": "workspace:*",
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

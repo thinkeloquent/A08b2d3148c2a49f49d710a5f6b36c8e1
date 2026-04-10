@@ -1,0 +1,13 @@
+{
+  "name": "ai-agent-workflow-node-type",
+  "version": "1.0.0",
+  "description": "AI Agent Workflow Node Type Registry - Fastify app with React frontend",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "app:dev": "node --watch backend/server.test.mjs",
+    "app:start": "node backend/server.test.mjs",
+    "test": "echo \"No tests yet\" && exit 0",
+    "build": "pnpm --filter @internal/ai-agent-workflow-node-type-frontend build"
+  }
+}

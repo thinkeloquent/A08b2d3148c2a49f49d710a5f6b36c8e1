@@ -1,0 +1,28 @@
+name: runtime_app_config_endpoints
+description: Runtime application configuration endpoints
+
+tests:
+  - id: endpoints
+    description: List all endpoints
+    path: /endpoints
+    expected_status: 200
+
+  - id: endpoint-by-name
+    description: Get endpoint by name
+    path: /endpoints/:name
+    expected_status: [200, 404]
+
+  - id: intent-mapping
+    description: Get intent mapping
+    path: /intent-mapping
+    expected_status: 200
+
+  - id: origins
+    description: Get allowed origins
+    path: /origins
+    expected_status: 200
+
+  - id: resolve-intent
+    description: Resolve intent by name
+    path: /resolve-intent/:intent
+    expected_status: [200, 404]

@@ -1,0 +1,331 @@
+syntax = "proto3";
+
+package taskgraph;
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_PENDING = 1;
+  TASK_STATUS_TODO = 2;
+  TASK_STATUS_IN_PROGRESS = 3;
+  TASK_STATUS_DONE = 4;
+  TASK_STATUS_BLOCKED = 5;
+  TASK_STATUS_SKIPPED = 6;
+  TASK_STATUS_RETRYING = 7;
+  TASK_STATUS_FAILED = 8;
+}
+
+enum StepStatus {
+  STEP_STATUS_UNSPECIFIED = 0;
+  STEP_STATUS_PENDING = 1;
+  STEP_STATUS_IN_PROGRESS = 2;
+  STEP_STATUS_COMPLETED = 3;
+  STEP_STATUS_SKIPPED = 4;
+  STEP_STATUS_BLOCKED = 5;
+}
+
+enum WorkflowStatus {
+  WORKFLOW_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_STATUS_PENDING = 1;
+  WORKFLOW_STATUS_RUNNING = 2;
+  WORKFLOW_STATUS_PAUSED = 3;
+  WORKFLOW_STATUS_COMPLETED = 4;
+  WORKFLOW_STATUS_FAILED = 5;
+  WORKFLOW_STATUS_CANCELLED = 6;
+}
+
+enum RepeatInterval {
+  REPEAT_INTERVAL_UNSPECIFIED = 0;
+  REPEAT_INTERVAL_NONE = 1;
+  REPEAT_INTERVAL_DAILY = 2;
+  REPEAT_INTERVAL_WEEKLY = 3;
+  REPEAT_INTERVAL_MONTHLY = 4;
+}
+
+// ============================================================================
+// TASK MESSAGES
+// ============================================================================
+
+message Task {
+  string id = 1;
+  optional string idempotency_key = 2;
+  string title = 3;
+  optional string description = 4;
+  TaskStatus status = 5;
+  optional string due_date = 6;
+  RepeatInterval repeat_interval = 7;
+  int32 retry_count = 8;
+  int32 max_retries = 9;
+  optional string skip_reason = 10;
+  map<string, string> metadata = 11;
+  string created_at = 12;
+  string updated_at = 13;
+  optional string creator_id = 14;
+  optional string assigned_to_id = 15;
+  optional string template_id = 16;
+  int32 steps_count = 17;
+  int32 prerequisites_count = 18;
+  int32 dependents_count = 19;
+}
+
+message CreateTaskRequest {
+  optional string idempotency_key = 1;
+  string title = 2;
+  optional string description = 3;
+  TaskStatus status = 4;
+  optional string due_date = 5;
+  RepeatInterval repeat_interval = 6;
+  int32 max_retries = 7;
+  map<string, string> metadata = 8;
+  optional string assigned_to_id = 9;
+  optional string template_id = 10;
+}
+
+message UpdateTaskRequest {
+  string task_id = 1;
+  optional string title = 2;
+  optional string description = 3;
+  TaskStatus status = 4;
+  optional string due_date = 5;
+  RepeatInterval repeat_interval = 6;
+  int32 max_retries = 7;
+  optional string skip_reason = 8;
+  map<string, string> metadata = 9;
+  optional string assigned_to_id = 10;
+}
+
+message GetTaskRequest {
+  string task_id = 1;
+  bool include_steps = 2;
+  bool include_dependencies = 3;
+  bool include_files = 4;
+  bool include_notes = 5;
+}
+
+message ListTasksRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  repeated TaskStatus status = 3;
+  optional string assigned_to_id = 4;
+  optional string creator_id = 5;
+  optional string search = 6;
+  optional string sort_field = 7;
+  optional string sort_order = 8;
+  bool include_steps = 9;
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+  Pagination pagination = 2;
+}
+
+message TaskResponse {
+  bool success = 1;
+  Task data = 2;
+  optional Error error = 3;
+}
+
+// ============================================================================
+// STEP MESSAGES
+// ============================================================================
+
+message Step {
+  string id = 1;
+  string token = 2;
+  string content = 3;
+  int32 order = 4;
+  StepStatus status = 5;
+  optional string started_at = 6;
+  optional string completed_at = 7;
+  optional string skip_reason = 8;
+  optional string blocked_reason = 9;
+  map<string, string> metadata = 10;
+  string created_at = 11;
+  string updated_at = 12;
+  string task_id = 13;
+}
+
+message CreateStepRequest {
+  string task_id = 1;
+  string token = 2;
+  string content = 3;
+  optional int32 order = 4;
+  map<string, string> metadata = 5;
+}
+
+message ListStepsResponse {
+  repeated Step steps = 1;
+}
+
+// ============================================================================
+// DEPENDENCY MESSAGES
+// ============================================================================
+
+message Dependency {
+  string prerequisite_id = 1;
+  string dependent_id = 2;
+  bool allow_skip = 3;
+  string created_at = 4;
+}
+
+message CreateDependencyRequest {
+  string prerequisite_id = 1;
+  string dependent_id = 2;
+  bool allow_skip = 3;
+}
+
+message DependencyGraphNode {
+  string id = 1;
+  string title = 2;
+  TaskStatus status = 3;
+  repeated string prerequisites = 4;
+  repeated string dependents = 5;
+}
+
+message DependencyGraph {
+  repeated DependencyGraphNode nodes = 1;
+  repeated DependencyEdge edges = 2;
+}
+
+message DependencyEdge {
+  string from = 1;
+  string to = 2;
+  bool allow_skip = 3;
+}
+
+// ============================================================================
+// CHECKPOINT MESSAGES
+// ============================================================================
+
+message Checkpoint {
+  string id = 1;
+  bytes checkpoint_data = 2;
+  string checkpoint_type = 3;
+  optional string expires_at = 4;
+  int32 restored_count = 5;
+  string created_at = 6;
+  string updated_at = 7;
+  string task_id = 8;
+}
+
+message SaveCheckpointRequest {
+  string task_id = 1;
+  bytes checkpoint_data = 2;
+  string checkpoint_type = 3;
+  optional string description = 4;
+  optional int32 ttl_seconds = 5;
+}
+
+message RestoreCheckpointRequest {
+  string checkpoint_id = 1;
+}
+
+// ============================================================================
+// EXECUTION LOG MESSAGES
+// ============================================================================
+
+message ExecutionLog {
+  string id = 1;
+  string event_type = 2;
+  bytes event_data = 3;
+  string correlation_id = 4;
+  optional string execution_id = 5;
+  optional string parent_event_id = 6;
+  string timestamp = 7;
+  optional string task_id = 8;
+  optional string step_id = 9;
+  optional string user_id = 10;
+}
+
+message ListExecutionLogsRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  optional string task_id = 3;
+  optional string step_id = 4;
+  optional string event_type = 5;
+  optional string correlation_id = 6;
+  optional string execution_id = 7;
+}
+
+message ListExecutionLogsResponse {
+  repeated ExecutionLog logs = 1;
+  Pagination pagination = 2;
+}
+
+// ============================================================================
+// WORKFLOW MESSAGES
+// ============================================================================
+
+message WorkflowExecution {
+  string id = 1;
+  string workflow_id = 2;
+  string execution_id = 3;
+  string workflow_type = 4;
+  WorkflowStatus status = 5;
+  bytes graph_definition = 6;
+  optional string current_node = 7;
+  string started_at = 8;
+  optional string completed_at = 9;
+  optional string paused_at = 10;
+  optional string checkpoint_id = 11;
+  optional string error_message = 12;
+  map<string, string> metadata = 13;
+  string correlation_id = 14;
+  repeated string completed_tasks = 15;
+  repeated string failed_tasks = 16;
+  repeated string skipped_tasks = 17;
+  string task_id = 18;
+  optional string user_id = 19;
+}
+
+message StartWorkflowRequest {
+  string task_id = 1;
+  string workflow_type = 2;
+  optional bytes graph_definition = 3;
+  map<string, string> metadata = 4;
+}
+
+message WorkflowStatusResponse {
+  string workflow_id = 1;
+  string execution_id = 2;
+  WorkflowStatus status = 3;
+  optional string current_node = 4;
+  WorkflowProgress progress = 5;
+  string started_at = 6;
+  optional string completed_at = 7;
+  optional string paused_at = 8;
+  optional string error_message = 9;
+}
+
+message WorkflowProgress {
+  int32 completed_tasks = 1;
+  int32 failed_tasks = 2;
+  int32 skipped_tasks = 3;
+  int32 total_tasks = 4;
+  float percent_complete = 5;
+}
+
+// ============================================================================
+// COMMON MESSAGES
+// ============================================================================
+
+message Pagination {
+  int32 total = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  bool has_more = 4;
+}
+
+message Error {
+  string code = 1;
+  string message = 2;
+  map<string, string> details = 3;
+}
+
+message SuccessResponse {
+  bool success = 1;
+  optional Error error = 2;
+}

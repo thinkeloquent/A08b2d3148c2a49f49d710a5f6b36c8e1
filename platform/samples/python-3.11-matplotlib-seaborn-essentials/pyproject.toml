@@ -1,0 +1,16 @@
+[project]
+name = "python-3.11-matplotlib-seaborn-essentials"
+version = "1.0.0"
+description = "Matplotlib & Seaborn essentials — charts, graphs, and visual dashboards"
+requires-python = ">=3.11,<3.12"
+
+dependencies = [
+    "matplotlib>=3.9,<4",
+    "seaborn>=0.13,<1",
+    "pandas>=2.2,<3",
+    "numpy>=1.26,<2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends._legacy:_Backend"

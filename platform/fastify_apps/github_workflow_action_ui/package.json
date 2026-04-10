@@ -1,0 +1,13 @@
+{
+  "name": "github-workflow-action-ui",
+  "version": "1.0.0",
+  "description": "GitHub Workflow Action UI - Fastify application with React frontend and admin dashboard",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "app:dev": "node --watch backend/server.test.mjs",
+    "app:start": "node backend/server.test.mjs",
+    "test": "echo \"No tests yet\" && exit 0",
+    "build": "echo \"No build required\" && exit 0"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "cache_json_awss3_storage",
+  "version": "1.0.0",
+  "description": "AWS S3-backed JSON storage with TTL support and polyglot parity",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome lint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "aws",
+    "s3",
+    "json",
+    "storage",
+    "cache",
+    "ttl",
+    "fastify"
+  ],
+  "author": "MTA Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@smithy/protocol-http": "^5.3.8",
+    "@types/node": "^20.10.0",
+    "aws-sdk-client-mock": "^3.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.400.0",
+    "aws-s3-client": "workspace:*",
+    "fastify": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-s3": {
+      "optional": false
+    },
+    "aws-s3-client": {
+      "optional": true
+    },
+    "fastify": {
+      "optional": true
+    }
+  }
+}

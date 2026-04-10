@@ -1,0 +1,37 @@
+syntax = "proto3";
+package component_registry;
+
+enum ComponentCategory {
+  COMPONENT_CATEGORY_UNSPECIFIED = 0;
+  COMPONENT_CATEGORY_FORMS = 1;
+  COMPONENT_CATEGORY_DATA = 2;
+  COMPONENT_CATEGORY_LAYOUT = 3;
+  COMPONENT_CATEGORY_FEEDBACK = 4;
+  COMPONENT_CATEGORY_NAVIGATION = 5;
+  COMPONENT_CATEGORY_OVERLAY = 6;
+}
+
+enum ComponentStatus {
+  COMPONENT_STATUS_UNSPECIFIED = 0;
+  COMPONENT_STATUS_STABLE = 1;
+  COMPONENT_STATUS_BETA = 2;
+  COMPONENT_STATUS_ALPHA = 3;
+  COMPONENT_STATUS_DEPRECATED = 4;
+}
+
+message PaginationRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message PaginationResponse {
+  int32 total = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 total_pages = 4;
+}
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
